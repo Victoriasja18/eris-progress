@@ -173,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="investigate-the-output-file" class="level2">
 <h2 class="anchored" data-anchor-id="investigate-the-output-file">Investigate the output file</h2>
-<div id="6fb88529" class="cell" data-execution_count="1">
+<div id="7cc5441a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import pyeris</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># # Run Eris with simulated data</span></span>
@@ -187,7 +187,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Have error from previous code and give an interval errors. There is no intervals detected errors when running the code.</p>
 <p>Try downloading UV</p>
-<div id="063840ce" class="cell" data-execution_count="2">
+<div id="eac9526a" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For the simulated data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># uv run eris -i data/contigs_shovill_simulated.gfa \</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     -d data/IS.mmi \</span></span>
@@ -206,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="analysing-the-output-files" class="level1">
 <h1>Analysing the output files</h1>
-<div id="4352ac05" class="cell" data-execution_count="3">
+<div id="100cd372" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the output files</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>simulated_df <span class="op">=</span> pd.read_csv(<span class="st">"../output/output_simulated/eris_output_simulated_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
@@ -230,7 +230,7 @@ Total complete genome assembly IS element counts: 4</code></pre>
 </div>
 </div>
 <p>There are <strong>only 4 IS found in the complete genome assembly</strong>, while there are 35 distinct IS found in the simulated data. This means Eris doesn’t perform well on the complete genome assembly, likely due to the presence of plasmids. We can investigate the IS elements found in both datasets by printing out the target column.</p>
-<div id="a7050e6a" class="cell" data-execution_count="4">
+<div id="a3ce2612" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In case we want to investigate the IS elements found in the complete genome assembly, we can print out the target column</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in complete genome assembly:"</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(complete_counts)</span>
@@ -286,7 +286,7 @@ Name: target, dtype: int64</code></pre>
 </div>
 </div>
 <p>I want to check whether the IS elements found in the complete genome assembly are also found in the simulated data.</p>
-<div id="9e724357" class="cell" data-execution_count="5">
+<div id="66909dce" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the IS elements found in the complete genome assembly are also found in the simulated data</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>common_is <span class="op">=</span> <span class="bu">set</span>(complete_counts.index) <span class="op">&amp;</span> <span class="bu">set</span>(simulated_counts.index)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in both datasets:"</span>, common_is)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
