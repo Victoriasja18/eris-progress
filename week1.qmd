@@ -4,6 +4,10 @@ author: "Victoria Sjalim"
 date: "2026-06-10"
 format: html
 
+project:
+  type: website
+  output-dir: docs
+
 ---
 
 # 10/06/2026 
