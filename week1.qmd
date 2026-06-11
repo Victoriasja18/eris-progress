@@ -74,7 +74,7 @@ print("Total simulated data IS element counts:", simulated_counts.count())
 print("Total complete genome assembly IS element counts:", complete_counts.count())
 ```
 
-There are only 4 IS found in the complete genome assembly, while there are 35 distinct IS found in the simulated data. This means Eris doesn't perform well on the complete genome assembly, likely due to the presence of plasmids. We can investigate the IS elements found in both datasets by printing out the target column. 
+There are **only 4 IS found in the complete genome assembly**, while there are 35 distinct IS found in the simulated data. This means Eris doesn't perform well on the complete genome assembly, likely due to the presence of plasmids. We can investigate the IS elements found in both datasets by printing out the target column. 
 
 ```{python}
 # In case we want to investigate the IS elements found in the complete genome assembly, we can print out the target column
