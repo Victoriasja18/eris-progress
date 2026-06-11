@@ -4,11 +4,6 @@ project:
 
 website:
   title: "Eris Progress"
-  navbar:
-    - href: home.qmd
-      text: Home
-    - href: week1.qmd
-      text: Week 1
 
 format:
   html:
