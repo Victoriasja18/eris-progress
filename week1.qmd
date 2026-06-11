@@ -1,12 +1,7 @@
 ---
-title: "Progress report"
+title: "Progress report week 1"
 author: "Victoria Sjalim"
 date: "2026-06-10"
-format: html
-
-project:
-  type: website
-  output-dir: docs
 
 ---
 
@@ -22,16 +17,16 @@ Input data:
 
 ## Investigate the output file 
 ```{python}
-import pyeris
+# import pyeris
 
-# Run Eris with simulated data
-eris -i data/contigs_shovill_simulated.gfa \
-    -d data/IS.mmi \
-    -o output/eris_output_simulated
+# # Run Eris with simulated data
+# eris -i data/contigs_shovill_simulated.gfa \
+#     -d data/IS.mmi \
+#     -o output/eris_output_simulated
 
 
-# Run Eris for only the contigs of the complete genome assembly
-eris -i data/contigs_complete_genome_assembly.gfa -d data/IS.mmi -o output/eris_output_complete_genome
+# # Run Eris for only the contigs of the complete genome assembly
+# eris -i data/contigs_complete_genome_assembly.gfa -d data/IS.mmi -o output/eris_output_complete_genome
 ```
 
 Have error from previous code and give an interval errors. 
@@ -41,23 +36,22 @@ Try downloading UV
 
 ```{python}
 # For the simulated data
-uv run eris -i data/contigs_shovill_simulated.gfa \
-    -d data/IS.mmi \
-    -o output/eris_output_simulated
+# uv run eris -i data/contigs_shovill_simulated.gfa \
+#     -d data/IS.mmi \
+#     -o output/eris_output_simulated
 
-# For the complete genome assembly
-uv run eris -i ../data/EC958_complete_genome.fasta \
-    -d ../data/IS.mmi -o ../output/eris_output_complete \
-    -q
+# # For the complete genome assembly
+# uv run eris -i ../data/EC958_complete_genome.fasta \
+#     -d ../data/IS.mmi -o ../output/eris_output_complete \
+#     -q
 
-mkdir -p output/complete_genome && mv output/eris_output_complete* output/complete_genome/
+# mkdir -p output/complete_genome && mv output/eris_output_complete* output/complete_genome/
 ```
 
 We succesfully run Eris for both the simulated data and the complete genome assembly. We can now investigate the output files.
 
 The problem with the complete genome assembly:
 - Since it contains plasmids, ERIS didn't run successfully. The complete genome has less columns compared to the simulated data.
-- 
 
 # Analysing the output files
 ```{python}
@@ -88,3 +82,16 @@ print(complete_counts)
 print("IS elements found in simulated data:")
 print(simulated_counts)
 ```
+
+I want to check whether the IS elements found in the complete genome assembly are also found in the simulated data. 
+
+```{python}
+# Check if the IS elements found in the complete genome assembly are also found in the simulated data
+common_is = set(complete_counts.index) & set(simulated_counts.index)
+print("IS elements found in both datasets:", common_is)
+```
+
+There are only 2 common IS between both data which create ambiguity in the results.
+
+After investigating the terminal, the complete genome assembly has .fasta format with only 3 long sequences. However, the simulated data has 456 shorter sequences. 
+

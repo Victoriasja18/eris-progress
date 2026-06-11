@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "week1.html",
+    "href": "week1.html",
+    "title": "Progress report",
+    "section": "",
+    "text": "Input data: - Complete genome assembly: obtain from Genbank (contains chromosome and plasmids) - Shovill simulated: only the chromosome - The realfastq simulated: only the chromosome - .mmi the genome pathway - .gfa is the assembly graph\n\n\n\n\n# import pyeris\n\n# # Run Eris with simulated data\n# eris -i data/contigs_shovill_simulated.gfa \\\n#     -d data/IS.mmi \\\n#     -o output/eris_output_simulated\n\n\n# # Run Eris for only the contigs of the complete genome assembly\n# eris -i data/contigs_complete_genome_assembly.gfa -d data/IS.mmi -o output/eris_output_complete_genome\n\nHave error from previous code and give an interval errors. There is no intervals detected errors when running the code.\nTry downloading UV\n\n# For the simulated data\n# uv run eris -i data/contigs_shovill_simulated.gfa \\\n#     -d data/IS.mmi \\\n#     -o output/eris_output_simulated\n\n# # For the complete genome assembly\n# uv run eris -i ../data/EC958_complete_genome.fasta \\\n#     -d ../data/IS.mmi -o ../output/eris_output_complete \\\n#     -q\n\n# mkdir -p output/complete_genome && mv output/eris_output_complete* output/complete_genome/\n\nWe succesfully run Eris for both the simulated data and the complete genome assembly. We can now investigate the output files.\nThe problem with the complete genome assembly: - Since it contains plasmids, ERIS didn’t run successfully. The complete genome has less columns compared to the simulated data."
+  },
+  {
+    "objectID": "week1.html#data-information",
+    "href": "week1.html#data-information",
+    "title": "Progress report",
+    "section": "",
+    "text": "Input data: - Complete genome assembly: obtain from Genbank (contains chromosome and plasmids) - Shovill simulated: only the chromosome - The realfastq simulated: only the chromosome - .mmi the genome pathway - .gfa is the assembly graph"
+  },
+  {
+    "objectID": "week1.html#investigate-the-output-file",
+    "href": "week1.html#investigate-the-output-file",
+    "title": "Progress report",
+    "section": "",
+    "text": "# import pyeris\n\n# # Run Eris with simulated data\n# eris -i data/contigs_shovill_simulated.gfa \\\n#     -d data/IS.mmi \\\n#     -o output/eris_output_simulated\n\n\n# # Run Eris for only the contigs of the complete genome assembly\n# eris -i data/contigs_complete_genome_assembly.gfa -d data/IS.mmi -o output/eris_output_complete_genome\n\nHave error from previous code and give an interval errors. There is no intervals detected errors when running the code.\nTry downloading UV\n\n# For the simulated data\n# uv run eris -i data/contigs_shovill_simulated.gfa \\\n#     -d data/IS.mmi \\\n#     -o output/eris_output_simulated\n\n# # For the complete genome assembly\n# uv run eris -i ../data/EC958_complete_genome.fasta \\\n#     -d ../data/IS.mmi -o ../output/eris_output_complete \\\n#     -q\n\n# mkdir -p output/complete_genome && mv output/eris_output_complete* output/complete_genome/\n\nWe succesfully run Eris for both the simulated data and the complete genome assembly. We can now investigate the output files.\nThe problem with the complete genome assembly: - Since it contains plasmids, ERIS didn’t run successfully. The complete genome has less columns compared to the simulated data."
+  }
+]
