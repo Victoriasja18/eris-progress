@@ -5,9 +5,8 @@ date: "2026-06-10"
 
 ---
 
-# 10/06/2026 
 
-## Data information
+# Data information
 Input data:
 - Complete genome assembly: obtain from Genbank (contains chromosome and plasmids)
 - Shovill simulated: only the chromosome 
@@ -15,14 +14,15 @@ Input data:
 - .mmi the genome pathway
 - .gfa is the assembly graph
 
-## Investigate the output file 
+# Running Eris
+We investigate the output file of simulated and complete genome assembly. 
+
 ```{python}
-# import pyeris
 
 # # Run Eris with simulated data
 # eris -i data/contigs_shovill_simulated.gfa \
-#     -d data/IS.mmi \
-#     -o output/eris_output_simulated
+#      -d data/IS.mmi \
+#      -o output/eris_output_simulated
 
 
 # # Run Eris for only the contigs of the complete genome assembly
@@ -31,6 +31,7 @@ Input data:
 
 Have error from previous code and give an interval errors. 
 There is no intervals detected errors when running the code.
+Note: please run eris in command line inside the github file
 
 Try downloading UV
 
@@ -50,7 +51,7 @@ Try downloading UV
 
 We succesfully run Eris for both the simulated data and the complete genome assembly. We can now investigate the output files.
 
-The problem with the complete genome assembly:
+The problem with the complete genome assembly (from Dimas):
 - Since it contains plasmids, ERIS didn't run successfully. The complete genome has less columns compared to the simulated data.
 
 # Analysing the output files
@@ -93,5 +94,113 @@ print("IS elements found in both datasets:", common_is)
 
 There are only 2 common IS between both data which create ambiguity in the results.
 
-After investigating the terminal, the complete genome assembly has .fasta format with only 3 long sequences. However, the simulated data has 456 shorter sequences. 
+--- 
+# Analysis to improve the results of the complete genome assembly
 
+After investigating the terminal, the complete genome assembly has .fasta format with only 3 long sequences. However, the simulated data has 456 fragmented sequences. 
+```{python}
+# Check the number of sequences in the complete genome assembly
+print("Number of sequences in complete genome assembly:")
+!grep -c "^>" ../data/EC958_complete_genome.fasta
+
+# Check the number of sequences in the simulated data
+print("Number of sequences in simulated data:")
+!grep -c "^S" ../data/contigs_shovill_simulated.gfa
+```
+
+## Convert the Fasta into GFA format
+Since the complete genome assembly is in .fasta format, we need to convert it into .gfa format to run Eris. The .gfa format has an important information where we can see the overlaps, paths, and coverage, while the FASTA lack of this information. 
+
+We used minigraph to convert the fasta file into gfa format. The command is as follows:
+
+```{bash}
+minigraph -xggs data/EC958_complete_genome.fasta > data/EC958_complete_genome.gfa
+
+# rerun Eris with the new gfa file
+uv run eris -i ../data/EC958_complete_genome.gfa -d ../data/IS.mmi -o ../output/complete_gfa/eris_complete_gfa
+```
+
+Weakness of this might be not real topological information of the genome assembly, as the gfa file is generated from the fasta file.
+
+```{python}
+# Load the new output file
+complete_gfa_df = pd.read_csv("../output/complete_gfa/eris_complete_gfa_report.tsv", sep="\t")
+
+# Check the dimension of the new dataframe
+print("Dimension of the new dataframe:", complete_gfa_df.shape)
+# Group IS elements together and count the number of occurrences for each IS element in the new dataframe
+complete_gfa_counts = complete_gfa_df.groupby("target")["target"].count()
+print("Total IS element counts in the new dataframe:", complete_gfa_counts.count())
+```
+
+Turns out that there are still only 4 IS found in the complete genome assembly after converting it into gfa format. 
+
+## Fragmentation of the complete genome assembly from the fasta file
+I want to try create a fragmentations of the complete genome assembly to see if it can improve the results. As the complete genome assembly has 3 sequences, I will try to create 150 fragments for each sequence.
+```{python}
+# Create fragments of the complete genome assembly
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
+import random
+
+complete_fasta = "../data/EC958_complete_genome.fasta"
+fragmented_fasta = "../data/EC958_complete_genome_fragmented.fasta"
+
+def fragment_genome(input_fasta: str, output_fasta: str, num_fragments: int = 150):
+    records = list(SeqIO.parse(input_fasta, "fasta"))
+    fragments = []
+    
+    for record in records:
+        seq_length = len(record.seq)
+        fragment_size = seq_length // num_fragments
+        
+        for i in range(num_fragments):
+            start = i * fragment_size
+            end = (i + 1) * fragment_size if i < num_fragments - 1 else seq_length
+            fragment_seq = record.seq[start:end]
+            fragment_id = f"{record.id}_fragment_{i+1}"
+            fragments.append(SeqRecord(fragment_seq, id=fragment_id, description=""))
+    
+    SeqIO.write(fragments, output_fasta, "fasta")
+    print(f"Written {len(fragments)} fragments to {output_fasta}")
+
+
+# Fragment the complete genome assembly
+fragment_genome(complete_fasta, 
+    fragmented_fasta, 
+    num_fragments=150)
+```
+
+After creating the fragmented fasta file, we can convert it into gfa format and run Eris again to see if there are more IS elements found in the complete genome assembly.
+
+```{bash}
+# Try to use Eris with the fragmented complete genome assembly
+# uv run eris --genome ../data/EC958_complete_genome_fragmented.fasta -d ../data/IS.mmi -o ../output/complete_fragmented/eris_complete_fragmented -q
+```
+
+### Investigate the output file after fragmentation
+```{python}
+# Load the new output file after fragmentation
+import pandas as pd
+complete_fragmented_df = pd.read_csv("../output/complete_fragmented/eris_complete_fragmented_report.tsv", sep="\t")
+# Check the dimension of the new dataframe after fragmentation  
+print("Dimension of the new dataframe after fragmentation:", complete_fragmented_df.shape)
+# Group IS elements together and count the number of occurrences for each IS element in the new dataframe
+complete_fragmented_counts = complete_fragmented_df.groupby("target")["target"].count()
+print("Total IS element counts in the new dataframe after fragmentation:", complete_fragmented_counts.count())
+```
+
+There are more IS found in the fragmented genome. However, we want to know whether is it the same IS found in the simulated data. Otherwise also report, the one that not found in the simulated data.
+```{python}
+# Check if the IS elements found in the fragmented complete genome assembly are also found in the simulated
+common_fragmented = set(complete_fragmented_counts.index) & set(simulated_counts.index)
+print("Number of common IS elements found in both datasets after fragmentation:", len(common_fragmented))
+print("IS elements found in both datasets after fragmentation:", common_fragmented)
+
+# Check the IS elements found in the fragmented complete genome assembly that are not found in the simulated data
+unique_fragmented = set(complete_fragmented_counts.index) - set(simulated_counts.index)
+print("Number of IS elements found in the fragmented complete genome assembly that are not found in the simulated data:", len(unique_fragmented))
+print("IS elements found in the fragmented complete genome assembly that are not found in the simulated data:", unique_fragmented)
+```
+
+There are 15 common IS found in the simulated and plasmid 
