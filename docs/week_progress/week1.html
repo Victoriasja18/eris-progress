@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-8c38fd85d21bfe44b50360969156fb14.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-209258432f336cc574c0f847bd0a7210.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -218,7 +218,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="running-eris" class="level1">
 <h1>Running Eris</h1>
 <p>We investigate the output file of simulated and complete genome assembly.</p>
-<div id="55c83a43" class="cell" data-execution_count="1">
+<div id="6761721d" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Run Eris with simulated data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># eris -i data/contigs_shovill_simulated.gfa \</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#      -d data/IS.mmi \</span></span>
@@ -230,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Have error from previous code and give an interval errors. There is no intervals detected errors when running the code. Note: please run eris in command line inside the github file</p>
 <p>Try downloading UV</p>
-<div id="7a689a19" class="cell" data-execution_count="2">
+<div id="847336d4" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For the simulated data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># uv run eris -i data/contigs_shovill_simulated.gfa \</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     -d data/IS.mmi \</span></span>
@@ -238,21 +238,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># # For the complete genome assembly</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># uv run eris -i ../data/EC958_complete_genome.fasta \</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     -d ../data/IS.mmi -o ../output/eris_output_complete \</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     -d ../data/IS.mmi -o ../result/eris_output_complete \</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     -q</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># mkdir -p output/complete_genome &amp;&amp; mv output/eris_output_complete* output/complete_genome/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># mkdir -p result/complete_genome &amp;&amp; mv result/eris_output_complete* result/complete_genome/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We succesfully run Eris for both the simulated data and the complete genome assembly. We can now investigate the output files.</p>
 <p>The problem with the complete genome assembly (from Dimas): - Since it contains plasmids, ERIS didn’t run successfully. The complete genome has less columns compared to the simulated data.</p>
 </section>
 <section id="analysing-the-output-files" class="level1">
 <h1>Analysing the output files</h1>
-<div id="57df8c60" class="cell" data-execution_count="3">
+<div id="ffb0eebe" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the output files</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>simulated_df <span class="op">=</span> pd.read_csv(<span class="st">"../output/output_simulated/eris_output_simulated_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>complete_df <span class="op">=</span> pd.read_csv(<span class="st">"../output/complete_genome/eris_output_complete_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>simulated_df <span class="op">=</span> pd.read_csv(<span class="st">"../result/output_simulated/eris_output_simulated_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>complete_df <span class="op">=</span> pd.read_csv(<span class="st">"../result/complete_genome/eris_output_complete_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the dimension of each dataframe</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Simulated data shape:"</span>, simulated_df.shape)</span>
@@ -272,7 +272,7 @@ Total complete genome assembly IS element counts: 4</code></pre>
 </div>
 </div>
 <p>There are <strong>only 4 IS found in the complete genome assembly</strong>, while there are 35 distinct IS found in the simulated data. This means Eris doesn’t perform well on the complete genome assembly, likely due to the presence of plasmids. We can investigate the IS elements found in both datasets by printing out the target column.</p>
-<div id="9c4d9fba" class="cell" data-execution_count="4">
+<div id="f557e04b" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In case we want to investigate the IS elements found in the complete genome assembly, we can print out the target column</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in complete genome assembly:"</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(complete_counts)</span>
@@ -328,7 +328,7 @@ Name: target, dtype: int64</code></pre>
 </div>
 </div>
 <p>I want to check whether the IS elements found in the complete genome assembly are also found in the simulated data.</p>
-<div id="9f459ee8" class="cell" data-execution_count="5">
+<div id="bb9cb71b" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the IS elements found in the complete genome assembly are also found in the simulated data</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>common_is <span class="op">=</span> <span class="bu">set</span>(complete_counts.index) <span class="op">&amp;</span> <span class="bu">set</span>(simulated_counts.index)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in both datasets:"</span>, common_is)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -342,7 +342,7 @@ Name: target, dtype: int64</code></pre>
 <section id="analysis-to-improve-the-results-of-the-complete-genome-assembly" class="level1">
 <h1>Analysis to improve the results of the complete genome assembly</h1>
 <p>After investigating the terminal, the complete genome assembly has .fasta format with only 3 long sequences. However, the simulated data has 456 fragmented sequences.</p>
-<div id="4d941d07" class="cell" data-execution_count="6">
+<div id="9ab184f4" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the number of sequences in the complete genome assembly</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of sequences in complete genome assembly:"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>grep <span class="op">-</span>c <span class="st">"^&gt;"</span> ..<span class="op">/</span>..<span class="op">/</span>data<span class="op">/</span>EC958_complete_genome.fasta</span>
@@ -364,11 +364,11 @@ Number of sequences in simulated data:
 <pre class="{bash}"><code># minigraph -xggs data/EC958_complete_genome.fasta &gt; data/EC958_complete_genome.gfa
 
 # rerun Eris with the new gfa file
-# uv run eris -i ../data/EC958_complete_genome.gfa -d ../data/IS.mmi -o ../output/complete_gfa/eris_complete_gfa</code></pre>
+# uv run eris -i ../data/EC958_complete_genome.gfa -d ../data/IS.mmi -o ../result/complete_gfa/eris_complete_gfa</code></pre>
 <p>Weakness of this might be not real topological information of the genome assembly, as the gfa file is generated from the fasta file.</p>
-<div id="af9e0193" class="cell" data-execution_count="7">
+<div id="2edb9461" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the new output file</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>complete_gfa_df <span class="op">=</span> pd.read_csv(<span class="st">"../output/complete_gfa/eris_complete_gfa_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>complete_gfa_df <span class="op">=</span> pd.read_csv(<span class="st">"../result/complete_gfa/eris_complete_gfa_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the dimension of the new dataframe</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dimension of the new dataframe:"</span>, complete_gfa_df.shape)</span>
@@ -385,7 +385,7 @@ Total IS element counts in the new dataframe: 4</code></pre>
 <section id="fragmentation-of-the-complete-genome-assembly-from-the-fasta-file" class="level2">
 <h2 class="anchored" data-anchor-id="fragmentation-of-the-complete-genome-assembly-from-the-fasta-file">Fragmentation of the complete genome assembly from the fasta file</h2>
 <p>I want to try create a fragmentations of the complete genome assembly to see if it can improve the results. As the complete genome assembly has 3 sequences, I will try to create 150 fragments for each sequence.</p>
-<div id="20e6c063" class="cell" data-execution_count="8">
+<div id="ddb5ae6f" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create fragments of the complete genome assembly</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio <span class="im">import</span> SeqIO</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.SeqRecord <span class="im">import</span> SeqRecord</span>
@@ -423,13 +423,13 @@ Total IS element counts in the new dataframe: 4</code></pre>
 </div>
 <p>After creating the fragmented fasta file, we can convert it into gfa format and run Eris again to see if there are more IS elements found in the complete genome assembly.</p>
 <pre class="{bash}"><code># Try to use Eris with the fragmented complete genome assembly
-# uv run eris --genome ../data/EC958_complete_genome_fragmented.fasta -d ../data/IS.mmi -o ../output/complete_fragmented/eris_complete_fragmented -q</code></pre>
+# uv run eris --genome ../data/EC958_complete_genome_fragmented.fasta -d ../data/IS.mmi -o ../result/complete_fragmented/eris_complete_fragmented -q</code></pre>
 <section id="investigate-the-output-file-after-fragmentation" class="level3">
 <h3 class="anchored" data-anchor-id="investigate-the-output-file-after-fragmentation">Investigate the output file after fragmentation</h3>
-<div id="3a09f3c2" class="cell" data-execution_count="9">
+<div id="fb49900b" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the new output file after fragmentation</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>complete_fragmented_df <span class="op">=</span> pd.read_csv(<span class="st">"../output/complete_fragmented/eris_complete_fragmented_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>complete_fragmented_df <span class="op">=</span> pd.read_csv(<span class="st">"../result/complete_fragmented/eris_complete_fragmented_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the dimension of the new dataframe after fragmentation  </span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dimension of the new dataframe after fragmentation:"</span>, complete_fragmented_df.shape)</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Group IS elements together and count the number of occurrences for each IS element in the new dataframe</span></span>
@@ -441,7 +441,7 @@ Total IS element counts in the new dataframe after fragmentation: 24</code></pre
 </div>
 </div>
 <p>There are more IS found in the fragmented genome. However, we want to know whether is it the same IS found in the simulated data. Otherwise also report, the one that not found in the simulated data.</p>
-<div id="af3974a9" class="cell" data-execution_count="10">
+<div id="b376b63a" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the IS elements found in the fragmented complete genome assembly are also found in the simulated</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>common_fragmented <span class="op">=</span> <span class="bu">set</span>(complete_fragmented_counts.index) <span class="op">&amp;</span> <span class="bu">set</span>(simulated_counts.index)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of common IS elements found in both datasets after fragmentation:"</span>, <span class="bu">len</span>(common_fragmented))</span>
@@ -453,9 +453,9 @@ Total IS element counts in the new dataframe after fragmentation: 24</code></pre
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in the fragmented complete genome assembly that are not found in the simulated data:"</span>, unique_fragmented)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of common IS elements found in both datasets after fragmentation: 15
-IS elements found in both datasets after fragmentation: {'ISKox3_ISL3_unknown', 'IS609_IS200/IS605_IS605', 'ISEc10_IS21_unknown', 'ISEc12_IS21_unknown', 'IS1A_IS1_unknown', 'MITEEc1_IS630_unknown', 'ISEc9_IS1380_unknown,IS5_IS5_IS5', 'ISEc52_IS3_IS3', 'IS1F_IS1_unknown', 'IS21_IS21_unknown_stitched', 'ISEc1_ISAs1_unknown', 'ISEc38_ISL3_unknown', 'IS200C_IS200/IS605_IS200', 'IS1R_IS1_unknown', 'ISEc23_IS66_unknown'}
+IS elements found in both datasets after fragmentation: {'IS1R_IS1_unknown', 'IS1F_IS1_unknown', 'ISEc23_IS66_unknown', 'IS1A_IS1_unknown', 'ISEc10_IS21_unknown', 'ISEc38_ISL3_unknown', 'ISKox3_ISL3_unknown', 'ISEc9_IS1380_unknown,IS5_IS5_IS5', 'MITEEc1_IS630_unknown', 'IS200C_IS200/IS605_IS200', 'IS21_IS21_unknown_stitched', 'ISEc12_IS21_unknown', 'ISEc1_ISAs1_unknown', 'ISEc52_IS3_IS3', 'IS609_IS200/IS605_IS605'}
 Number of IS elements found in the fragmented complete genome assembly that are not found in the simulated data: 9
-IS elements found in the fragmented complete genome assembly that are not found in the simulated data: {'IS15DII_IS6_unknown', 'IS1397_IS3_IS150', 'ISEc9_IS1380_unknown', 'IS4_IS4_IS4', 'IS15_IS6_unknown', 'ISEcp1_IS1380_unknown', 'IS26_IS6_unknown', 'IS15DI_IS6_unknown', 'IS6100_IS6_unknown'}</code></pre>
+IS elements found in the fragmented complete genome assembly that are not found in the simulated data: {'IS6100_IS6_unknown', 'ISEc9_IS1380_unknown', 'IS1397_IS3_IS150', 'ISEcp1_IS1380_unknown', 'IS15_IS6_unknown', 'IS15DI_IS6_unknown', 'IS4_IS4_IS4', 'IS15DII_IS6_unknown', 'IS26_IS6_unknown'}</code></pre>
 </div>
 </div>
 <p>There are 15 common IS found in the simulated and plasmid</p>

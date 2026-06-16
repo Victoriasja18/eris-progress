@@ -44,10 +44,10 @@ Try downloading UV
 
 # # For the complete genome assembly
 # uv run eris -i ../data/EC958_complete_genome.fasta \
-#     -d ../data/IS.mmi -o ../output/eris_output_complete \
+#     -d ../data/IS.mmi -o ../result/eris_output_complete \
 #     -q
 
-# mkdir -p output/complete_genome && mv output/eris_output_complete* output/complete_genome/
+# mkdir -p result/complete_genome && mv result/eris_output_complete* result/complete_genome/
 ```
 
 We succesfully run Eris for both the simulated data and the complete genome assembly. We can now investigate the output files.
@@ -59,8 +59,8 @@ The problem with the complete genome assembly (from Dimas):
 ```{python}
 import pandas as pd
 # Load the output files
-simulated_df = pd.read_csv("../output/output_simulated/eris_output_simulated_report.tsv", sep="\t")
-complete_df = pd.read_csv("../output/complete_genome/eris_output_complete_report.tsv", sep="\t")
+simulated_df = pd.read_csv("../result/output_simulated/eris_output_simulated_report.tsv", sep="\t")
+complete_df = pd.read_csv("../result/complete_genome/eris_output_complete_report.tsv", sep="\t")
 
 # Check the dimension of each dataframe
 print("Simulated data shape:", simulated_df.shape)
@@ -118,14 +118,14 @@ We used minigraph to convert the fasta file into gfa format. The command is as f
 # minigraph -xggs data/EC958_complete_genome.fasta > data/EC958_complete_genome.gfa
 
 # rerun Eris with the new gfa file
-# uv run eris -i ../data/EC958_complete_genome.gfa -d ../data/IS.mmi -o ../output/complete_gfa/eris_complete_gfa
+# uv run eris -i ../data/EC958_complete_genome.gfa -d ../data/IS.mmi -o ../result/complete_gfa/eris_complete_gfa
 ```
 
 Weakness of this might be not real topological information of the genome assembly, as the gfa file is generated from the fasta file.
 
 ```{python}
 # Load the new output file
-complete_gfa_df = pd.read_csv("../output/complete_gfa/eris_complete_gfa_report.tsv", sep="\t")
+complete_gfa_df = pd.read_csv("../result/complete_gfa/eris_complete_gfa_report.tsv", sep="\t")
 
 # Check the dimension of the new dataframe
 print("Dimension of the new dataframe:", complete_gfa_df.shape)
@@ -176,14 +176,14 @@ After creating the fragmented fasta file, we can convert it into gfa format and 
 
 ```{bash}
 # Try to use Eris with the fragmented complete genome assembly
-# uv run eris --genome ../data/EC958_complete_genome_fragmented.fasta -d ../data/IS.mmi -o ../output/complete_fragmented/eris_complete_fragmented -q
+# uv run eris --genome ../data/EC958_complete_genome_fragmented.fasta -d ../data/IS.mmi -o ../result/complete_fragmented/eris_complete_fragmented -q
 ```
 
 ### Investigate the output file after fragmentation
 ```{python}
 # Load the new output file after fragmentation
 import pandas as pd
-complete_fragmented_df = pd.read_csv("../output/complete_fragmented/eris_complete_fragmented_report.tsv", sep="\t")
+complete_fragmented_df = pd.read_csv("../result/complete_fragmented/eris_complete_fragmented_report.tsv", sep="\t")
 # Check the dimension of the new dataframe after fragmentation  
 print("Dimension of the new dataframe after fragmentation:", complete_fragmented_df.shape)
 # Group IS elements together and count the number of occurrences for each IS element in the new dataframe
