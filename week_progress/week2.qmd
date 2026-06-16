@@ -8,3 +8,45 @@ execute:
 
 # Data validations
 
+# Investigate the output file after fragmentation
+```{python}
+# Load the new output file after fragmentation
+import pandas as pd
+# complete fragemented
+complete_fragmented_df = pd.read_csv("../result/complete_fragmented/eris_complete_fragmented_report.tsv", sep="\t")
+
+# Complete
+complete_df = pd.read_csv("../result/complete_genome/eris_output_complete_report.tsv", sep="\t")
+complete_counts = complete_df.groupby("target")["target"].count() 
+
+# Simulated
+simulated_df = pd.read_csv("../result/output_simulated/eris_output_simulated_report.tsv", sep="\t")
+simulated_counts = simulated_df.groupby("target")["target"].count()
+
+
+```
+
+Want to see how much number of IS elements are detected 
+
+```{python}
+# Check the dimension of the new dataframe after fragmentation  
+print("Dimension of the new dataframe after fragmentation:", complete_fragmented_df.shape)
+# Group IS elements together and count the number of occurrences for each IS element in the new dataframe
+complete_fragmented_counts = complete_fragmented_df.groupby("target")["target"].count()
+print("Total IS element counts in the new dataframe after fragmentation:", complete_fragmented_counts.count())
+```
+
+```{python}
+# Check if the IS elements found in the fragmented complete genome assembly are also found in the simulated
+common_fragmented = set(complete_fragmented_counts.index) & set(simulated_counts.index)
+print("Number of common IS elements found in both datasets after fragmentation:", len(common_fragmented))
+print("IS elements found in both datasets after fragmentation:", common_fragmented)
+
+# Check the IS elements found in the fragmented complete genome assembly that are not found in the simulated data
+unique_fragmented = set(complete_fragmented_counts.index) - set(simulated_counts.index)
+print("Number of IS elements found in the fragmented complete genome assembly that are not found in the simulated data:", len(unique_fragmented))
+print("IS elements found in the fragmented complete genome assembly that are not found in the simulated data:", unique_fragmented)
+```
+
+There are 15 common IS found in the simulated and plasmid datasets
+
