@@ -22,8 +22,6 @@ complete_counts = complete_df.groupby("target")["target"].count()
 # Simulated
 simulated_df = pd.read_csv("../result/output_simulated/eris_output_simulated_report.tsv", sep="\t")
 simulated_counts = simulated_df.groupby("target")["target"].count()
-
-
 ```
 
 Want to see how much number of IS elements are detected 
@@ -35,18 +33,71 @@ print("Dimension of the new dataframe after fragmentation:", complete_fragmented
 complete_fragmented_counts = complete_fragmented_df.groupby("target")["target"].count()
 print("Total IS element counts in the new dataframe after fragmentation:", complete_fragmented_counts.count())
 ```
-
+## If they are intersecting
 ```{python}
 # Check if the IS elements found in the fragmented complete genome assembly are also found in the simulated
 common_fragmented = set(complete_fragmented_counts.index) & set(simulated_counts.index)
 print("Number of common IS elements found in both datasets after fragmentation:", len(common_fragmented))
-print("IS elements found in both datasets after fragmentation:", common_fragmented)
+print("IS elements found in both datasets after fragmentation:")
+print(common_fragmented)
 
 # Check the IS elements found in the fragmented complete genome assembly that are not found in the simulated data
 unique_fragmented = set(complete_fragmented_counts.index) - set(simulated_counts.index)
 print("Number of IS elements found in the fragmented complete genome assembly that are not found in the simulated data:", len(unique_fragmented))
-print("IS elements found in the fragmented complete genome assembly that are not found in the simulated data:", unique_fragmented)
+print("IS elements found in the fragmented complete genome assembly that are not found in the simulated data:")
+print(unique_fragmented)
 ```
 
 There are 15 common IS found in the simulated and plasmid datasets
 
+## Total disruption
+```{python}
+
+def calc_disruption(df):
+    total = int((df['effect'] == 'DISRUPTED').sum())
+    percentage = float(total / len(df) *100)
+    return total, round(percentage, 3)
+
+print("Total IS that is disrupted in complete genome:", calc_disruption(complete_df))
+print("Total IS that is disrupted in fragmented genome:", calc_disruption(complete_fragmented_df))
+print("Total IS that is disrupted in simulated genome:", calc_disruption(simulated_df))
+
+
+```
+
+## Summary
+| Total IS | Complete | Simulated | Fragmented |
+|---------|:-----|------:|:------:|
+| Total rows | 37 | 293 | 212 |
+| Total disruption | 7 | 24 | 16 |
+| Total unique IS | 4 | 35 | 24 |
+
+: Demonstration of pipe table syntax
+
+# Do the precision and recall calculations for the fragmented genome assembly
+
+I have confusion how to calculate the precision and recall.
+
+In the .bed file provided from Genbank, there are multiple IS with unique identifiers. We need to ensure we predicted the right IS element. 
+
+We group the IS elements and count the number of occurrences for each IS element in the new dataframe. We also want to separate the name as well to identify the location.
+
+```{python}
+# obtain the first IS name
+complete_fragmented_counts = complete_fragmented_df.groupby("target")["target"].count().reset_index(name="count")
+
+complete_fragmented_counts["Name"] = complete_fragmented_counts['target'].str.split('_').str[0]
+
+# Make it as a new variables (a bit too long)
+clean_frag = complete_fragmented_counts
+```
+Since we want to intersect with the bed file, we want to have the original position back from the complete sequence
+
+```{python}
+# def recalculate_original_position(df, fragment_size):
+#     df['original_start'] = (df['fragment_number'] - 1) * fragment_size + df['start_in_fragment']
+#     df['original_end'] = (df['fragment_number'] - 1) * fragment_size + df['end_in_fragment']
+#     return df
+
+# df = recalculate_original_position(df, fragment_size)
+# ```

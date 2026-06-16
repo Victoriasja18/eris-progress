@@ -164,7 +164,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#data-validations" id="toc-data-validations" class="nav-link active" data-scroll-target="#data-validations">Data validations</a></li>
-  <li><a href="#investigate-the-output-file-after-fragmentation" id="toc-investigate-the-output-file-after-fragmentation" class="nav-link" data-scroll-target="#investigate-the-output-file-after-fragmentation">Investigate the output file after fragmentation</a></li>
+  <li><a href="#investigate-the-output-file-after-fragmentation" id="toc-investigate-the-output-file-after-fragmentation" class="nav-link" data-scroll-target="#investigate-the-output-file-after-fragmentation">Investigate the output file after fragmentation</a>
+  <ul class="collapse">
+  <li><a href="#if-they-are-intersecting" id="toc-if-they-are-intersecting" class="nav-link" data-scroll-target="#if-they-are-intersecting">If they are intersecting</a></li>
+  <li><a href="#total-disruption" id="toc-total-disruption" class="nav-link" data-scroll-target="#total-disruption">Total disruption</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul></li>
+  <li><a href="#do-the-precision-and-recall-calculations-for-the-fragmented-genome-assembly" id="toc-do-the-precision-and-recall-calculations-for-the-fragmented-genome-assembly" class="nav-link" data-scroll-target="#do-the-precision-and-recall-calculations-for-the-fragmented-genome-assembly">Do the precision and recall calculations for the fragmented genome assembly</a></li>
+  <li><a href="#def-recalculate_original_positiondf-fragment_size" id="toc-def-recalculate_original_positiondf-fragment_size" class="nav-link" data-scroll-target="#def-recalculate_original_positiondf-fragment_size">def recalculate_original_position(df, fragment_size):</a></li>
+  <li><a href="#dforiginal_start-dffragment_number---1-fragment_size-dfstart_in_fragment" id="toc-dforiginal_start-dffragment_number---1-fragment_size-dfstart_in_fragment" class="nav-link" data-scroll-target="#dforiginal_start-dffragment_number---1-fragment_size-dfstart_in_fragment">df[‘original_start’] = (df[‘fragment_number’] - 1) * fragment_size + df[‘start_in_fragment’]</a></li>
+  <li><a href="#dforiginal_end-dffragment_number---1-fragment_size-dfend_in_fragment" id="toc-dforiginal_end-dffragment_number---1-fragment_size-dfend_in_fragment" class="nav-link" data-scroll-target="#dforiginal_end-dffragment_number---1-fragment_size-dfend_in_fragment">df[‘original_end’] = (df[‘fragment_number’] - 1) * fragment_size + df[‘end_in_fragment’]</a></li>
+  <li><a href="#return-df" id="toc-return-df" class="nav-link" data-scroll-target="#return-df">return df</a></li>
+  <li><a href="#df-recalculate_original_positiondf-fragment_size" id="toc-df-recalculate_original_positiondf-fragment_size" class="nav-link" data-scroll-target="#df-recalculate_original_positiondf-fragment_size">df = recalculate_original_position(df, fragment_size)</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">```</a></li>
   </ul>
 </nav>
     </div>
@@ -207,7 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="investigate-the-output-file-after-fragmentation" class="level1">
 <h1>Investigate the output file after fragmentation</h1>
-<div id="ff349b6c" class="cell" data-execution_count="1">
+<div id="0a0deef3" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the new output file after fragmentation</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># complete fragemented</span></span>
@@ -222,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>simulated_counts <span class="op">=</span> simulated_df.groupby(<span class="st">"target"</span>)[<span class="st">"target"</span>].count()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Want to see how much number of IS elements are detected</p>
-<div id="1a37f4a1" class="cell" data-execution_count="2">
+<div id="171ecf3a" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the dimension of the new dataframe after fragmentation  </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dimension of the new dataframe after fragmentation:"</span>, complete_fragmented_df.shape)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Group IS elements together and count the number of occurrences for each IS element in the new dataframe</span></span>
@@ -233,24 +245,117 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 Total IS element counts in the new dataframe after fragmentation: 24</code></pre>
 </div>
 </div>
-<div id="fe751052" class="cell" data-execution_count="3">
+<section id="if-they-are-intersecting" class="level2">
+<h2 class="anchored" data-anchor-id="if-they-are-intersecting">If they are intersecting</h2>
+<div id="922d7f21" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the IS elements found in the fragmented complete genome assembly are also found in the simulated</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>common_fragmented <span class="op">=</span> <span class="bu">set</span>(complete_fragmented_counts.index) <span class="op">&amp;</span> <span class="bu">set</span>(simulated_counts.index)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of common IS elements found in both datasets after fragmentation:"</span>, <span class="bu">len</span>(common_fragmented))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in both datasets after fragmentation:"</span>, common_fragmented)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the IS elements found in the fragmented complete genome assembly that are not found in the simulated data</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>unique_fragmented <span class="op">=</span> <span class="bu">set</span>(complete_fragmented_counts.index) <span class="op">-</span> <span class="bu">set</span>(simulated_counts.index)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of IS elements found in the fragmented complete genome assembly that are not found in the simulated data:"</span>, <span class="bu">len</span>(unique_fragmented))</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in the fragmented complete genome assembly that are not found in the simulated data:"</span>, unique_fragmented)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in both datasets after fragmentation:"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(common_fragmented)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the IS elements found in the fragmented complete genome assembly that are not found in the simulated data</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>unique_fragmented <span class="op">=</span> <span class="bu">set</span>(complete_fragmented_counts.index) <span class="op">-</span> <span class="bu">set</span>(simulated_counts.index)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of IS elements found in the fragmented complete genome assembly that are not found in the simulated data:"</span>, <span class="bu">len</span>(unique_fragmented))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"IS elements found in the fragmented complete genome assembly that are not found in the simulated data:"</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(unique_fragmented)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of common IS elements found in both datasets after fragmentation: 15
-IS elements found in both datasets after fragmentation: {'ISKox3_ISL3_unknown', 'ISEc9_IS1380_unknown,IS5_IS5_IS5', 'ISEc52_IS3_IS3', 'ISEc10_IS21_unknown', 'ISEc38_ISL3_unknown', 'IS21_IS21_unknown_stitched', 'IS1R_IS1_unknown', 'IS200C_IS200/IS605_IS200', 'ISEc12_IS21_unknown', 'IS1F_IS1_unknown', 'ISEc23_IS66_unknown', 'ISEc1_ISAs1_unknown', 'MITEEc1_IS630_unknown', 'IS609_IS200/IS605_IS605', 'IS1A_IS1_unknown'}
+IS elements found in both datasets after fragmentation:
+{'ISEc23_IS66_unknown', 'ISEc9_IS1380_unknown,IS5_IS5_IS5', 'ISEc52_IS3_IS3', 'IS1R_IS1_unknown', 'ISEc38_ISL3_unknown', 'IS1F_IS1_unknown', 'ISEc1_ISAs1_unknown', 'IS21_IS21_unknown_stitched', 'IS200C_IS200/IS605_IS200', 'ISKox3_ISL3_unknown', 'IS1A_IS1_unknown', 'ISEc12_IS21_unknown', 'MITEEc1_IS630_unknown', 'ISEc10_IS21_unknown', 'IS609_IS200/IS605_IS605'}
 Number of IS elements found in the fragmented complete genome assembly that are not found in the simulated data: 9
-IS elements found in the fragmented complete genome assembly that are not found in the simulated data: {'IS15DI_IS6_unknown', 'IS26_IS6_unknown', 'IS6100_IS6_unknown', 'IS15_IS6_unknown', 'IS4_IS4_IS4', 'IS1397_IS3_IS150', 'ISEc9_IS1380_unknown', 'IS15DII_IS6_unknown', 'ISEcp1_IS1380_unknown'}</code></pre>
+IS elements found in the fragmented complete genome assembly that are not found in the simulated data:
+{'IS1397_IS3_IS150', 'IS15_IS6_unknown', 'IS15DII_IS6_unknown', 'IS4_IS4_IS4', 'IS6100_IS6_unknown', 'ISEcp1_IS1380_unknown', 'IS15DI_IS6_unknown', 'IS26_IS6_unknown', 'ISEc9_IS1380_unknown'}</code></pre>
 </div>
 </div>
 <p>There are 15 common IS found in the simulated and plasmid datasets</p>
+</section>
+<section id="total-disruption" class="level2">
+<h2 class="anchored" data-anchor-id="total-disruption">Total disruption</h2>
+<div id="a26c69ab" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_disruption(df):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> <span class="bu">int</span>((df[<span class="st">'effect'</span>] <span class="op">==</span> <span class="st">'DISRUPTED'</span>).<span class="bu">sum</span>())</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    percentage <span class="op">=</span> <span class="bu">float</span>(total <span class="op">/</span> <span class="bu">len</span>(df) <span class="op">*</span><span class="dv">100</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> total, <span class="bu">round</span>(percentage, <span class="dv">3</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Total IS that is disrupted in complete genome:"</span>, calc_disruption(complete_df))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Total IS that is disrupted in fragmented genome:"</span>, calc_disruption(complete_fragmented_df))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Total IS that is disrupted in simulated genome:"</span>, calc_disruption(simulated_df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Total IS that is disrupted in complete genome: (7, 18.919)
+Total IS that is disrupted in fragmented genome: (24, 11.321)
+Total IS that is disrupted in simulated genome: (16, 5.461)</code></pre>
+</div>
+</div>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<table class="caption-top table">
+<caption>Demonstration of pipe table syntax</caption>
+<thead>
+<tr class="header">
+<th>Total IS</th>
+<th style="text-align: left;">Complete</th>
+<th style="text-align: right;">Simulated</th>
+<th style="text-align: center;">Fragmented</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Total rows</td>
+<td style="text-align: left;">37</td>
+<td style="text-align: right;">293</td>
+<td style="text-align: center;">212</td>
+</tr>
+<tr class="even">
+<td>Total disruption</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: center;">16</td>
+</tr>
+<tr class="odd">
+<td>Total unique IS</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: center;">24</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="do-the-precision-and-recall-calculations-for-the-fragmented-genome-assembly" class="level1">
+<h1>Do the precision and recall calculations for the fragmented genome assembly</h1>
+<p>I have confusion how to calculate the precision and recall.</p>
+<p>In the .bed file provided from Genbank, there are multiple IS with unique identifiers. We need to ensure we predicted the right IS element.</p>
+<p>We group the IS elements and count the number of occurrences for each IS element in the new dataframe. We also want to separate the name as well to identify the location.</p>
+<div id="bdfbc7a4" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># obtain the first IS name</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>complete_fragmented_counts <span class="op">=</span> complete_fragmented_df.groupby(<span class="st">"target"</span>)[<span class="st">"target"</span>].count().reset_index(name<span class="op">=</span><span class="st">"count"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>complete_fragmented_counts[<span class="st">"Name"</span>] <span class="op">=</span> complete_fragmented_counts[<span class="st">'target'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Make it as a new variables (a bit too long)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>clean_frag <span class="op">=</span> complete_fragmented_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Since we want to intersect with the bed file, we want to have the original position back from the complete sequence</p>
+</section>
+<section id="def-recalculate_original_positiondf-fragment_size" class="level1">
+<h1>def recalculate_original_position(df, fragment_size):</h1>
+</section>
+<section id="dforiginal_start-dffragment_number---1-fragment_size-dfstart_in_fragment" class="level1">
+<h1>df[‘original_start’] = (df[‘fragment_number’] - 1) * fragment_size + df[‘start_in_fragment’]</h1>
+</section>
+<section id="dforiginal_end-dffragment_number---1-fragment_size-dfend_in_fragment" class="level1">
+<h1>df[‘original_end’] = (df[‘fragment_number’] - 1) * fragment_size + df[‘end_in_fragment’]</h1>
+</section>
+<section id="return-df" class="level1">
+<h1>return df</h1>
+</section>
+<section id="df-recalculate_original_positiondf-fragment_size" class="level1">
+<h1>df = recalculate_original_position(df, fragment_size)</h1>
+</section>
+<section id="section" class="level1">
+<h1>```</h1>
 
 
 </section>
