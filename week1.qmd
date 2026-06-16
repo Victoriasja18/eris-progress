@@ -2,7 +2,8 @@
 title: "Progress report week 1"
 author: "Victoria Sjalim"
 date: "2026-06-10"
-
+execute: 
+  freeze: auto
 ---
 
 
@@ -114,10 +115,10 @@ Since the complete genome assembly is in .fasta format, we need to convert it in
 We used minigraph to convert the fasta file into gfa format. The command is as follows:
 
 ```{bash}
-minigraph -xggs data/EC958_complete_genome.fasta > data/EC958_complete_genome.gfa
+# minigraph -xggs data/EC958_complete_genome.fasta > data/EC958_complete_genome.gfa
 
 # rerun Eris with the new gfa file
-uv run eris -i ../data/EC958_complete_genome.gfa -d ../data/IS.mmi -o ../output/complete_gfa/eris_complete_gfa
+# uv run eris -i ../data/EC958_complete_genome.gfa -d ../data/IS.mmi -o ../output/complete_gfa/eris_complete_gfa
 ```
 
 Weakness of this might be not real topological information of the genome assembly, as the gfa file is generated from the fasta file.

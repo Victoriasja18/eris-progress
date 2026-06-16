@@ -5,6 +5,9 @@ project:
 website:
   title: "Eris Progress"
 
+execute: 
+  freeze: auto
+
 format:
   html:
     theme: cosmo
