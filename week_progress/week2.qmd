@@ -93,11 +93,3 @@ clean_frag = complete_fragmented_counts
 ```
 Since we want to intersect with the bed file, we want to have the original position back from the complete sequence
 
-```{python}
-# def recalculate_original_position(df, fragment_size):
-#     df['original_start'] = (df['fragment_number'] - 1) * fragment_size + df['start_in_fragment']
-#     df['original_end'] = (df['fragment_number'] - 1) * fragment_size + df['end_in_fragment']
-#     return df
-
-# df = recalculate_original_position(df, fragment_size)
-# ```
