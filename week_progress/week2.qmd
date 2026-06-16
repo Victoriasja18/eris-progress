@@ -1,0 +1,10 @@
+---
+title: "Progress report week 2"
+author: "Victoria Sjalim"
+date: "2026-06-17"
+execute: 
+  freeze: auto
+---
+
+# Data validations
+

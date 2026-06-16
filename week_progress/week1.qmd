@@ -102,11 +102,11 @@ After investigating the terminal, the complete genome assembly has .fasta format
 ```{python}
 # Check the number of sequences in the complete genome assembly
 print("Number of sequences in complete genome assembly:")
-!grep -c "^>" ../data/EC958_complete_genome.fasta
+!grep -c "^>" ../../data/EC958_complete_genome.fasta
 
 # Check the number of sequences in the simulated data
 print("Number of sequences in simulated data:")
-!grep -c "^S" ../data/contigs_shovill_simulated.gfa
+!grep -c "^S" ../../data/contigs_shovill_simulated.gfa
 ```
 
 ## Convert the Fasta into GFA format
@@ -144,8 +144,8 @@ from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 import random
 
-complete_fasta = "../data/EC958_complete_genome.fasta"
-fragmented_fasta = "../data/EC958_complete_genome_fragmented.fasta"
+complete_fasta = "../../data/EC958_complete_genome.fasta"
+fragmented_fasta = "../../data/EC958_complete_genome_fragmented.fasta"
 
 def fragment_genome(input_fasta: str, output_fasta: str, num_fragments: int = 150):
     records = list(SeqIO.parse(input_fasta, "fasta"))

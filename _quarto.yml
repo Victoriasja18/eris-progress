@@ -4,6 +4,17 @@ project:
 
 website:
   title: "Eris Progress"
+  navbar: 
+    background: primary
+    left: 
+      - text: "Home"
+        href: index.html
+      - text: "Weekly Updates"
+        menu: 
+          - text: "Week 1"
+            href: week_progress/week1.qmd
+          - text: "Week 2"
+            href: week_progress/week2.qmd
 
 execute: 
   freeze: auto
