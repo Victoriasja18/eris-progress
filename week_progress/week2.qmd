@@ -91,5 +91,52 @@ complete_fragmented_counts["Name"] = complete_fragmented_counts['target'].str.sp
 # Make it as a new variables (a bit too long)
 clean_frag = complete_fragmented_counts
 ```
-Since we want to intersect with the bed file, we want to have the original position back from the complete sequence
+
+## Reading the BED file
+Notice the position is so different. Since we want to intersect with the bed file, we want to have the original position back from the complete sequence
+
+```{python}
+# Reading the bed file
+bed_columns = ['transcript', 'chromStart', 'chromEnd', 'name', 'score', 'strand']
+
+# Read the file (use only the names that match your file's column count)
+ann_bed = pd.read_table('../../data/complete_ec958_IS.reanotated.sorted.bed', header=None, names=bed_columns[:6])
+
+print(ann_bed) 
+```
+
+## Calculate it based on the names
+---
+```{python}
+# Make a list for the name only and separate the underscore 
+# We remove any types in different position
+ref_list = list(ann_bed["name"].str.split('_').str[0].drop_duplicates())
+
+print(f'Total IS found in the list{len(ref_list)}')
+print(ref_list)
+
+ref_set = set(ref_list)
+
+# Flag each row whether it's found or not
+clean_frag['correct'] = clean_frag['Name'].isin(ref_set)
+
+# Overall accuracy
+accuracy_frag = clean_frag['correct'].mean()
+print(f'Accuracy is {accuracy_frag:.2%}')
+
+# Names not predicted in the list
+wrong_frag = clean_frag.loc[~clean_frag['correct'], 'Name'].unique()
+print("Names not found in reference list:", wrong_frag)
+
+```
+
+## Calculate it based on the position
+
+```{python}
+print(complete_fragmented_df.head(10))
+
+print(ann_bed.head(10))
+```
+
+From the file above we can see that the position doesn't reflect the original position after being fragmented. Therefore, we need to returned it to the original position
 
