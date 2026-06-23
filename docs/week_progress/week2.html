@@ -173,8 +173,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#do-the-precision-and-recall-calculations-for-the-fragmented-genome-assembly" id="toc-do-the-precision-and-recall-calculations-for-the-fragmented-genome-assembly" class="nav-link" data-scroll-target="#do-the-precision-and-recall-calculations-for-the-fragmented-genome-assembly">Do the precision and recall calculations for the fragmented genome assembly</a>
   <ul class="collapse">
   <li><a href="#reading-the-bed-file" id="toc-reading-the-bed-file" class="nav-link" data-scroll-target="#reading-the-bed-file">Reading the BED file</a></li>
-  <li><a href="#calculate-it-based-on-the-names" id="toc-calculate-it-based-on-the-names" class="nav-link" data-scroll-target="#calculate-it-based-on-the-names">## Calculate it based on the names</a></li>
-  <li><a href="#calculate-it-based-on-the-position" id="toc-calculate-it-based-on-the-position" class="nav-link" data-scroll-target="#calculate-it-based-on-the-position">Calculate it based on the position</a></li>
+  <li><a href="#calculate-it-based-on-the-names" id="toc-calculate-it-based-on-the-names" class="nav-link" data-scroll-target="#calculate-it-based-on-the-names">Calculate it based on the names</a></li>
+  </ul></li>
+  <li><a href="#meeting-updates---17626" id="toc-meeting-updates---17626" class="nav-link" data-scroll-target="#meeting-updates---17626">Meeting Updates - 17/6/26</a></li>
+  <li><a href="#analysing-the-is26is15" id="toc-analysing-the-is26is15" class="nav-link" data-scroll-target="#analysing-the-is26is15">Analysing the IS26/IS15</a>
+  <ul class="collapse">
+  <li><a href="#extracting-the-locations-of-the-is26-from-the-ground-truth" id="toc-extracting-the-locations-of-the-is26-from-the-ground-truth" class="nav-link" data-scroll-target="#extracting-the-locations-of-the-is26-from-the-ground-truth">Extracting the locations of the IS26 from the ground truth</a></li>
+  <li><a href="#analysing-is15" id="toc-analysing-is15" class="nav-link" data-scroll-target="#analysing-is15">Analysing IS15</a></li>
+  <li><a href="#analysing-both-datasets" id="toc-analysing-both-datasets" class="nav-link" data-scroll-target="#analysing-both-datasets">Analysing both datasets</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -218,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="investigate-the-output-file-after-fragmentation" class="level1">
 <h1>Investigate the output file after fragmentation</h1>
-<div id="2b828caa" class="cell" data-execution_count="1">
+<div id="148bf40d" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the new output file after fragmentation</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># complete fragemented</span></span>
@@ -233,7 +239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>simulated_counts <span class="op">=</span> simulated_df.groupby(<span class="st">"target"</span>)[<span class="st">"target"</span>].count()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Want to see how much number of IS elements are detected</p>
-<div id="7c061229" class="cell" data-execution_count="2">
+<div id="93c1a807" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the dimension of the new dataframe after fragmentation  </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dimension of the new dataframe after fragmentation:"</span>, complete_fragmented_df.shape)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Group IS elements together and count the number of occurrences for each IS element in the new dataframe</span></span>
@@ -246,7 +252,7 @@ Total IS element counts in the new dataframe after fragmentation: 24</code></pre
 </div>
 <section id="if-they-are-intersecting" class="level2">
 <h2 class="anchored" data-anchor-id="if-they-are-intersecting">If they are intersecting</h2>
-<div id="ad8d108c" class="cell" data-execution_count="3">
+<div id="0a434fed" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if the IS elements found in the fragmented complete genome assembly are also found in the simulated</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>common_fragmented <span class="op">=</span> <span class="bu">set</span>(complete_fragmented_counts.index) <span class="op">&amp;</span> <span class="bu">set</span>(simulated_counts.index)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of common IS elements found in both datasets after fragmentation:"</span>, <span class="bu">len</span>(common_fragmented))</span>
@@ -261,17 +267,17 @@ Total IS element counts in the new dataframe after fragmentation: 24</code></pre
 <div class="cell-output cell-output-stdout">
 <pre><code>Number of common IS elements found in both datasets after fragmentation: 15
 IS elements found in both datasets after fragmentation:
-{'ISEc23_IS66_unknown', 'ISEc10_IS21_unknown', 'IS1R_IS1_unknown', 'MITEEc1_IS630_unknown', 'ISKox3_ISL3_unknown', 'ISEc38_ISL3_unknown', 'IS1F_IS1_unknown', 'IS200C_IS200/IS605_IS200', 'ISEc52_IS3_IS3', 'IS21_IS21_unknown_stitched', 'ISEc1_ISAs1_unknown', 'ISEc9_IS1380_unknown,IS5_IS5_IS5', 'IS1A_IS1_unknown', 'IS609_IS200/IS605_IS605', 'ISEc12_IS21_unknown'}
+{'ISEc12_IS21_unknown', 'IS1A_IS1_unknown', 'ISKox3_ISL3_unknown', 'ISEc1_ISAs1_unknown', 'IS1F_IS1_unknown', 'ISEc10_IS21_unknown', 'IS609_IS200/IS605_IS605', 'ISEc38_ISL3_unknown', 'IS1R_IS1_unknown', 'IS200C_IS200/IS605_IS200', 'IS21_IS21_unknown_stitched', 'ISEc23_IS66_unknown', 'ISEc9_IS1380_unknown,IS5_IS5_IS5', 'MITEEc1_IS630_unknown', 'ISEc52_IS3_IS3'}
 Number of IS elements found in the fragmented complete genome assembly that are not found in the simulated data: 9
 IS elements found in the fragmented complete genome assembly that are not found in the simulated data:
-{'IS6100_IS6_unknown', 'IS26_IS6_unknown', 'IS4_IS4_IS4', 'IS15DI_IS6_unknown', 'ISEc9_IS1380_unknown', 'IS1397_IS3_IS150', 'ISEcp1_IS1380_unknown', 'IS15DII_IS6_unknown', 'IS15_IS6_unknown'}</code></pre>
+{'ISEc9_IS1380_unknown', 'IS6100_IS6_unknown', 'ISEcp1_IS1380_unknown', 'IS26_IS6_unknown', 'IS15_IS6_unknown', 'IS1397_IS3_IS150', 'IS4_IS4_IS4', 'IS15DI_IS6_unknown', 'IS15DII_IS6_unknown'}</code></pre>
 </div>
 </div>
 <p>There are 15 common IS found in the simulated and plasmid datasets</p>
 </section>
 <section id="total-disruption" class="level2">
 <h2 class="anchored" data-anchor-id="total-disruption">Total disruption</h2>
-<div id="1fa49476" class="cell" data-execution_count="4">
+<div id="41c7c503" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_disruption(df):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> <span class="bu">int</span>((df[<span class="st">'effect'</span>] <span class="op">==</span> <span class="st">'DISRUPTED'</span>).<span class="bu">sum</span>())</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    percentage <span class="op">=</span> <span class="bu">float</span>(total <span class="op">/</span> <span class="bu">len</span>(df) <span class="op">*</span><span class="dv">100</span>)</span>
@@ -327,7 +333,7 @@ Total IS that is disrupted in simulated genome: (16, 5.461)</code></pre>
 <p>I have confusion how to calculate the precision and recall.</p>
 <p>In the .bed file provided from Genbank, there are multiple IS with unique identifiers. We need to ensure we predicted the right IS element.</p>
 <p>We group the IS elements and count the number of occurrences for each IS element in the new dataframe. We also want to separate the name as well to identify the location.</p>
-<div id="725adf20" class="cell" data-execution_count="5">
+<div id="cac63a8a" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># obtain the first IS name</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>complete_fragmented_counts <span class="op">=</span> complete_fragmented_df.groupby(<span class="st">"target"</span>)[<span class="st">"target"</span>].count().reset_index(name<span class="op">=</span><span class="st">"count"</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -339,7 +345,7 @@ Total IS that is disrupted in simulated genome: (16, 5.461)</code></pre>
 <section id="reading-the-bed-file" class="level2">
 <h2 class="anchored" data-anchor-id="reading-the-bed-file">Reading the BED file</h2>
 <p>Notice the position is so different. Since we want to intersect with the bed file, we want to have the original position back from the complete sequence</p>
-<div id="2fb52294" class="cell" data-execution_count="6">
+<div id="1acc6ea2" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading the bed file</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bed_columns <span class="op">=</span> [<span class="st">'transcript'</span>, <span class="st">'chromStart'</span>, <span class="st">'chromEnd'</span>, <span class="st">'name'</span>, <span class="st">'score'</span>, <span class="st">'strand'</span>]</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -366,8 +372,8 @@ Total IS that is disrupted in simulated genome: (16, 5.461)</code></pre>
 </div>
 </section>
 <section id="calculate-it-based-on-the-names" class="level2">
-<h2 class="anchored" data-anchor-id="calculate-it-based-on-the-names">## Calculate it based on the names</h2>
-<div id="00afb3bd" class="cell" data-execution_count="7">
+<h2 class="anchored" data-anchor-id="calculate-it-based-on-the-names">Calculate it based on the names</h2>
+<div id="284b6c4f" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a list for the name only and separate the underscore </span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># We remove any types in different position</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ref_list <span class="op">=</span> <span class="bu">list</span>(ann_bed[<span class="st">"name"</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">0</span>].drop_duplicates())</span>
@@ -395,62 +401,159 @@ Names not found in reference list: ['IS15DII' 'IS15DI' 'IS15' 'ISEcp1']</code></
 </div>
 </div>
 </section>
-<section id="calculate-it-based-on-the-position" class="level2">
-<h2 class="anchored" data-anchor-id="calculate-it-based-on-the-position">Calculate it based on the position</h2>
-<div id="b38d57ba" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(complete_fragmented_df.head(<span class="dv">10</span>))</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ann_bed.head(<span class="dv">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="meeting-updates---17626" class="level1">
+<h1>Meeting Updates - 17/6/26</h1>
+<p>Our goals: 1. Do the precision recall from the complete genome sequence with the ground truth file 2. Determine whether the right position were called by Eris, especially for the chromosome (after the assembly) 3. Whether the context are correctly reported</p>
+<p>What we can do now? 1. Debug the minimap, especially how it behaving in the Fasta file 2. Add some pytest to see whether the code behaving like it should be 3. Investigate more about the IS15 (search the sequences and do BLAST search)</p>
+<p>Notes: - IS15 = IS26 - ISEcp1 = IS9</p>
+</section>
+<section id="analysing-the-is26is15" class="level1">
+<h1>Analysing the IS26/IS15</h1>
+<section id="extracting-the-locations-of-the-is26-from-the-ground-truth" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-the-locations-of-the-is26-from-the-ground-truth">Extracting the locations of the IS26 from the ground truth</h2>
+<div id="2ba3db40" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the sequence for IS26 in the ground truth file</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ann_bed[ann_bed[<span class="st">'name'</span>].<span class="bu">str</span>.startswith(<span class="st">'IS26'</span>)])</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We do have 8 IS26 </span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>is26_data <span class="op">=</span> ann_bed[ann_bed[<span class="st">'name'</span>].<span class="bu">str</span>.startswith(<span class="st">'IS26'</span>)]</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the new file as bedfile</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>is26_data[bed_columns].to_csv(<span class="st">"../../data/IS26_data.bed"</span>, sep<span class="op">=</span><span class="st">'</span><span class="ch">\t</span><span class="st">'</span>, header<span class="op">=</span><span class="va">False</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               locus_id                      target  \
-0  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-1  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-2  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-3  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-4  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-5  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-6  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-7  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-8  locus_split_7cb9f76c  IS21_IS21_unknown_stitched   
-9        locus_aec150fc         ISEc23_IS66_unknown   
-
-                             gene_id            context  dist_bp  topo_hops  \
-0   HG941718.1_fragment_67_3857_3992  OVERLAPPING_START        0          0   
-1   HG941718.1_fragment_67_4000_4132    OVERLAPPING_END        0          0   
-2   HG941718.1_fragment_67_5944_6181  OVERLAPPING_START        0          0   
-3   HG941718.1_fragment_67_3589_3805           UPSTREAM      140          0   
-4   HG941718.1_fragment_67_3390_3495           UPSTREAM      450          0   
-5   HG941718.1_fragment_67_3250_3343           UPSTREAM      602          0   
-6   HG941718.1_fragment_67_6486_6624         DOWNSTREAM      201          0   
-7   HG941718.1_fragment_67_7353_8526         DOWNSTREAM     1068          0   
-8   HG941718.1_fragment_67_8590_8827         DOWNSTREAM     2305          0   
-9  HG941718.1_fragment_7_28973_29369  OVERLAPPING_START        0          0   
-
-       orientation     effect  fractional_depth  
-0      same strand  DISRUPTED               1.0  
-1      same strand  DISRUPTED               1.0  
-2      same strand  DISRUPTED               1.0  
-3      same strand       NONE               1.0  
-4      same strand       NONE               1.0  
-5  opposite strand       NONE               1.0  
-6      same strand       NONE               1.0  
-7      same strand       NONE               1.0  
-8      same strand       NONE               1.0  
-9  opposite strand  DISRUPTED               1.0  
-   transcript  chromStart  chromEnd       name  score strand
-0  HG941718.1      233727    236259   ISEc23_1      0      +
-1  HG941718.1      814902    815025  MITEEc1_1      0      -
-2  HG941718.1     1365600   1366443     ISCfr4      0      +
-3  HG941718.1     1372287   1373517     ISEc24      0      -
-4  HG941718.1     1417476   1418621        IS4      0      -
-5  HG941718.1     1480031   1482480   ISEc12_1      0      +
-6  HG941718.1     1647528   1648819      ISEc1      0      +
-7  HG941718.1     1997567   1998999   IS1397_1      0      -
-8  HG941718.1     2103782   2104446    IS609_1      0      +
-9  HG941718.1     2135365   2136797   IS1397_2      0      -</code></pre>
+<pre><code>    transcript  chromStart  chromEnd    name  score strand
+49  HG941719.1       36288     37108  IS26_1      0      +
+50  HG941719.1       37108     38748  IS26_2      0      -
+51  HG941719.1       43434     44254  IS26_3      0      -
+53  HG941719.1       75316     76136  IS26_4      0      +
+54  HG941719.1       86143     86963  IS26_5      0      +
+56  HG941719.1       98044     98864  IS26_6      0      -
+57  HG941719.1      102449    103269  IS26_7      0      +
+58  HG941719.1      105455    106275  IS26_8      0      -</code></pre>
 </div>
 </div>
-<p>From the file above we can see that the position doesn’t reflect the original position after being fragmented. Therefore, we need to returned it to the original position</p>
+<p>Use bedtools to get the fasta</p>
+<pre class="{bash}"><code># bedtools getfasta -fi ../data/EC958_complete_genome.fasta -bed ./../data/IS26_data.bed -s -name &gt; ./../progress/result/is26_hits.fa</code></pre>
+<p>Blast search</p>
+</section>
+<section id="analysing-is15" class="level2">
+<h2 class="anchored" data-anchor-id="analysing-is15">Analysing IS15</h2>
+<div id="80e046f0" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract only the rows with IS15 on it</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>is15_df <span class="op">=</span> complete_fragmented_df[complete_fragmented_df[<span class="st">'target'</span>].<span class="bu">str</span>.startswith(<span class="st">"IS15"</span>)]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>is15_df <span class="op">=</span> is15_df.copy()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>parts <span class="op">=</span> is15_df[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the location</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>is15_df[<span class="st">'transcript'</span>] <span class="op">=</span> parts.<span class="bu">str</span>[<span class="dv">0</span>:<span class="dv">3</span>].<span class="bu">str</span>.join(<span class="st">'_'</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>is15_df[<span class="st">'start'</span>] <span class="op">=</span> parts.<span class="bu">str</span>[<span class="dv">3</span>]</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>is15_df[<span class="st">'end'</span>] <span class="op">=</span> parts.<span class="bu">str</span>[<span class="dv">4</span>]</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>is15_df[<span class="st">'score'</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>is15_df[<span class="st">'name'</span>] <span class="op">=</span> is15_df[<span class="st">'target'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Map the strand</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>is15_df[<span class="st">'strand'</span>] <span class="op">=</span> is15_df[<span class="st">'orientation'</span>].<span class="bu">map</span>({<span class="st">'same strand'</span>: <span class="st">'+'</span>, <span class="st">'opposite strand'</span>: <span class="st">'-'</span>})</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(is15_df.head(<span class="dv">10</span>))</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new bedfile</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>is15_bed <span class="op">=</span> is15_df[[<span class="st">'transcript'</span>, <span class="st">'start'</span>, <span class="st">'end'</span>, <span class="st">'name'</span>,<span class="st">'score'</span>, <span class="st">'strand'</span>]]</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>is15_bed.to_csv(<span class="st">'../../data/IS15_data.bed'</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, header<span class="op">=</span><span class="va">False</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           locus_id               target                          gene_id  \
+183  locus_4bc999be   IS15DI_IS6_unknown      HG941719.1_fragment_49_2_89   
+184  locus_4bc999be   IS15DI_IS6_unknown    HG941719.1_fragment_49_94_811   
+188  locus_80413b9b  IS15DII_IS6_unknown     HG941719.1_fragment_84_2_323   
+189  locus_80413b9b  IS15DII_IS6_unknown   HG941719.1_fragment_84_335_902   
+190  locus_04199b8a  IS15DII_IS6_unknown   HG941719.1_fragment_96_314_902   
+191  locus_04199b8a  IS15DII_IS6_unknown     HG941719.1_fragment_96_0_168   
+195  locus_74367e5e   IS15DI_IS6_unknown    HG941719.1_fragment_110_1_277   
+196  locus_74367e5e   IS15DI_IS6_unknown  HG941719.1_fragment_110_400_901   
+201  locus_4e22b4c5     IS15_IS6_unknown    HG941719.1_fragment_118_0_456   
+202  locus_4e22b4c5     IS15_IS6_unknown  HG941719.1_fragment_118_494_902   
+
+               context  dist_bp  topo_hops      orientation     effect  \
+183    OVERLAPPING_END        0          0      same strand  DISRUPTED   
+184             INSIDE        0          0      same strand       NONE   
+188  OVERLAPPING_START        0          0  opposite strand  DISRUPTED   
+189             INSIDE        0          0      same strand       NONE   
+190             INSIDE        0          0      same strand       NONE   
+191           UPSTREAM       95          0      same strand       NONE   
+195             INSIDE        0          0      same strand       NONE   
+196           UPSTREAM       72          0  opposite strand       NONE   
+201             INSIDE        0          0      same strand       NONE   
+202  OVERLAPPING_START        0          0  opposite strand  DISRUPTED   
+
+     fractional_depth               transcript start  end  score     name  \
+183               1.0   HG941719.1_fragment_49     2   89      0   IS15DI   
+184               1.0   HG941719.1_fragment_49    94  811      0   IS15DI   
+188               1.0   HG941719.1_fragment_84     2  323      0  IS15DII   
+189               1.0   HG941719.1_fragment_84   335  902      0  IS15DII   
+190               1.0   HG941719.1_fragment_96   314  902      0  IS15DII   
+191               1.0   HG941719.1_fragment_96     0  168      0  IS15DII   
+195               1.0  HG941719.1_fragment_110     1  277      0   IS15DI   
+196               1.0  HG941719.1_fragment_110   400  901      0   IS15DI   
+201               1.0  HG941719.1_fragment_118     0  456      0     IS15   
+202               1.0  HG941719.1_fragment_118   494  902      0     IS15   
+
+    strand  
+183      +  
+184      +  
+188      -  
+189      +  
+190      +  
+191      +  
+195      +  
+196      -  
+201      +  
+202      -  </code></pre>
+</div>
+</div>
+<pre class="{bash}"><code># bedtools getfasta -fi ../data/EC958_complete_genome_fragmented.fasta -bed ./../data/IS15_data.bed -s -name &gt; ../progress/result/is15_hits.fa</code></pre>
+</section>
+<section id="analysing-both-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="analysing-both-datasets">Analysing both datasets</h2>
+<div id="6d6c75be" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The dimension for the IS15"</span>, is15_bed.shape)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"This is the data for IS15:"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat ..<span class="op">/</span>..<span class="op">/</span>data<span class="op">/</span>IS15_data.bed</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">The dimension for IS26:"</span>, is26_data.shape)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"This is the data for the IS26"</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>cat ..<span class="op">/</span>..<span class="op">/</span>data<span class="op">/</span>IS26_data.bed</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The dimension for the IS15 (10, 6)
+This is the data for IS15:
+HG941719.1_fragment_49  2   89  IS15DI  0   +
+HG941719.1_fragment_49  94  811 IS15DI  0   +
+HG941719.1_fragment_84  2   323 IS15DII 0   -
+HG941719.1_fragment_84  335 902 IS15DII 0   +
+HG941719.1_fragment_96  314 902 IS15DII 0   +
+HG941719.1_fragment_96  0   168 IS15DII 0   +
+HG941719.1_fragment_110 1   277 IS15DI  0   +
+HG941719.1_fragment_110 400 901 IS15DI  0   -
+HG941719.1_fragment_118 0   456 IS15    0   +
+HG941719.1_fragment_118 494 902 IS15    0   -
+
+The dimension for IS26: (8, 6)
+This is the data for the IS26
+HG941719.1  36288   37108   IS26_1  0   +
+HG941719.1  37108   38748   IS26_2  0   -
+HG941719.1  43434   44254   IS26_3  0   -
+HG941719.1  75316   76136   IS26_4  0   +
+HG941719.1  86143   86963   IS26_5  0   +
+HG941719.1  98044   98864   IS26_6  0   -
+HG941719.1  102449  103269  IS26_7  0   +
+HG941719.1  105455  106275  IS26_8  0   -</code></pre>
+</div>
+</div>
+<p>As we can see, it comes from the same transcript. However, more IS found for IS15 compared to ground truth.</p>
+<p>Intersecting the file to see if they are actually the same sequence</p>
+<pre class="{bash}"><code># makeblastdb -in result/is_found/is26_hits.fa -dbtype nucl
+# blastn -query result/is_found/is15_hits.fa -db result/is_found/is26_hits.fa -outfmt "6 qseqid sseqid pident length evalue" -out result/is_found/hits_disc</code></pre>
+<pre class="{bash}"><code>cat /../result/is_found/hits_disc | head -10</code></pre>
+<p>Several positions with IS26 (1, 3, 4, 5, 6, 7, 8) were similar with the IS15, IS15DI, and IS15DII.</p>
 
 
 </section>

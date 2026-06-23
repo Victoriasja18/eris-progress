@@ -33,7 +33,9 @@ print("Dimension of the new dataframe after fragmentation:", complete_fragmented
 complete_fragmented_counts = complete_fragmented_df.groupby("target")["target"].count()
 print("Total IS element counts in the new dataframe after fragmentation:", complete_fragmented_counts.count())
 ```
+
 ## If they are intersecting
+
 ```{python}
 # Check if the IS elements found in the fragmented complete genome assembly are also found in the simulated
 common_fragmented = set(complete_fragmented_counts.index) & set(simulated_counts.index)
@@ -106,7 +108,6 @@ print(ann_bed)
 ```
 
 ## Calculate it based on the names
----
 ```{python}
 # Make a list for the name only and separate the underscore 
 # We remove any types in different position
@@ -130,13 +131,94 @@ print("Names not found in reference list:", wrong_frag)
 
 ```
 
-## Calculate it based on the position
 
+
+# Meeting Updates - 17/6/26
+Our goals:
+1. Do the precision recall from the complete genome sequence with the ground truth file
+2. Determine whether the right position were called by Eris, especially for the chromosome (after the assembly)
+3. Whether the context are correctly reported 
+
+What we can do now?
+1. Debug the minimap, especially how it behaving in the Fasta file
+2. Add some pytest to see whether the code behaving like it should be
+3. Investigate more about the IS15 (search the sequences and do BLAST search)
+
+Notes:
+- IS15 = IS26
+- ISEcp1 = IS9
+
+# Analysing the IS26/IS15
+
+## Extracting the locations of the IS26 from the ground truth
 ```{python}
-print(complete_fragmented_df.head(10))
+# Find the sequence for IS26 in the ground truth file
+print(ann_bed[ann_bed['name'].str.startswith('IS26')])
+# We do have 8 IS26 
 
-print(ann_bed.head(10))
+is26_data = ann_bed[ann_bed['name'].str.startswith('IS26')]
+
+# Save the new file as bedfile
+is26_data[bed_columns].to_csv("../../data/IS26_data.bed", sep='\t', header=False, index=False)
 ```
 
-From the file above we can see that the position doesn't reflect the original position after being fragmented. Therefore, we need to returned it to the original position
+Use bedtools to get the fasta
+```{bash}
+# bedtools getfasta -fi ../data/EC958_complete_genome.fasta -bed ./../data/IS26_data.bed -s -name > ./../progress/result/is26_hits.fa
+```
 
+Blast search
+
+## Analysing IS15
+```{python}
+# Extract only the rows with IS15 on it
+is15_df = complete_fragmented_df[complete_fragmented_df['target'].str.startswith("IS15")]
+is15_df = is15_df.copy()
+
+parts = is15_df['gene_id'].str.split('_')
+
+# Extract the location
+is15_df['transcript'] = parts.str[0:3].str.join('_')
+is15_df['start'] = parts.str[3]
+is15_df['end'] = parts.str[4]
+is15_df['score'] = 0
+is15_df['name'] = is15_df['target'].str.split('_').str[0]
+# Map the strand
+is15_df['strand'] = is15_df['orientation'].map({'same strand': '+', 'opposite strand': '-'})
+
+print(is15_df.head(10))
+
+# Create new bedfile
+is15_bed = is15_df[['transcript', 'start', 'end', 'name','score', 'strand']]
+is15_bed.to_csv('../../data/IS15_data.bed', sep="\t", header=False, index=False)
+```
+
+```{bash}
+# bedtools getfasta -fi ../data/EC958_complete_genome_fragmented.fasta -bed ./../data/IS15_data.bed -s -name > ../progress/result/is15_hits.fa
+```
+
+## Analysing both datasets
+```{python}
+print("The dimension for the IS15", is15_bed.shape)
+print("This is the data for IS15:")
+!cat ../../data/IS15_data.bed
+
+print("\nThe dimension for IS26:", is26_data.shape)
+print("This is the data for the IS26")
+!cat ../../data/IS26_data.bed
+```
+
+As we can see, it comes from the same transcript. However, more IS found for IS15 compared to ground truth.
+
+Intersecting the file to see if they are actually the same sequence
+```{bash}
+# makeblastdb -in result/is_found/is26_hits.fa -dbtype nucl
+# blastn -query result/is_found/is15_hits.fa -db result/is_found/is26_hits.fa -outfmt "6 qseqid sseqid pident length evalue" -out result/is_found/hits_disc
+```
+
+
+```{bash}
+cat /../result/is_found/hits_disc | head -10
+```
+
+Several positions with IS26 (1, 3, 4, 5, 6, 7, 8) were similar with the IS15, IS15DI, and IS15DII. 
