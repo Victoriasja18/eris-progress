@@ -88,6 +88,20 @@
     "href": "week_progress/week3.html",
     "title": "Progress report week 3",
     "section": "",
-    "text": "Analysing Minimap through mappy\nWhich modules has mappy:\n\nAlignment.py\nPipeline.py\nio.py\n\nWhich modules inherited the mappy:\n\ngraph.py\ninterval.py"
+    "text": "Which modules has mappy:\n\nalignment.py\npipeline.py\nio.py\n\nWhich modules inherited the mappy:\n\ngraph.py\ninterval.py"
+  },
+  {
+    "objectID": "week_progress/week3.html#minimap2",
+    "href": "week_progress/week3.html#minimap2",
+    "title": "Progress report week 3",
+    "section": "Minimap2",
+    "text": "Minimap2\nLet’s run the mappy without any eris and see what is the result.\nAfter reading the minimap2 API, it seems minimap2 required tuning for specific data type (i.e., differ between long vs short reads, ONT vs pac-bio)\n\nimport mappy as mp\nimport pandas as pd\n\n# Obtain the query first \n# !bedtools getfasta -fi data/EC958_complete_genome.fasta \\\n#     -bed data/complete_ec958_IS.reanotated.sorted.bed -s -name &gt; data/IS_elements.fa\n\n# Path\ncomp_fa_path = \"Eris/data/EC958_complete_genome.fasta\"\n\n# Align the complete genome assembly fasta file\ncomp_fa_aln = mp.Aligner(comp_fa_path, preset = \"map-ont\")\n\n#Read IS sequences and map them\nwith open(\"../result/minimap2_IS.bed\", \"w\") as bed:\n    for is_name, is_seq, _ in mp.fastx_read(\"../../data/IS_elements.fa\"):\n        for hit in comp_fa_aln.map(is_seq):\n            print(hit)\n            if not hit.is_primary:\n                continue\n            strand = \"+\" if hit.strand == 1 else \"-\"\n            bed.write(f\"{hit.ctg}\\t{hit.r_st}\\t{hit.r_en}\\t{is_name}\\t{hit.mapq}\\t{strand}\\n\")\nprint(\"It's done!\")\n\nIt's done!\n\n\nNothing hit want to try other way\n\n# minimap2 -c --cs -x asm5 data/EC958_complete_genome.fasta data/IS_elements.fa &gt; progress/result/complete_map_IS.paf\n\nimport pandas as pd\n\nrows = []\nwith open(\"../result/complete_map_IS.paf\") as f:\n    for line in f:\n        cols = line.strip().split(\"\\t\")\n        q_name  = cols[0]\n        t_name  = cols[5]\n        t_st    = int(cols[7])\n        t_en    = int(cols[8])\n        strand  = cols[4]\n        mapq    = int(cols[11])\n        rows.append([t_name, t_st, t_en, q_name, mapq, strand])\n\ntotal_is_file = pd.DataFrame(rows, columns=[\"transcript\",\"start\",\"end\",\"name\",\"score\",\"strand\"])\ntotal_is_file.to_csv(\"../result/minimap2_IS.bed\", sep=\"\\t\", index=False, header=False)\nprint(total_is_file.head(10))\nprint(total_is_file.shape)\n\n   transcript    start      end                                     name  \\\n0  HG941718.1   233727   236259    ISEc23_1::HG941718.1:233727-236259(+)   \n1  HG941719.1   131258   133790    ISEc23_1::HG941718.1:233727-236259(+)   \n2  HG941718.1  4925088  4927620    ISEc23_1::HG941718.1:233727-236259(+)   \n3  HG941718.1  2265833  2268365    ISEc23_1::HG941718.1:233727-236259(+)   \n4  HG941718.1  1365600  1366443    ISCfr4::HG941718.1:1365600-1366443(+)   \n5  HG941718.1  1372287  1373517    ISEc24::HG941718.1:1372287-1373517(-)   \n6  HG941718.1  1417476  1418621       IS4::HG941718.1:1417476-1418621(-)   \n7  HG941718.1  3111919  3114368  ISEc12_1::HG941718.1:1480031-1482480(+)   \n8  HG941718.1  2271181  2273630  ISEc12_1::HG941718.1:1480031-1482480(+)   \n9  HG941718.1  4971900  4974349  ISEc12_1::HG941718.1:1480031-1482480(+)   \n\n   score strand  \n0      0      +  \n1      0      -  \n2      0      +  \n3      0      +  \n4     60      +  \n5     60      -  \n6     60      -  \n7      0      +  \n8      0      +  \n9      0      +  \n(164, 6)\n\n\nIn total, there are 163 IS found just solely using minimap2."
+  },
+  {
+    "objectID": "week_progress/week3.html#debugging-the-file",
+    "href": "week_progress/week3.html#debugging-the-file",
+    "title": "Progress report week 3",
+    "section": "Debugging the file",
+    "text": "Debugging the file\nEris did some filtering that might hinder it finding IS.\nAfter investigating the pipeline from Pipeline.py, I want to test what would be the result from the function _process_contig usig the complete genome fasta file (.fasta) and the complete genome simulated (.gfa) file.\n\n#from eris import pipeline\nimport mappy as map"
   }
 ]

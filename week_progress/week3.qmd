@@ -6,15 +6,101 @@ execute:
   freeze: auto
 ---
 
-# Analysing Minimap through mappy
+# Analysing Eris Github
 Which modules has mappy:
 
-- ```Alignment.py```
-- ```Pipeline.py```
+- ```alignment.py```
+- ```pipeline.py```
 - ```io.py```
 
 Which modules inherited the mappy:
 
 - ```graph.py```
 - ```interval.py```
+
+# Analysing the pipeline
+The pipeline for Eris is below:
+- Contig processing (mostly from alignment.py)
+- Target mapping ()
+- Gene calling
+- Graph building (assuming from graph.py)
+- Locus assembly
+
+Problem with the pipeline:
+
+- The pipeline ultimately only handles multi-contigs because it relied on the overlapped between sequences. 
+    - Lack of condition for long-reads data
+- Some filtering that lead to less IS found
+
+## Minimap2 
+Let's run the mappy without any eris and see what is the result. 
+
+After reading the minimap2 API, it seems minimap2 required tuning for specific data type (i.e., differ between long vs short reads, ONT vs pac-bio)
+
+```{python}
+import mappy as mp
+import pandas as pd
+
+# Obtain the query first 
+# !bedtools getfasta -fi data/EC958_complete_genome.fasta \
+#     -bed data/complete_ec958_IS.reanotated.sorted.bed -s -name > data/IS_elements.fa
+
+# Path
+comp_fa_path = "Eris/data/EC958_complete_genome.fasta"
+
+# Align the complete genome assembly fasta file
+comp_fa_aln = mp.Aligner(comp_fa_path, preset = "map-ont")
+
+#Read IS sequences and map them
+with open("../result/minimap2_IS.bed", "w") as bed:
+    for is_name, is_seq, _ in mp.fastx_read("../../data/IS_elements.fa"):
+        for hit in comp_fa_aln.map(is_seq):
+            print(hit)
+            if not hit.is_primary:
+                continue
+            strand = "+" if hit.strand == 1 else "-"
+            bed.write(f"{hit.ctg}\t{hit.r_st}\t{hit.r_en}\t{is_name}\t{hit.mapq}\t{strand}\n")
+print("It's done!")
+
+```
+
+Nothing hit want to try other way
+```{python}
+# minimap2 -c --cs -x asm5 data/EC958_complete_genome.fasta data/IS_elements.fa > progress/result/complete_map_IS.paf
+
+import pandas as pd
+
+rows = []
+with open("../result/complete_map_IS.paf") as f:
+    for line in f:
+        cols = line.strip().split("\t")
+        q_name  = cols[0]
+        t_name  = cols[5]
+        t_st    = int(cols[7])
+        t_en    = int(cols[8])
+        strand  = cols[4]
+        mapq    = int(cols[11])
+        rows.append([t_name, t_st, t_en, q_name, mapq, strand])
+
+total_is_file = pd.DataFrame(rows, columns=["transcript","start","end","name","score","strand"])
+total_is_file.to_csv("../result/minimap2_IS.bed", sep="\t", index=False, header=False)
+print(total_is_file.head(10))
+print(total_is_file.shape)
+
+```
+
+In total, there are 163 IS found just solely using minimap2.
+
+## Debugging the file
+Eris did some filtering that might hinder it finding IS. 
+
+
+After investigating the pipeline from ```Pipeline.py```, I want to test what would be the result from the function ```_process_contig``` usig the complete genome fasta file (.fasta) and the complete genome simulated (.gfa) file.
+
+```{python}
+#from eris import pipeline
+import mappy as map
+
+
+```
 
