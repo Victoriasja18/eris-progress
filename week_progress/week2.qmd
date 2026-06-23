@@ -135,16 +135,19 @@ print("Names not found in reference list:", wrong_frag)
 
 # Meeting Updates - 17/6/26
 Our goals:
+
 1. Do the precision recall from the complete genome sequence with the ground truth file
 2. Determine whether the right position were called by Eris, especially for the chromosome (after the assembly)
 3. Whether the context are correctly reported 
 
 What we can do now?
+
 1. Debug the minimap, especially how it behaving in the Fasta file
 2. Add some pytest to see whether the code behaving like it should be
 3. Investigate more about the IS15 (search the sequences and do BLAST search)
 
 Notes:
+
 - IS15 = IS26
 - ISEcp1 = IS9
 
@@ -167,7 +170,6 @@ Use bedtools to get the fasta
 # bedtools getfasta -fi ../data/EC958_complete_genome.fasta -bed ./../data/IS26_data.bed -s -name > ./../progress/result/is26_hits.fa
 ```
 
-Blast search
 
 ## Analysing IS15
 ```{python}

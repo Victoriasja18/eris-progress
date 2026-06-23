@@ -1,0 +1,20 @@
+---
+title: "Progress report week 3"
+author: "Victoria Sjalim"
+date: "2026-06-23"
+execute: 
+  freeze: auto
+---
+
+# Analysing Minimap through mappy
+Which modules has mappy:
+
+- ```Alignment.py```
+- ```Pipeline.py```
+- ```io.py```
+
+Which modules inherited the mappy:
+
+- ```graph.py```
+- ```interval.py```
+
