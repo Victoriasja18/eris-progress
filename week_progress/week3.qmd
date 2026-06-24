@@ -20,6 +20,7 @@ Which modules inherited the mappy:
 
 # Analysing the pipeline
 The pipeline for Eris is below:
+
 - Contig processing (mostly from alignment.py)
 - Target mapping ()
 - Gene calling
@@ -65,9 +66,17 @@ print("It's done!")
 ```
 
 Nothing hit want to try other way
-```{python}
+```{bash}
+# Map this to the query
 # minimap2 -c --cs -x asm5 data/EC958_complete_genome.fasta data/IS_elements.fa > progress/result/complete_map_IS.paf
 
+# # Indexing
+# minimap2 -d data/IS.mmi data/EC958_complete_genome.fasta 
+
+```
+
+
+```{python}
 import pandas as pd
 
 rows = []
@@ -83,7 +92,7 @@ with open("../result/complete_map_IS.paf") as f:
         rows.append([t_name, t_st, t_en, q_name, mapq, strand])
 
 total_is_file = pd.DataFrame(rows, columns=["transcript","start","end","name","score","strand"])
-total_is_file.to_csv("../result/minimap2_IS.bed", sep="\t", index=False, header=False)
+total_is_file.to_csv("../result/complete_map_IS.bed", sep="\t", index=False, header=False)
 print(total_is_file.head(10))
 print(total_is_file.shape)
 
@@ -92,15 +101,65 @@ print(total_is_file.shape)
 In total, there are 163 IS found just solely using minimap2.
 
 ## Debugging the file
-Eris did some filtering that might hinder it finding IS. 
-
-
-After investigating the pipeline from ```Pipeline.py```, I want to test what would be the result from the function ```_process_contig``` usig the complete genome fasta file (.fasta) and the complete genome simulated (.gfa) file.
+Eris did some filtering that might hinder it finding IS. Run how does mappy acts on eris
 
 ```{python}
 #from eris import pipeline
-import mappy as map
+# import pandas as pd
+# from pathlib import Path
+# from eris.alignment import AlignmentBatch, Cigar
+# from eris.constants import Strand
 
+# def run_alignment(
+#     genome_fasta: str,
+#     is_fasta: str,
+#     preset: str = "asm5",
+#     min_mapq: int = 20,
+# ) -> AlignmentBatch:
+#     """
+#     Align IS elements against a reference genome and export PAF/BED.
+
+#     Args:
+#         genome_fasta: Path to reference genome (e.g. EC958.fasta)
+#         is_fasta:     Path to IS element sequences FASTA
+#         preset:       minimap2 preset — 'asm5' for assembled IS elements
+#         min_mapq:     Minimum mapping quality to keep
+
+#     Returns:
+#         Filtered AlignmentBatch of all primary hits
+#     """
+#     aligner = mp.Aligner(genome_fasta, preset=preset)
+#     if not aligner:
+#         raise ValueError(f"Failed to index genome: {genome_fasta}")
+
+#     batches = []
+#     for name, seq, _ in mp.fastx_read(is_fasta):
+#         hits = list(aligner.map(seq))
+#         if not hits:
+#             print(f"[warn] No hits for {name}")
+#             continue
+#         try:
+#             batch = AlignmentBatch.from_mappy(name, len(seq), hits)
+#             batches.append(batch)
+#         except ValueError:
+#             print(f"[warn] No primary alignments for {name}")
+#             continue
+
+#     if not batches:
+#         raise RuntimeError("No alignments produced — check your FASTA files and preset")
+
+#     # Merge all IS element batches into one
+#     combined = AlignmentBatch.concat(batches)
+
+#     # Filter by mapping quality
+#     combined = combined.filter(combined.qualities >= min_mapq)
+
+#     # Cull overlapping hits on the same target region
+#     combined = combined.cull_overlaps(max_overlap_fraction=0.1)
+
+#     return combined
+
+# aln_eris = run_alignment(comp_fa_path)
 
 ```
 
