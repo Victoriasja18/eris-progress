@@ -47,14 +47,14 @@ import pandas as pd
 #     -bed data/complete_ec958_IS.reanotated.sorted.bed -s -name > data/IS_elements.fa
 
 # Path
-comp_fa_path = "Eris/data/EC958_complete_genome.fasta"
+comp_fa_path = "../../data/EC958_complete_genome.fasta"
 
 # Align the complete genome assembly fasta file
-comp_fa_aln = mp.Aligner(comp_fa_path, preset = "map-ont")
+comp_fa_aln = mp.Aligner(comp_fa_path)
 
 #Read IS sequences and map them
 with open("../result/minimap2_IS.bed", "w") as bed:
-    for is_name, is_seq, _ in mp.fastx_read("../../data/IS_elements.fa"):
+    for is_name, is_seq, _ in mp.fastx_read("../../data/IS_n.mmi"):
         for hit in comp_fa_aln.map(is_seq):
             print(hit)
             if not hit.is_primary:
@@ -80,7 +80,7 @@ Nothing hit want to try other way
 import pandas as pd
 
 rows = []
-with open("../result/complete_map_IS.paf") as f:
+with open("../result/minimap2/complete_map_IS.paf") as f:
     for line in f:
         cols = line.strip().split("\t")
         q_name  = cols[0]
@@ -100,66 +100,19 @@ print(total_is_file.shape)
 
 In total, there are 163 IS found just solely using minimap2.
 
-## Debugging the file
-Eris did some filtering that might hinder it finding IS. Run how does mappy acts on eris
+##  Debugging the file
+Fixed the function `_build_local` in the `pipeline.py` 
 
-```{python}
-#from eris import pipeline
-# import pandas as pd
-# from pathlib import Path
-# from eris.alignment import AlignmentBatch, Cigar
-# from eris.constants import Strand
+We re-run the eris again with this.
 
-# def run_alignment(
-#     genome_fasta: str,
-#     is_fasta: str,
-#     preset: str = "asm5",
-#     min_mapq: int = 20,
-# ) -> AlignmentBatch:
-#     """
-#     Align IS elements against a reference genome and export PAF/BED.
+```{bash}
+# uv run eris -i ../data/contigs_shovill_realfastq.gfa -d ../data/IS_n.mmi -o ../progress/result/aft_sort/eris_new_gfa_comp -q
 
-#     Args:
-#         genome_fasta: Path to reference genome (e.g. EC958.fasta)
-#         is_fasta:     Path to IS element sequences FASTA
-#         preset:       minimap2 preset — 'asm5' for assembled IS elements
-#         min_mapq:     Minimum mapping quality to keep
+# uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/aft_sort/eris_new_gfa_sim -q
 
-#     Returns:
-#         Filtered AlignmentBatch of all primary hits
-#     """
-#     aligner = mp.Aligner(genome_fasta, preset=preset)
-#     if not aligner:
-#         raise ValueError(f"Failed to index genome: {genome_fasta}")
+# uv run eris -i ../data/EC958_complete_genome_fragmented.fasta -d ../data/IS_n.mmi -o ../progress/result/bfr_sort/com_frag_fa -q
 
-#     batches = []
-#     for name, seq, _ in mp.fastx_read(is_fasta):
-#         hits = list(aligner.map(seq))
-#         if not hits:
-#             print(f"[warn] No hits for {name}")
-#             continue
-#         try:
-#             batch = AlignmentBatch.from_mappy(name, len(seq), hits)
-#             batches.append(batch)
-#         except ValueError:
-#             print(f"[warn] No primary alignments for {name}")
-#             continue
-
-#     if not batches:
-#         raise RuntimeError("No alignments produced — check your FASTA files and preset")
-
-#     # Merge all IS element batches into one
-#     combined = AlignmentBatch.concat(batches)
-
-#     # Filter by mapping quality
-#     combined = combined.filter(combined.qualities >= min_mapq)
-
-#     # Cull overlapping hits on the same target region
-#     combined = combined.cull_overlaps(max_overlap_fraction=0.1)
-
-#     return combined
-
-# aln_eris = run_alignment(comp_fa_path)
+# grep "^>" ../progress/result/com_n_run/com_fa_sec_loci.fasta | wc -l
 
 ```
 

@@ -1,0 +1,6 @@
+label	locus_id	target	num_segments	is_stitched
+unsorted	locus_split_f39f82b6	IS682_IS66_unknown_stitched	2	True
+unsorted	locus_split_cfa41022	IS629_IS3_IS51_stitched	2	True
+unsorted	locus_split_4d745759	ISEc8_IS66_unknown_stitched	2	True
+unsorted	locus_split_21173d5f	IS21_IS21_unknown_stitched	2	True
+unsorted	locus_c0bbe1aa	ISEc12_IS21_unknown	1	False

@@ -1,0 +1,139 @@
+---
+title: "Progress report week 4"
+author: "Victoria Sjalim"
+date: "2026-06-30"
+execute: 
+  freeze: auto
+---
+
+# Analysing the file after sorting the location
+
+The complete genome assembly has more IS found compared to the .gfa file after sorting it.
+
+```{python}
+from Bio import SeqIO
+import pandas as pd
+from pathlib import Path
+
+def unique_is(filepath: str):
+    df = pd.read_table(filepath, sep="\t")
+    dim = df.shape[0]
+    count = len(df.groupby("target")["target"].count())
+    return f'Total IS: {dim}, Total unique IS: {count}'
+
+def calc_seq(filepath: str):
+    with open(filepath, "r") as file:
+        records = list(SeqIO.parse(file, "fasta"))
+    return(len(records))
+
+# Filepath
+folder = Path("../result/aft_sort/..").resolve()
+for file in folder.rglob("*.tsv"):
+    print(file.name)
+    print(unique_is(file))
+
+```
+
+It seems that the total number of unique IS found correspond to total number of loci created. If we back to the table from week 2, we found this:
+
+| Total IS | Complete | Simulated | Fragmented |
+|---------|:-----|------|------:|
+| Total rows | 37 | 293 | 212 |
+| Total unique IS | 4 | 35 | 24 |
+
+However, after we sorted it we found:
+| Total IS | Complete (fa) | Complete (gfa) | Simulated (gfa)|
+|---------|:-----|------|------:|
+| Total rows | 513 | 334 | 343 |
+| Total unique IS | 38 | 43 | 40 |
+
+## Investigate what does happened
+
+I compared the file _loci.fasta for the complete genome file. The one after sorting has more loci.
+
+```{bash}
+# calculate after sorting
+grep "^>" result/aft_sort/comp_fa/eris_new_complete_loci.fasta | wc -l
+
+# calculate before sorting
+grep "^>" result/bfr_sort/com_fa/com_fa_loci.fasta | wc -l
+```
+
+The before sorting only have 4 loci assembled, while after sorting have 60 assembled loci
+
+In the `pipeline.py` in **extract_sequence** function it mentioned that they are "Extracts the full nucleotide sequence of the locus from the assembly. Handles multi-contig loci by stitching segments together in graph order".
+
+I want to see how does Eris create the locus and the position they retained before and after sorting
+
+
+```{python}
+import importlib
+import eris.pipeline
+from eris.pipeline import Pipeline
+from eris.graph import TopologyEngine 
+from eris.io import GenomeAssembly, TargetDatabase
+import pandas as pd
+importlib.reload(eris.pipeline)
+
+# Target database
+target_db = TargetDatabase("../../data/IS_n.mmi")
+
+# Do genome assembly
+genome = GenomeAssembly.from_file("../../data/EC958_complete_genome.fasta")
+
+# See how does the locus builder actually work
+def collect_loci(genome, target_db, label):
+    rows = []
+    with Pipeline(target_db=target_db) as pipeline:
+        for locus in pipeline(genome):
+            target = locus.targets[0] if locus.targets else None
+            num_segments = len(target.segments) if target else 0
+            rows.append({
+                "label":        label,
+                "locus_id":     locus.id,
+                "target":       target.id if target else None,
+                "num_segments": num_segments,
+                "is_stitched":  num_segments > 1,
+            })
+    return pd.DataFrame(rows)
+
+sort = collect_loci(genome, target_db, label="sorted")
+
+sort.to_csv("../result/sorted_loci.tsv", sep="\t",index= False)
+
+```
+
+
+I used the same code, however, I changed the code inside pipeline.py manually (deleting/adding `.sort()`)
+
+## Debug the build local
+
+```{python}
+# from eris.pipeline import Pipeline, LocusBuilder
+# import eris.pipeline as ep
+
+# # Monkey-patch _build_local to log what it sees 
+# original_build_local = LocusBuilder._build_local
+
+# def debug_build_local(self, contig_id, intact_batch, contig_gene_intervals):
+#     print(f"\n[_build_local] contig: {contig_id}")
+#     print(f"  alignments in batch: {len(intact_batch)}")
+    
+#     results = list(original_build_local(self, contig_id, intact_batch, contig_gene_intervals))
+#     print(f"  loci produced: {len(results)}")
+    
+#     for locus in results:
+#         target = locus.targets[0] if locus.targets else None
+#         print(f"→ {locus.id} | {target.id if target else 'no target'}")
+    
+#     return iter(results)
+
+# LocusBuilder._build_local = debug_build_local
+
+# # Run on unsorted and watch the logs 
+# with Pipeline(target_db=target_db) as pipeline:
+#     loci = list(pipeline(unsorted_genome))
+
+# # Restore original 
+# LocusBuilder._build_local = original_build_local
+```

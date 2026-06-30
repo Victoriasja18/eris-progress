@@ -13,10 +13,10 @@ execute:
 # Load the new output file after fragmentation
 import pandas as pd
 # complete fragemented
-complete_fragmented_df = pd.read_csv("../result/complete_fragmented/eris_complete_fragmented_report.tsv", sep="\t")
+complete_fragmented_df = pd.read_csv("../result/com_frag/eris_complete_fragmented_report.tsv", sep="\t")
 
 # Complete
-complete_df = pd.read_csv("../result/complete_genome/eris_output_complete_report.tsv", sep="\t")
+complete_df = pd.read_csv("../result/com_genome/eris_output_complete_report.tsv", sep="\t")
 complete_counts = complete_df.groupby("target")["target"].count() 
 
 # Simulated
