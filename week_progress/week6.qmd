@@ -10,7 +10,7 @@ execute:
 ## Ground truth file
 Modify the Ground truth file so it would be easier for us to do precision and recall. 
 
- ```{python}
+```{python}
 import pandas as pd
 
 # Open the ground truth file
@@ -47,7 +47,7 @@ pred_fa = pred_fa.drop(columns=["gene_id", "locus_id", "target"])
 ```
 
 Create the synonyms for both files
- 
+
 ```{python}
 import IS_dict as isd
 

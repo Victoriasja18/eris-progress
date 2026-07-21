@@ -25,6 +25,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -147,9 +182,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#clean-the-data" id="toc-clean-the-data" class="nav-link active" data-scroll-target="#clean-the-data">Clean the data</a>
   <ul class="collapse">
   <li><a href="#ground-truth-file" id="toc-ground-truth-file" class="nav-link" data-scroll-target="#ground-truth-file">Ground truth file</a></li>
+  <li><a href="#for-the-result-of-complete-fasta-file" id="toc-for-the-result-of-complete-fasta-file" class="nav-link" data-scroll-target="#for-the-result-of-complete-fasta-file">For the result of complete fasta file</a></li>
   </ul></li>
-  <li><a href="#open-the-ground-truth-file" id="toc-open-the-ground-truth-file" class="nav-link" data-scroll-target="#open-the-ground-truth-file">Open the ground truth file</a></li>
-  <li><a href="#read-the-file-use-only-the-names-that-match-your-files-column-count" id="toc-read-the-file-use-only-the-names-that-match-your-files-column-count" class="nav-link" data-scroll-target="#read-the-file-use-only-the-names-that-match-your-files-column-count">Read the file (use only the names that match your file’s column count)</a></li>
   <li><a href="#precision-recall-for-the-gfa" id="toc-precision-recall-for-the-gfa" class="nav-link" data-scroll-target="#precision-recall-for-the-gfa">Precision recall for the GFA</a>
   <ul class="collapse">
   <li><a href="#analyse-the-data" id="toc-analyse-the-data" class="nav-link" data-scroll-target="#analyse-the-data">Analyse the data</a></li>
@@ -196,163 +230,245 @@ ul.task-list li input[type="checkbox"] {
 <section id="ground-truth-file" class="level2">
 <h2 class="anchored" data-anchor-id="ground-truth-file">Ground truth file</h2>
 <p>Modify the Ground truth file so it would be easier for us to do precision and recall.</p>
-<p>import pandas as pd</p>
+<div id="4d1b7bf6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Open the ground truth file</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>bed_columns <span class="op">=</span> [<span class="st">'transcript'</span>, <span class="st">'chromStart'</span>, <span class="st">'chromEnd'</span>, <span class="st">'name'</span>, <span class="st">'score'</span>, <span class="st">'strand'</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the file (use only the names that match your file's column count)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ann_bed <span class="op">=</span> pd.read_table(<span class="st">'../../data/complete_ec958_IS.reanotated.sorted.bed'</span>, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>bed_columns[:<span class="dv">6</span>])</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>gt <span class="op">=</span> ann_bed.copy()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>gt[<span class="st">"repeats"</span>] <span class="op">=</span> gt[<span class="st">"name"</span>].<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">1</span>] </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>gt[<span class="st">"name"</span>] <span class="op">=</span> gt[<span class="st">"name"</span>].<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gt.head(<span class="dv">20</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    transcript  chromStart  chromEnd      name  score strand repeats
+0   HG941718.1      233727    236259    ISEc23      0      +       1
+1   HG941718.1      814902    815025   MITEEc1      0      -       1
+2   HG941718.1     1365600   1366443    ISCfr4      0      +     NaN
+3   HG941718.1     1372287   1373517    ISEc24      0      -     NaN
+4   HG941718.1     1417476   1418621       IS4      0      -     NaN
+5   HG941718.1     1480031   1482480    ISEc12      0      +       1
+6   HG941718.1     1647528   1648819     ISEc1      0      +     NaN
+7   HG941718.1     1997567   1998999    IS1397      0      -       1
+8   HG941718.1     2103782   2104446     IS609      0      +       1
+9   HG941718.1     2135365   2136797    IS1397      0      -       2
+10  HG941718.1     2142423   2143132    IS200C      0      -       1
+11  HG941718.1     2244066   2245788    ISEc38      0      -     NaN
+12  HG941718.1     2248880   2250339    ISEc20      0      +     NaN
+13  HG941718.1     2252365   2254232  IS100kyp      0      -     NaN
+14  HG941718.1     2265833   2268365    ISEc23      0      +       2
+15  HG941718.1     2271108   2273665    ISEc12      0      +       2
+16  HG941718.1     2284842   2285551    IS200C      0      -       1
+17  HG941718.1     2384714   2385482      IS1A      0      -       1
+18  HG941718.1     3111919   3114403    ISEc12      0      +       3
+19  HG941718.1     3237314   3237436   MITEEc1      0      -       2</code></pre>
+</div>
+</div>
 </section>
-</section>
-<section id="open-the-ground-truth-file" class="level1">
-<h1>Open the ground truth file</h1>
-<p>bed_columns = [‘transcript’, ‘chromStart’, ‘chromEnd’, ‘name’, ‘score’, ‘strand’]</p>
-</section>
-<section id="read-the-file-use-only-the-names-that-match-your-files-column-count" class="level1">
-<h1>Read the file (use only the names that match your file’s column count)</h1>
-<p>ann_bed = pd.read_table(‘../../data/complete_ec958_IS.reanotated.sorted.bed’, header=None, names=bed_columns[:6])</p>
-<p>gt = ann_bed.copy() gt[“repeats”] = gt[“name”].str.split(“<em>”).str[1] gt[”name”] = gt[”name”].str.split(”</em>”).str[0]</p>
-<p>print(gt.head(20))</p>
-<pre><code>
-
-## For the result of complete fasta file
-```{python}
-comp_fa = pd.read_csv("../result/aft_sort/comp_fa/eris_new_complete_report.tsv", sep="\t")
-
-pred_fa = comp_fa.iloc[:,:3]
-
-# Extract the locations
-pred_fa["transcript"] = pred_fa['gene_id'].str.split('_').str[0]
-pred_fa["chromStart"] = pred_fa['gene_id'].str.split('_').str[1].astype(int)
-pred_fa["chromEnd"] = pred_fa['gene_id'].str.split('_').str[2].astype(int)
-
-# Extract the name
-pred_fa["name"] = pred_fa["target"].str.split("_").str[0]
-pred_fa["repeats"] = pred_fa.groupby("name")["locus_id"].transform(lambda x: pd.factorize(x)[0] + 1)
-
-pred_fa = pred_fa.drop(columns=["gene_id", "locus_id", "target"])
-</code></pre>
+<section id="for-the-result-of-complete-fasta-file" class="level2">
+<h2 class="anchored" data-anchor-id="for-the-result-of-complete-fasta-file">For the result of complete fasta file</h2>
+<div id="3704889c" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>comp_fa <span class="op">=</span> pd.read_csv(<span class="st">"../result/aft_sort/comp_fa/eris_new_complete_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pred_fa <span class="op">=</span> comp_fa.iloc[:,:<span class="dv">3</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the locations</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>pred_fa[<span class="st">"transcript"</span>] <span class="op">=</span> pred_fa[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>pred_fa[<span class="st">"chromStart"</span>] <span class="op">=</span> pred_fa[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">1</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>pred_fa[<span class="st">"chromEnd"</span>] <span class="op">=</span> pred_fa[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">2</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the name</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>pred_fa[<span class="st">"name"</span>] <span class="op">=</span> pred_fa[<span class="st">"target"</span>].<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>pred_fa[<span class="st">"repeats"</span>] <span class="op">=</span> pred_fa.groupby(<span class="st">"name"</span>)[<span class="st">"locus_id"</span>].transform(<span class="kw">lambda</span> x: pd.factorize(x)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>pred_fa <span class="op">=</span> pred_fa.drop(columns<span class="op">=</span>[<span class="st">"gene_id"</span>, <span class="st">"locus_id"</span>, <span class="st">"target"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p>Create the synonyms for both files</p>
-<pre class="{python}"><code>import IS_dict as isd
+<div id="4ceda6d8" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> IS_dict <span class="im">as</span> isd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the lookup once</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> isd.load_is_table()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>name_to_synonyms, synonym_to_name <span class="op">=</span> isd.build_synonym_dicts(rows)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new column: list of synonyms for each name in your dataframe</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>pred_fa[<span class="st">"synonyms"</span>] <span class="op">=</span> pred_fa[<span class="st">"name"</span>].<span class="bu">apply</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> n: isd.get_synonyms(n, name_to_synonyms, synonym_to_name) <span class="kw">or</span> pd.NA</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pred_fa.tail(<span class="dv">20</span>))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># for the GT</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>gt[<span class="st">"synonyms"</span>] <span class="op">=</span> gt[<span class="st">"name"</span>].<span class="bu">apply</span>(</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> n: isd.get_synonyms(n, name_to_synonyms, synonym_to_name) <span class="kw">or</span> pd.NA</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     transcript  chromStart  chromEnd  name  repeats  \
+493  HG941719.1      111527    112289  IS26        7   
+494  HG941719.1      114642    115608  IS26        7   
+495  HG941719.1      115653    116406  IS26        7   
+496  HG941719.1      116830    116968  IS26        7   
+497  HG941719.1      120422    120698  IS1A        3   
+498  HG941719.1      120742    121120  IS1A        3   
+499  HG941719.1      119865    120048  IS1A        3   
+500  HG941719.1      119494    119617  IS1A        3   
+501  HG941719.1      118164    119334  IS1A        3   
+502  HG941719.1      121153    121318  IS1A        3   
+503  HG941719.1      121373    122222  IS1A        3   
+504  HG941719.1      122380    123946  IS1A        3   
+505  HG941719.1      131288    132902  IS1R        2   
+506  HG941719.1      132932    133229  IS1R        2   
+507  HG941719.1      133279    133705  IS1R        2   
+508  HG941719.1      131155    131233  IS1R        2   
+509  HG941719.1      130304    131078  IS1R        2   
+510  HG941719.1      129791    130292  IS1R        2   
+511  HG941719.1      133862    134918  IS1R        2   
+512  HG941719.1      134951    135464  IS1R        2   
 
-# Build the lookup once
-rows = isd.load_is_table()
-name_to_synonyms, synonym_to_name = isd.build_synonym_dicts(rows)
-
-# Add a new column: list of synonyms for each name in your dataframe
-pred_fa["synonyms"] = pred_fa["name"].apply(
-    lambda n: isd.get_synonyms(n, name_to_synonyms, synonym_to_name) or pd.NA
-)
-
-print(pred_fa.tail(20))
-
-# for the GT
-gt["synonyms"] = gt["name"].apply(
-    lambda n: isd.get_synonyms(n, name_to_synonyms, synonym_to_name) or pd.NA
-)
-</code></pre>
-<pre class="{python}"><code>
-from collections import defaultdict
-
-def find_location_matches(df1, df2, buffer):
-    """
-    Stage 1: find every (df2_idx, df1_idx) pair whose location overlaps within buffer.
-    df1 = ground truth, df2 = predictions
-    Returns a list of candidate matches with both rows' info.
-    """
-    candidates = []
-    for i, pred in df2.iterrows():
-        for j, truth in df1.iterrows():
-            if pred["transcript"] != truth["transcript"]:
-                continue
-            if (pred["chromStart"] - buffer) &lt;= truth["chromEnd"] and \
-               (pred["chromEnd"]   + buffer) &gt;= truth["chromStart"]:
-                candidates.append({"pred_idx": i, "truth_idx": j})
-    return candidates
-
-def name_matches(pred_row, truth_name):
-    """True if truth_name equals pred's name, or appears in pred's synonyms
-    (handles synonyms stored as a real list or as a stringified list)."""
-    if pred_row["name"] == truth_name:
-        return True
-    syns = pred_row.get("synonyms", pd.NA)
-
-    if isinstance(syns, str):
-        try:
-            syns = ast.literal_eval(syns)
-        except (ValueError, SyntaxError):
-            syns = []
-
-    if isinstance(syns, list):
-        return truth_name in syns
-    return False
-
-def precision_recall(df1, df2, buffer):
-    candidates = find_location_matches(df1, df2, buffer)
-
-    # group all candidates by which prediction they belong to
-    by_pred = defaultdict(list)
-    for c in candidates:
-        by_pred[c["pred_idx"]].append(c["truth_idx"])
-
-    matched_df1 = set()
-    matched_df2 = set()
-    wrong_name_records = []
-
-    for i, truth_idxs in by_pred.items():
-        pred = df2.loc[i]
-        tp_found = False
-
-        # first pass: does ANY candidate match on name?
-        for j in truth_idxs:
-            truth = df1.loc[j]
-            if name_matches(pred, truth["name"]):
-                matched_df1.add(j)
-                matched_df2.add(i)
-                tp_found = True
-                break  # one correct match is enough for this prediction
-
-        # only log wrong_name if nothing matched
-        if not tp_found:
-            j = truth_idxs[0]  # closest/first candidate location
-            truth = df1.loc[j]
-            record = pred.to_dict()
-            record["truth_name"] = truth["name"]
-            record["truth_idx"] = j
-            record["category"] = "wrong_name"
-            wrong_name_records.append(record)
-
-    tp = len(matched_df2)
-    wrong_name_pred_idx = {r["truth_idx"] for r in []}  # not used for exclusion below; see fp_idx
-    wrong_name_pred_idx = set(pred_fa.loc[[r_i for r_i in by_pred if r_i not in matched_df2]].index)
-    fp_idx = set(pred_fa.index) - matched_df2 - wrong_name_pred_idx
-    fn = len(df1) - len(matched_df1)
-    fp = len(fp_idx)
-
-    precision = tp / (tp + fp) if (tp + fp) &gt; 0 else 0
-    recall    = tp / (tp + fn) if (tp + fn) &gt; 0 else 0
-    f1        = 2 * precision * recall / (precision + recall) if (precision + recall) &gt; 0 else 0
-
-    summary = {"buffer": buffer, "TP": tp, "FP": fp, "FN": fn,
-               "precision": round(precision, 3), "recall": round(recall, 3), "f1": round(f1, 3)}
-
-    tp_df = df2.loc[list(matched_df2)].copy()
-    tp_df["category"] = "TP"
-
-    wrong_name_df = pd.DataFrame(wrong_name_records)
-
-    fp_df = df2.loc[list(fp_idx)].copy()
-    fp_df["category"] = "FP"
-
-    fn_df = df1.loc[df1.index.difference(matched_df1)].copy()
-    fn_df["category"] = "FN"
-
-    detail_df = pd.concat([tp_df, wrong_name_df, fp_df, fn_df], ignore_index=True)
-    detail_df["buffer"] = buffer
-
-    return summary, detail_df</code></pre>
-<pre class="{python}"><code># Run for all buffers
-results = []
-for buf in [0, 25, 50, 100]:
-    summary, df = precision_recall(gt, pred_fa, buf)
-    results.append(summary)
-
-print(pd.DataFrame(results).to_string(index=False))</code></pre>
+                                              synonyms  
+493  [I, IS140, IS15, IS15-DeltaI, IS15-DeltaII, IS...  
+494  [I, IS140, IS15, IS15-DeltaI, IS15-DeltaII, IS...  
+495  [I, IS140, IS15, IS15-DeltaI, IS15-DeltaII, IS...  
+496  [I, IS140, IS15, IS15-DeltaI, IS15-DeltaII, IS...  
+497  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+498  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+499  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+500  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+501  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+502  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+503  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+504  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+505  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+506  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+507  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+508  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+509  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+510  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+511  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+512  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  </code></pre>
+</div>
+</div>
+<div id="46a40f1c" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_location_matches(df1, df2, <span class="bu">buffer</span>):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Stage 1: find every (df2_idx, df1_idx) pair whose location overlaps within buffer.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    df1 = ground truth, df2 = predictions</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns a list of candidate matches with both rows' info.</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    candidates <span class="op">=</span> []</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, pred <span class="kw">in</span> df2.iterrows():</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j, truth <span class="kw">in</span> df1.iterrows():</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> pred[<span class="st">"transcript"</span>] <span class="op">!=</span> truth[<span class="st">"transcript"</span>]:</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (pred[<span class="st">"chromStart"</span>] <span class="op">-</span> <span class="bu">buffer</span>) <span class="op">&lt;=</span> truth[<span class="st">"chromEnd"</span>] <span class="kw">and</span> <span class="op">\</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>               (pred[<span class="st">"chromEnd"</span>]   <span class="op">+</span> <span class="bu">buffer</span>) <span class="op">&gt;=</span> truth[<span class="st">"chromStart"</span>]:</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                candidates.append({<span class="st">"pred_idx"</span>: i, <span class="st">"truth_idx"</span>: j})</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> candidates</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> name_matches(pred_row, truth_name):</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""True if truth_name equals pred's name, or appears in pred's synonyms</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">    (handles synonyms stored as a real list or as a stringified list)."""</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> pred_row[<span class="st">"name"</span>] <span class="op">==</span> truth_name:</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    syns <span class="op">=</span> pred_row.get(<span class="st">"synonyms"</span>, pd.NA)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(syns, <span class="bu">str</span>):</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>            syns <span class="op">=</span> ast.literal_eval(syns)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> (<span class="pp">ValueError</span>, <span class="pp">SyntaxError</span>):</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>            syns <span class="op">=</span> []</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(syns, <span class="bu">list</span>):</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> truth_name <span class="kw">in</span> syns</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> precision_recall(df1, df2, <span class="bu">buffer</span>):</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    candidates <span class="op">=</span> find_location_matches(df1, df2, <span class="bu">buffer</span>)</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># group all candidates by which prediction they belong to</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    by_pred <span class="op">=</span> defaultdict(<span class="bu">list</span>)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> candidates:</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>        by_pred[c[<span class="st">"pred_idx"</span>]].append(c[<span class="st">"truth_idx"</span>])</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    matched_df1 <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    matched_df2 <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    wrong_name_records <span class="op">=</span> []</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, truth_idxs <span class="kw">in</span> by_pred.items():</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>        pred <span class="op">=</span> df2.loc[i]</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>        tp_found <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>        <span class="co"># first pass: does ANY candidate match on name?</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> truth_idxs:</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>            truth <span class="op">=</span> df1.loc[j]</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> name_matches(pred, truth[<span class="st">"name"</span>]):</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>                matched_df1.add(j)</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>                matched_df2.add(i)</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>                tp_found <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span>  <span class="co"># one correct match is enough for this prediction</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>        <span class="co"># only log wrong_name if nothing matched</span></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> tp_found:</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>            j <span class="op">=</span> truth_idxs[<span class="dv">0</span>]  <span class="co"># closest/first candidate location</span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>            truth <span class="op">=</span> df1.loc[j]</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>            record <span class="op">=</span> pred.to_dict()</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>            record[<span class="st">"truth_name"</span>] <span class="op">=</span> truth[<span class="st">"name"</span>]</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>            record[<span class="st">"truth_idx"</span>] <span class="op">=</span> j</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>            record[<span class="st">"category"</span>] <span class="op">=</span> <span class="st">"wrong_name"</span></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>            wrong_name_records.append(record)</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    tp <span class="op">=</span> <span class="bu">len</span>(matched_df2)</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    wrong_name_pred_idx <span class="op">=</span> {r[<span class="st">"truth_idx"</span>] <span class="cf">for</span> r <span class="kw">in</span> []}  <span class="co"># not used for exclusion below; see fp_idx</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    wrong_name_pred_idx <span class="op">=</span> <span class="bu">set</span>(pred_fa.loc[[r_i <span class="cf">for</span> r_i <span class="kw">in</span> by_pred <span class="cf">if</span> r_i <span class="kw">not</span> <span class="kw">in</span> matched_df2]].index)</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>    fp_idx <span class="op">=</span> <span class="bu">set</span>(pred_fa.index) <span class="op">-</span> matched_df2 <span class="op">-</span> wrong_name_pred_idx</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>    fn <span class="op">=</span> <span class="bu">len</span>(df1) <span class="op">-</span> <span class="bu">len</span>(matched_df1)</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>    fp <span class="op">=</span> <span class="bu">len</span>(fp_idx)</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>    precision <span class="op">=</span> tp <span class="op">/</span> (tp <span class="op">+</span> fp) <span class="cf">if</span> (tp <span class="op">+</span> fp) <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>    recall    <span class="op">=</span> tp <span class="op">/</span> (tp <span class="op">+</span> fn) <span class="cf">if</span> (tp <span class="op">+</span> fn) <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>    f1        <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> precision <span class="op">*</span> recall <span class="op">/</span> (precision <span class="op">+</span> recall) <span class="cf">if</span> (precision <span class="op">+</span> recall) <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>    summary <span class="op">=</span> {<span class="st">"buffer"</span>: <span class="bu">buffer</span>, <span class="st">"TP"</span>: tp, <span class="st">"FP"</span>: fp, <span class="st">"FN"</span>: fn,</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>               <span class="st">"precision"</span>: <span class="bu">round</span>(precision, <span class="dv">3</span>), <span class="st">"recall"</span>: <span class="bu">round</span>(recall, <span class="dv">3</span>), <span class="st">"f1"</span>: <span class="bu">round</span>(f1, <span class="dv">3</span>)}</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>    tp_df <span class="op">=</span> df2.loc[<span class="bu">list</span>(matched_df2)].copy()</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>    tp_df[<span class="st">"category"</span>] <span class="op">=</span> <span class="st">"TP"</span></span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>    wrong_name_df <span class="op">=</span> pd.DataFrame(wrong_name_records)</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>    fp_df <span class="op">=</span> df2.loc[<span class="bu">list</span>(fp_idx)].copy()</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>    fp_df[<span class="st">"category"</span>] <span class="op">=</span> <span class="st">"FP"</span></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>    fn_df <span class="op">=</span> df1.loc[df1.index.difference(matched_df1)].copy()</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>    fn_df[<span class="st">"category"</span>] <span class="op">=</span> <span class="st">"FN"</span></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>    detail_df <span class="op">=</span> pd.concat([tp_df, wrong_name_df, fp_df, fn_df], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>    detail_df[<span class="st">"buffer"</span>] <span class="op">=</span> <span class="bu">buffer</span></span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> summary, detail_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="ad011557" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run for all buffers</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> buf <span class="kw">in</span> [<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>]:</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    summary, df <span class="op">=</span> precision_recall(gt, pred_fa, buf)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    results.append(summary)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame(results).to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> buffer  TP  FP  FN  precision  recall    f1
+      0  26 352  51      0.069   0.338 0.114
+     25  28 337  51      0.077   0.354 0.126
+     50  28 325  51      0.079   0.354 0.130
+    100  33 299  51      0.099   0.393 0.159</code></pre>
+</div>
+</div>
 <p>Re try the code <!-- ```{python}
 def precision_recall(gt, pred_df, buffer):
     """
@@ -445,48 +561,90 @@ candidate, summary = evaluate_across_buffers(gt, pred_fa, [0, 10, 30, 50])
 print(summary)
  --></p>
 </section>
+</section>
 <section id="precision-recall-for-the-gfa" class="level1">
 <h1>Precision recall for the GFA</h1>
 <p>We already did the minimap and match it. The problem is some of the sequence match to multiple contigs.</p>
 <section id="analyse-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="analyse-the-data">Analyse the data</h2>
-<pre class="{python}"><code>
-paf_cols = [
-    "query_name", "query_length", "query_start", "query_end", "strand",
-    "target_name", "target_length", "target_start", "target_end",
-    "num_matches", "alignment_length", "mapq"
-]
+<div id="b12b8605" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>paf_cols <span class="op">=</span> [</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"query_name"</span>, <span class="st">"query_length"</span>, <span class="st">"query_start"</span>, <span class="st">"query_end"</span>, <span class="st">"strand"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"target_name"</span>, <span class="st">"target_length"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"num_matches"</span>, <span class="st">"alignment_length"</span>, <span class="st">"mapq"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># PAF has no header row and is tab-separated; extra tag columns (tp:A:P, cm:i:..., etc.)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>paf_df <span class="op">=</span> pd.read_csv(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../result/aft_sort/sim_gfa/aln_gfa.paf"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    header<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    usecols<span class="op">=</span><span class="bu">range</span>(<span class="dv">12</span>),</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    names<span class="op">=</span>paf_cols</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract just the real-genome (target) position info</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>gfa_pred <span class="op">=</span> paf_df[[<span class="st">"query_name"</span>, <span class="st">"target_name"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>, <span class="st">"strand"</span>]]</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>sim_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/aft_sort/sim_gfa/eris_new_gfa_sim_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>clean_gfa <span class="op">=</span> sim_gfa.iloc[:,:<span class="dv">3</span>]</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the name</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"name"</span>] <span class="op">=</span> clean_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"repeats"</span>] <span class="op">=</span> clean_gfa.groupby(<span class="st">"name"</span>)[<span class="st">"locus_id"</span>].transform(<span class="kw">lambda</span> x: pd.factorize(x)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co"># clean_gfa = clean_gfa.drop(columns=["gene_id", "locus_id", "target"])</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(clean_gfa)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Match the location</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_pred.head(<span class="dv">10</span>))</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="co"># How many unique locus in total based on their strand</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>strand_counts <span class="op">=</span> gfa_pred.groupby(<span class="st">"query_name"</span>)[<span class="st">"strand"</span>].value_counts().unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 locus_id                        target              gene_id  \
+0    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched        1116087_0_222   
+1    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched       1244816_2_1133   
+2    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched       1176191_31_181   
+3    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched         1245048_2_80   
+4    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched        1244700_0_438   
+..                    ...                           ...                  ...   
+338        locus_1bab84a1                IS629_IS3_IS51    1245106_4002_6087   
+339        locus_404bfd86              IS1R_IS1_unknown        1245136_1_181   
+340        locus_404bfd86              IS1R_IS1_unknown      1245136_225_444   
+341        locus_404bfd86              IS1R_IS1_unknown  1245038_98886_99339   
+342        locus_404bfd86              IS1R_IS1_unknown  1245038_98286_98805   
 
-# PAF has no header row and is tab-separated; extra tag columns (tp:A:P, cm:i:..., etc.)
-paf_df = pd.read_csv(
-    "../result/aft_sort/sim_gfa/aln_gfa.paf",
-    sep="\t",
-    header=None,
-    usecols=range(12),
-    names=paf_cols
-)
+       name  repeats  
+0    ISEc23        1  
+1    ISEc23        1  
+2    ISEc23        1  
+3    ISEc23        1  
+4    ISEc23        1  
+..      ...      ...  
+338   IS629        1  
+339    IS1R        1  
+340    IS1R        1  
+341    IS1R        1  
+342    IS1R        1  
 
-# Extract just the real-genome (target) position info
-gfa_pred = paf_df[["query_name", "target_name", "target_start", "target_end", "strand"]]
-
-# ---
-
-sim_gfa = pd.read_csv("../result/aft_sort/sim_gfa/eris_new_gfa_sim_report.tsv", sep="\t")
-
-clean_gfa = sim_gfa.iloc[:,:3]
-
-# Extract the name
-clean_gfa["name"] = clean_gfa["target"].str.split("_").str[0]
-clean_gfa["repeats"] = clean_gfa.groupby("name")["locus_id"].transform(lambda x: pd.factorize(x)[0] + 1)
-
-# clean_gfa = clean_gfa.drop(columns=["gene_id", "locus_id", "target"])
-print(clean_gfa)
-
-# Match the location
-print(gfa_pred.head(10))
-
-# How many unique locus in total based on their strand
-strand_counts = gfa_pred.groupby("query_name")["strand"].value_counts().unstack(fill_value=0)</code></pre>
+[343 rows x 5 columns]
+             query_name target_name  target_start  target_end strand
+0  locus_split_e96e3e49  HG941718.1       4926309     4942531      +
+1  locus_split_6683cf2e  HG941718.1        234948      243291      +
+2  locus_split_419597b9  HG941718.1       4943739     4944120      -
+3  locus_split_419597b9  HG941718.1       3558907     3559288      -
+4  locus_split_419597b9  HG941718.1       5007671     5008052      +
+5  locus_split_419597b9  HG941718.1       3559184     3559544      +
+6  locus_split_419597b9  HG941718.1       5007415     5007775      -
+7  locus_split_419597b9  HG941718.1       4944016     4944375      +
+8  locus_split_419597b9  HG941718.1       5007405     5007510      -
+9  locus_split_419597b9  HG941718.1       4944280     4944385      +</code></pre>
+</div>
+</div>
 
 
 </section>
