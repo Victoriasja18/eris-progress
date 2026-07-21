@@ -43,7 +43,6 @@ pred_fa["name"] = pred_fa["target"].str.split("_").str[0]
 pred_fa["repeats"] = pred_fa.groupby("name")["locus_id"].transform(lambda x: pd.factorize(x)[0] + 1)
 
 pred_fa = pred_fa.drop(columns=["gene_id", "locus_id", "target"])
-
 ```
 
 Create the synonyms for both files
@@ -319,4 +318,13 @@ print(gfa_pred.head(10))
 
 # How many unique locus in total based on their strand
 strand_counts = gfa_pred.groupby("query_name")["strand"].value_counts().unstack(fill_value=0)
+```
+
+Debugging
+
+```{python}
+gfa_loc = gfa_pred.copy()
+
+print(gfa_loc[gfa_loc["query_name"] == "locus_split_419597b9"])
+
 ```

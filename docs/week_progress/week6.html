@@ -230,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ground-truth-file" class="level2">
 <h2 class="anchored" data-anchor-id="ground-truth-file">Ground truth file</h2>
 <p>Modify the Ground truth file so it would be easier for us to do precision and recall.</p>
-<div id="4d1b7bf6" class="cell" data-execution_count="1">
+<div id="8580be92" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Open the ground truth file</span></span>
@@ -271,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="for-the-result-of-complete-fasta-file" class="level2">
 <h2 class="anchored" data-anchor-id="for-the-result-of-complete-fasta-file">For the result of complete fasta file</h2>
-<div id="3704889c" class="cell" data-execution_count="2">
+<div id="e2279c9a" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>comp_fa <span class="op">=</span> pd.read_csv(<span class="st">"../result/aft_sort/comp_fa/eris_new_complete_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pred_fa <span class="op">=</span> comp_fa.iloc[:,:<span class="dv">3</span>]</span>
@@ -288,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>pred_fa <span class="op">=</span> pred_fa.drop(columns<span class="op">=</span>[<span class="st">"gene_id"</span>, <span class="st">"locus_id"</span>, <span class="st">"target"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Create the synonyms for both files</p>
-<div id="4ceda6d8" class="cell" data-execution_count="3">
+<div id="f56491eb" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> IS_dict <span class="im">as</span> isd</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the lookup once</span></span>
@@ -352,7 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 512  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  </code></pre>
 </div>
 </div>
-<div id="46a40f1c" class="cell" data-execution_count="4">
+<div id="d7b507b4" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_location_matches(df1, df2, <span class="bu">buffer</span>):</span>
@@ -453,7 +453,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> summary, detail_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="ad011557" class="cell" data-execution_count="5">
+<div id="5e0b4be2" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run for all buffers</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> buf <span class="kw">in</span> [<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>]:</span>
@@ -567,7 +567,7 @@ print(summary)
 <p>We already did the minimap and match it. The problem is some of the sequence match to multiple contigs.</p>
 <section id="analyse-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="analyse-the-data">Analyse the data</h2>
-<div id="b12b8605" class="cell" data-execution_count="6">
+<div id="b065f721" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>paf_cols <span class="op">=</span> [</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"query_name"</span>, <span class="st">"query_length"</span>, <span class="st">"query_start"</span>, <span class="st">"query_end"</span>, <span class="st">"strand"</span>,</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"target_name"</span>, <span class="st">"target_length"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>,</span>
@@ -635,6 +635,23 @@ print(summary)
              query_name target_name  target_start  target_end strand
 0  locus_split_e96e3e49  HG941718.1       4926309     4942531      +
 1  locus_split_6683cf2e  HG941718.1        234948      243291      +
+2  locus_split_419597b9  HG941718.1       4943739     4944120      -
+3  locus_split_419597b9  HG941718.1       3558907     3559288      -
+4  locus_split_419597b9  HG941718.1       5007671     5008052      +
+5  locus_split_419597b9  HG941718.1       3559184     3559544      +
+6  locus_split_419597b9  HG941718.1       5007415     5007775      -
+7  locus_split_419597b9  HG941718.1       4944016     4944375      +
+8  locus_split_419597b9  HG941718.1       5007405     5007510      -
+9  locus_split_419597b9  HG941718.1       4944280     4944385      +</code></pre>
+</div>
+</div>
+<p>Debugging</p>
+<div id="e8aa4358" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gfa_loc <span class="op">=</span> gfa_pred.copy()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_loc[gfa_loc[<span class="st">"query_name"</span>] <span class="op">==</span> <span class="st">"locus_split_419597b9"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             query_name target_name  target_start  target_end strand
 2  locus_split_419597b9  HG941718.1       4943739     4944120      -
 3  locus_split_419597b9  HG941718.1       3558907     3559288      -
 4  locus_split_419597b9  HG941718.1       5007671     5008052      +
