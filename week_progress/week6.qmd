@@ -275,3 +275,47 @@ candidate, summary = evaluate_across_buffers(gt, pred_fa, [0, 10, 30, 50])
 print(summary)
  -->
 
+# Precision recall for the GFA
+
+We already did the minimap and match it. The problem is some of the sequence match to multiple contigs. 
+
+## Analyse the data
+```{python}
+
+paf_cols = [
+    "query_name", "query_length", "query_start", "query_end", "strand",
+    "target_name", "target_length", "target_start", "target_end",
+    "num_matches", "alignment_length", "mapq"
+]
+
+# PAF has no header row and is tab-separated; extra tag columns (tp:A:P, cm:i:..., etc.)
+paf_df = pd.read_csv(
+    "../result/aft_sort/sim_gfa/aln_gfa.paf",
+    sep="\t",
+    header=None,
+    usecols=range(12),
+    names=paf_cols
+)
+
+# Extract just the real-genome (target) position info
+gfa_pred = paf_df[["query_name", "target_name", "target_start", "target_end", "strand"]]
+
+# ---
+
+sim_gfa = pd.read_csv("../result/aft_sort/sim_gfa/eris_new_gfa_sim_report.tsv", sep="\t")
+
+clean_gfa = sim_gfa.iloc[:,:3]
+
+# Extract the name
+clean_gfa["name"] = clean_gfa["target"].str.split("_").str[0]
+clean_gfa["repeats"] = clean_gfa.groupby("name")["locus_id"].transform(lambda x: pd.factorize(x)[0] + 1)
+
+# clean_gfa = clean_gfa.drop(columns=["gene_id", "locus_id", "target"])
+print(clean_gfa)
+
+# Match the location
+print(gfa_pred.head(10))
+
+# How many unique locus in total based on their strand
+strand_counts = gfa_pred.groupby("query_name")["strand"].value_counts().unstack(fill_value=0)
+```

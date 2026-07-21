@@ -21,14 +21,14 @@ def unique_is(filepath: str):
     total_unique = len(df.groupby("target")["locus_id"].nunique())
     return f'Total IS: {dim}, Total unique IS: {total_unique}'
 
-def calc_seq(filepath: str):
-    with open(filepath, "r") as file:
-        records = list(SeqIO.parse(file, "fasta"))
-    return(len(records))
-
 # Filepath
-folder = Path("../result/aft_sort/..").resolve()
+folder = Path("../result/aft_sort").resolve()
 for file in folder.rglob("*.tsv"):
+    df = pd.read_table(file, sep="\t")
+    if "target" not in df.columns:
+        print(f"BAD FILE: {file} -> columns: {list(df.columns)}")
+        continue
+
     print(file.name)
     print(unique_is(file))
 
@@ -149,7 +149,7 @@ sort_sim.to_csv("../result/sorted_sim_loci.tsv", sep="\t",index= False)
 
 # # Restore original 
 # LocusBuilder._build_local = original_build_local
- ```
+```
 
 With coordinates
 ```{python}
@@ -184,12 +184,10 @@ def collect_coords(genome, target_db, label):
                     })
     return pd.DataFrame(rows)
 
-unsort_coord = collect_coords(genome, target_db, label="unsorted") 
-unsort_coord.to_csv("../result/unsorted_coord_loci.tsv", sep="\t",index= False)
+unsort_coord = collect_coords(genome, target_db,label="unsorted") 
+unsort_coord.to_csv("../result/loci/unsorted_coord_loci.tsv", sep="\t",index= False)
 
 ```
-
-
 
 
 # Precision and recall
