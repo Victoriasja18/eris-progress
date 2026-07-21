@@ -46,7 +46,8 @@ pred_fa = pred_fa.drop(columns=["gene_id", "locus_id", "target"])
 
 ```
 
-Create the synonyms for both files 
+Create the synonyms for both files
+ 
 ```{python}
 import IS_dict as isd
 
