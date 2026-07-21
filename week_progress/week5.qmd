@@ -1,0 +1,182 @@
+---
+title: "Progress report week 5"
+author: "Victoria Sjalim"
+date: "2026-07-07"
+execute: 
+  freeze: auto
+---
+
+# Precision and recall for the simulated data
+The simulated data has a tricky part where the location or the position of the IS is not equivalent as the fasta or the ground truth.
+
+In here, I just take the name and the locus position (indicating different positions) and compared with the ground truth file. It might lead to different IS found due to the locaitons. 
+
+```{python}
+import pandas as pd
+# Open the ground truth file
+bed_columns = ['transcript', 'chromStart', 'chromEnd', 'name', 'score', 'strand']
+
+# Read the file (use only the names that match your file's column count)
+ann_bed = pd.read_table('../../data/complete_ec958_IS.reanotated.sorted.bed', header=None, names=bed_columns[:6])
+
+print(ann_bed.head())
+```
+
+```{python}
+sim_gfa = pd.read_csv("../result/aft_sort/sim_gfa/eris_new_gfa_sim_report.tsv", sep="\t")
+
+sim_gfa["IS_name"] = sim_gfa['target'].str.split('_').str[0]
+print(f'Total unique IS: {len(sim_gfa["IS_name"].value_counts())}')
+print(f'Total unique locus IDs: {len(sim_gfa["locus_id"].value_counts())}')
+
+# Create IS dictionary 
+
+
+# Create new columns based on the different postion of IS
+def label_is(df, is_col="IS_name", locus_col="locus_id", synonym_lookup=None):
+    """
+    Adds 'canonical_IS' and 'IS_label' columns.
+    Rows with the same IS name AND same locus_id get the same label (e.g. IS1_1).
+    A new locus_id under the same canonical IS name gets the next number (IS1_2, IS1_3...).
+    """
+    df = df.copy()
+
+    # canonicalize synonyms first, if you have a lookup
+    if synonym_lookup is not None:
+        df["canonical_IS"] = df[is_col].map(lambda x: synonym_lookup.get(x, x))
+    else:
+        df["canonical_IS"] = df[is_col]
+
+    # rank locus_ids by first appearance, within each canonical_IS group
+    def assign_labels(group):
+        # order of first appearance of each locus_id within this IS group
+        first_seen = group[locus_col].drop_duplicates()
+        locus_to_num = {loc: i + 1 for i, loc in enumerate(first_seen)}
+        group["IS_label"] = group["canonical_IS"] + "_" + group[locus_col].map(locus_to_num).astype(str)
+        return group
+
+    df = df.groupby("canonical_IS", group_keys=False, sort=False).apply(assign_labels)
+    return df
+
+sim_named = label_is(sim_gfa)
+# print(sim_named.tail(10))
+
+#--- overlap the two named and see if there is anything 
+common_names = set(ann_bed["name"]) & set(sim_named["IS_label"])
+print(f"Common names: {len(common_names)}")
+```
+
+```{python}
+import pandas as pd
+
+# Calculate precision and recall
+def precision_recall_names(df1, df2, dictionary: dict = None):
+    """
+    We will do precision and recall based on what IS that found
+    df1 = ground truth (reference)
+    df2 = predictions to evaluate
+
+    TP = df2 locus that matches a df1 locus within buffer
+    FP = df2 locus that has no match in df1
+    FN = df1 locus that has no match in df2
+    """
+    tp, fp, fn = 0, 0, 0
+    matched_df1 = set()
+
+    # Drop any duplicates in the predicted dataframe
+    gt_labels = set(df1.drop_duplicates(subset=["name"]))
+    pred_labels = set(df2.drop_duplicates(subset=["IS_label"]))
+
+    # Calculate the TP, FN, FP
+    tp_labels = gt_labels & pred_labels
+    fn_labels = gt_labels - pred_labels
+    fp_labels = pred_labels - gt_labels
+
+    tp, fp, fn = len(tp_labels), len(fp_labels), len(fn_labels)
+    precision = tp / (tp + fp) if (tp + fp) else 0.0
+    recall = tp / (tp + fn) if (tp + fn) else 0.0
+
+    summary = {"precision": precision, "recall": recall, "tp": tp, "fp": fp, "fn": fn}
+
+    # actual rows, tagged with their classification
+    df2 = df2.copy()
+    df2["match_status"] = df2["IS_label"].apply(
+        lambda lbl: "TP" if lbl in tp_labels else "FP"
+    )
+    tp_rows = df2[df2["match_status"] == "TP"]
+    fp_rows = df2[df2["match_status"] == "FP"]
+    fn_rows = df1[df1['name'].isin(fn_labels)]  # ground truth rows that were missed
+
+    detail = {
+        "tp_labels": sorted(tp_labels),
+        "fp_labels": sorted(fp_labels),
+        "fn_labels": sorted(fn_labels),
+        "tp_rows": tp_rows,
+        "fp_rows": fp_rows,
+        "fn_rows": fn_rows,
+        "pred_df_tagged": df2,  # full predicted df with match_status column, if you want to inspect everything at once
+    }
+
+    return summary, detail
+
+
+sim_matrix = precision_recall_names(ann_bed, sim_named)
+print(sim_matrix[0])
+
+```
+
+# Create a dictionary to improve P & Recall
+
+For some reason, I cannot scrape the database from the github. It mentioned that there was a hostname mistmatch and certificate not valid. I found online that they put everything into a CSV file in other repo. 
+
+```{=html}
+RAW_URL = "https://raw.githubusercontent.com/thanhleviet/ISfinder-sequences/master/IS.csv"
+```
+
+I create (well claude is with few revisions from me) a separate python script to create a dictionary of IS synonyms from the IS that we found. All available in ```IS_dict.py```
+
+```{python}
+import IS_dict as isd
+
+pred_IS_names = sim_named["IS_name"].unique().tolist()
+
+dict_is = isd.final_dict(pred_IS_names)
+print(dict_is)
+```
+
+
+# Recalculate total unique IS
+
+```{python}
+from pathlib import Path
+
+def calc_unique(pathway):
+    df = pd.read_table(pathway, sep="\t")
+    total_unique = df.groupby("target")["locus_id"].nunique().sum()
+    return total_unique
+
+# for loop inside the filepath
+folder = Path("../result/aft_sort").resolve()
+folder_bfr = Path("../result/bfr_sort").resolve()
+
+for file in folder.rglob("*.tsv"):
+    print(file.name)
+    print(calc_unique(file))
+
+for file in folder_bfr.rglob("*.tsv"):
+    print(file.name)
+    print(calc_unique(file))
+
+```
+
+# Extract the location from the loci
+
+```{bash}
+grep "^>" result/aft_sort/sim_gfa/eris_new_gfa_sim_loci.fasta | wc -l
+minimap2 ../data/EC958_complete_genome.fasta result/aft_sort/sim_gfa/eris_new_gfa_sim_loci.fasta >  result/aft_sort/sim_gfa/aln_gfa.paf
+wc -l result/aft_sort/sim_gfa/aln_gfa.paf
+
+
+uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/bfr_sort/sim_gfa
+```
+

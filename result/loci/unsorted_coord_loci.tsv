@@ -1,0 +1,10 @@
+label	locus_id	target	is_stitched	contig	seg_start	seg_end	strand	seg_length
+unsorted	locus_split_37b1cda1	IS682_IS66_unknown_stitched	True	HG941718.1	3334553	3336544	1	1991
+unsorted	locus_split_37b1cda1	IS682_IS66_unknown_stitched	True	HG941718.1	2239105	2239532	1	427
+unsorted	locus_split_5d0a16fe	IS629_IS3_IS51_stitched	True	HG941718.1	4158851	4159646	-1	795
+unsorted	locus_split_5d0a16fe	IS629_IS3_IS51_stitched	True	HG941718.1	4953985	4954156	-1	171
+unsorted	locus_split_f01bad6f	ISEc8_IS66_unknown_stitched	True	HG941718.1	3315934	3316102	1	168
+unsorted	locus_split_f01bad6f	ISEc8_IS66_unknown_stitched	True	HG941718.1	4915869	4916118	1	249
+unsorted	locus_split_32abeba4	IS21_IS21_unknown_stitched	True	HG941718.1	2252235	2252365	1	130
+unsorted	locus_split_32abeba4	IS21_IS21_unknown_stitched	True	HG941718.1	2254407	2254575	1	168
+unsorted	locus_12b883d9	ISEc12_IS21_unknown	False	HG941718.1	1479959	1482540	1	2581

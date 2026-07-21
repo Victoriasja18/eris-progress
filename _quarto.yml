@@ -19,6 +19,10 @@ website:
             href: week_progress/week3.qmd
           - text: "Week 4"
             href: week_progress/week4.qmd
+          - text: "Week 5"
+            href: week_progress/week5.qmd
+          - text: "Week 6"
+            href: week_progress/week6.qmd
 
 execute: 
   freeze: auto

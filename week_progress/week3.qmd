@@ -99,20 +99,3 @@ print(total_is_file.shape)
 ```
 
 In total, there are 163 IS found just solely using minimap2.
-
-##  Debugging the file
-Fixed the function `_build_local` in the `pipeline.py` 
-
-We re-run the eris again with this.
-
-```{bash}
-# uv run eris -i ../data/contigs_shovill_realfastq.gfa -d ../data/IS_n.mmi -o ../progress/result/aft_sort/eris_new_gfa_comp -q
-
-# uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/aft_sort/eris_new_gfa_sim -q
-
-# uv run eris -i ../data/EC958_complete_genome_fragmented.fasta -d ../data/IS_n.mmi -o ../progress/result/bfr_sort/com_frag_fa -q
-
-# grep "^>" ../progress/result/com_n_run/com_fa_sec_loci.fasta | wc -l
-
-```
-

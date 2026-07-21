@@ -68,6 +68,7 @@ print("Total IS that is disrupted in simulated genome:", calc_disruption(simulat
 ```
 
 ## Summary
+
 | Total IS | Complete | Simulated | Fragmented |
 |---------|:-----|------:|:------:|
 | Total rows | 37 | 293 | 212 |

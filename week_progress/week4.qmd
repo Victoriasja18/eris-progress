@@ -18,8 +18,8 @@ from pathlib import Path
 def unique_is(filepath: str):
     df = pd.read_table(filepath, sep="\t")
     dim = df.shape[0]
-    count = len(df.groupby("target")["target"].count())
-    return f'Total IS: {dim}, Total unique IS: {count}'
+    total_unique = len(df.groupby("target")["locus_id"].nunique())
+    return f'Total IS: {dim}, Total unique IS: {total_unique}'
 
 def calc_seq(filepath: str):
     with open(filepath, "r") as file:
@@ -42,8 +42,9 @@ It seems that the total number of unique IS found correspond to total number of 
 | Total unique IS | 4 | 35 | 24 |
 
 However, after we sorted it we found:
-| Total IS | Complete (fa) | Complete (gfa) | Simulated (gfa)|
-|---------|:-----|------|------:|
+
+| Total IS | Complete (fa)| Complete (gfa) | Simulated (gfa)|
+|---------|-----|------|------:|
 | Total rows | 513 | 334 | 343 |
 | Total unique IS | 38 | 43 | 40 |
 
@@ -99,12 +100,24 @@ def collect_loci(genome, target_db, label):
 
 sort = collect_loci(genome, target_db, label="sorted")
 
-sort.to_csv("../result/sorted_loci.tsv", sep="\t",index= False)
+# sort.to_csv("../result/sorted_loci.tsv", sep="\t",index= False)
 
 ```
 
 
 I used the same code, however, I changed the code inside pipeline.py manually (deleting/adding `.sort()`)
+
+Re-running it for the gfa file
+
+```{python}
+# Do genome assembly for the simulated
+genome_sim = GenomeAssembly.from_file("../../data/contigs_shovill_simulated.gfa")
+
+sort_sim = collect_loci(genome_sim, target_db, label="sorted")
+
+sort_sim.to_csv("../result/sorted_sim_loci.tsv", sep="\t",index= False)
+
+```
 
 ## Debug the build local
 
@@ -124,7 +137,7 @@ I used the same code, however, I changed the code inside pipeline.py manually (d
     
 #     for locus in results:
 #         target = locus.targets[0] if locus.targets else None
-#         print(f"→ {locus.id} | {target.id if target else 'no target'}")
+#         print(f"{locus.id} | {target.id if target else 'no target'}")
     
 #     return iter(results)
 
@@ -132,8 +145,186 @@ I used the same code, however, I changed the code inside pipeline.py manually (d
 
 # # Run on unsorted and watch the logs 
 # with Pipeline(target_db=target_db) as pipeline:
-#     loci = list(pipeline(unsorted_genome))
+#     loci = list(pipeline(genome))
 
 # # Restore original 
 # LocusBuilder._build_local = original_build_local
+ ```
+
+With coordinates
+```{python}
+import importlib
+import eris.pipeline
+from eris.pipeline import Pipeline
+from eris.graph import TopologyEngine 
+from eris.io import GenomeAssembly, TargetDatabase
+import pandas as pd
+importlib.reload(eris.pipeline)
+
+def collect_coords(genome, target_db, label):
+    rows = []
+    with Pipeline(target_db=target_db) as pipeline:
+        for locus in pipeline(genome):
+            target = locus.targets[0] if locus.targets else None
+            num_segments = len(target.segments) if target else 0
+
+            # Extract each segment's coordinates separately
+            if target:
+                for seg in target.segments:
+                    rows.append({
+                        "label":        label,
+                        "locus_id":     locus.id,
+                        "target":       target.id,
+                        "is_stitched":  num_segments > 1,
+                        "contig":       seg.contig,
+                        "seg_start":    seg.start,
+                        "seg_end":      seg.end,
+                        "strand":       seg.strand,
+                        "seg_length":   seg.end - seg.start,
+                    })
+    return pd.DataFrame(rows)
+
+unsort_coord = collect_coords(genome, target_db, label="unsorted") 
+unsort_coord.to_csv("../result/unsorted_coord_loci.tsv", sep="\t",index= False)
+
 ```
+
+
+
+
+# Precision and recall
+
+```{python}
+import pandas as pd
+from sklearn.metrics import confusion_matrix, classification_report
+
+comp_fa = pd.read_csv("../result/aft_sort/comp_fa/eris_new_complete_report.tsv", sep="\t")
+
+comp_loc = comp_fa.iloc[:,1:3]
+print(comp_loc)
+
+comp_loc["transcript"] = comp_loc['gene_id'].str.split('_').str[0]
+comp_loc["chromStart"] = comp_loc['gene_id'].str.split('_').str[1].astype(int)
+comp_loc["chromEnd"] = comp_loc['gene_id'].str.split('_').str[2].astype(int)
+
+print(comp_loc.head(10))
+
+# ---
+# Open the ground truth file
+bed_columns = ['transcript', 'chromStart', 'chromEnd', 'name', 'score', 'strand']
+
+# Read the file (use only the names that match your file's column count)
+ann_bed = pd.read_table('../../data/complete_ec958_IS.reanotated.sorted.bed', header=None, names=bed_columns[:6])
+
+
+```
+
+## Find how many locations hits
+
+```{python}
+
+def intersect_loc(df1, df2, buffer):
+    hits = 0
+    matched = []
+    
+    for _, r1 in df1.iterrows():
+        for _, r2 in df2.iterrows():
+            if r1["transcript"] != r2["transcript"]:
+                continue
+            # Check if positions overlap with buffer
+            if (r1["chromStart"] - buffer) <= r2["chromEnd"] and (r1["chromEnd"] + buffer) >= r2["chromStart"]:
+                hits += 1
+                matched.append({
+                    "transcript": r1["transcript"],
+                    "start_1":   r1["chromStart"],
+                    "end_1":     r1["chromEnd"],
+                    "start_2":   r2["chromStart"],
+                    "end_2":     r2["chromEnd"],
+                    "buffer":    buffer,
+                })
+    
+    return hits, pd.DataFrame(matched)
+
+# Run for each buffer
+for buf in [10, 15, 25, 50, 100]:
+    hits, df_matched = intersect_loc(comp_loc, ann_bed, buf)
+    print(f"Buffer {buf:>3} bp → {hits} hits")
+    # print(df_matched)
+
+
+```
+
+## Precision and recall
+```{python}
+# Calculate precision and recall
+def precision_recall(df1, df2, buffer):
+    """
+    df1 = ground truth (reference)
+    df2 = predictions to evaluate
+
+    TP = df2 locus that matches a df1 locus within buffer
+    FP = df2 locus that has no match in df1
+    FN = df1 locus that has no match in df2
+    """
+    tp, fp, fn = 0, 0, 0
+    matched_df1 = set()
+
+    for i, pred in df2.iterrows():
+        matched = False
+        for j, truth in df1.iterrows():
+            if pred["transcript"] != truth["transcript"]:
+                continue
+            if (pred["chromStart"] - buffer) <= truth["chromEnd"] and \
+               (pred["chromEnd"]   + buffer) >= truth["chromStart"]:
+                matched = True
+                matched_df1.add(j)
+                break
+        if matched:
+            tp += 1
+            df2.at[i, f"Buffer_{buffer}"] = "TP"
+        else:
+            fp += 1 
+            df2.at[i, f"Buffer_{buffer}"] = "FP"
+
+    # FN = df1 loci that were never matched
+    fn_rows = []
+    for j, truth in df1.iterrows():
+        if j not in matched_df1:
+            fn += 1
+            fn_row = truth.copy()
+            fn_row[f"Buffer_{buffer}"] = "FN"
+            fn_rows.append(fn_row)
+    
+    if fn_rows:
+        # fn_rows = pd.DataFrame(fn_rows).iloc[:,:-2]
+        df2 = pd.concat([df2, pd.DataFrame(fn_rows)], ignore_index=True)
+
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    recall    = tp / (tp + fn) if (tp + fn) > 0 else 0
+    f1  = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+
+    summary_matrix = {"buffer": buffer, "TP": tp, "FP": fp, "FN": fn,
+    "precision": round(precision, 3), "recall": round(recall, 3), "f1": round(f1, 3)}
+    
+    return summary_matrix, df2
+
+# Run for all buffers
+comp_matrix = comp_loc.copy()
+
+results = []
+for buf in [10, 15, 25, 50]:
+    summary, comp_matrix = precision_recall(ann_bed, comp_loc, buf)
+    results.append(summary)
+
+print(pd.DataFrame(results).to_string(index=False))
+print(comp_matrix.tail(10))
+
+# comp_matrix.to_csv("../result/complete_precision_recall.tsv", sep="\t", index=False)
+
+```
+
+As we increased the buffer, we can see that all the metrics were increased. However, we do have high recall but low precision. Which means we do have high number of false positive. 
+
+
+
+

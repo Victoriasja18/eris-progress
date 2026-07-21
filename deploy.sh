@@ -1,8 +1,13 @@
 #!/bin/bash
 set -e
 
-echo "Rendering site..."
-quarto render
+if [ $# -gt 0 ]; then
+    echo "Rendering specified files: $@"
+    quarto render "$@"
+else
+    echo "Rendering site..."
+    quarto render
+fi
 
 echo "Pushing to GitHub..."
 git add .
