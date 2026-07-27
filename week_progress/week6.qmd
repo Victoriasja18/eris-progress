@@ -68,6 +68,7 @@ gt["synonyms"] = gt["name"].apply(
 
 ```
 
+# Precision and recall 
 ```{python}
 
 import ast
@@ -75,12 +76,46 @@ import pandas as pd
 from collections import defaultdict
 
 
+def _parse_synonyms(val):
+    """Coerce a synonyms field (list, stringified list, or NaN) into a list."""
+    if isinstance(val, str):
+        try:
+            val = ast.literal_eval(val)
+        except (ValueError, SyntaxError):
+            return []
+    if isinstance(val, list):
+        return val
+    return []
+
+
+def _names_match(pred, truth):
+    """True if pred and truth refer to the same IS element by name or synonym,
+    checked in both directions."""
+    pred_name = pred["name"]
+    truth_name = truth["name"]
+
+    if pred_name == truth_name:
+        return True
+
+    pred_syns = _parse_synonyms(pred.get("synonyms", pd.NA))
+    truth_syns = _parse_synonyms(truth.get("synonyms", pd.NA))
+
+    if truth_name in pred_syns:
+        return True
+    if pred_name in truth_syns:
+        return True
+    if pred_syns and truth_syns and set(pred_syns) & set(truth_syns):
+        return True
+
+    return False
+
+
 def precision_recall(df1, df2, buffer):
     """
     df1 = ground truth, df2 = predictions.
     A prediction is TP only if its location overlaps a truth (within buffer)
-    AND its name (or a synonym) matches. Any prediction whose location
-    matches but whose name doesn't is now scored as FP, not silently dropped.
+    AND its name matches the truth's name or either side's synonym list.
+    Any prediction whose location matches but whose name doesn't is scored as FP.
     """
     # --- Stage 1: location candidates ---
     by_pred = defaultdict(list)
@@ -102,20 +137,9 @@ def precision_recall(df1, df2, buffer):
         tp_found = False
 
         for j in truth_idxs:
-            truth_name = df1.loc[j, "name"]
+            truth = df1.loc[j]
 
-            name_match = pred["name"] == truth_name
-            if not name_match:
-                syns = pred.get("synonyms", pd.NA)
-                if isinstance(syns, str):
-                    try:
-                        syns = ast.literal_eval(syns)
-                    except (ValueError, SyntaxError):
-                        syns = []
-                if isinstance(syns, list):
-                    name_match = truth_name in syns
-
-            if name_match:
+            if _names_match(pred, truth):
                 matched_df1.add(j)
                 matched_df2.add(i)
                 tp_found = True
@@ -341,7 +365,7 @@ for buf, df in detail_dfs.items():
     combined = df_renamed if combined is None else combined.merge(df_renamed, on=key_cols, how="outer")
 
 combined = pd.DataFrame(combined)
-combined.to_csv("../result/complete_precision_recall.tsv", sep="\t", index=False)
+combined.to_csv("../result/complete1_precision_recall.tsv", sep="\t", index=False)
 
 ```
 

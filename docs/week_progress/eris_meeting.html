@@ -193,8 +193,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#precision-and-recall" id="toc-precision-and-recall" class="nav-link" data-scroll-target="#precision-and-recall">Precision and recall</a>
   <ul class="collapse">
-  <li><a href="#complete" id="toc-complete" class="nav-link" data-scroll-target="#complete">Complete</a></li>
+  <li><a href="#complete" id="toc-complete" class="nav-link" data-scroll-target="#complete">Complete</a>
+  <ul class="collapse">
+  <li><a href="#before-matching-with-the-dictionary" id="toc-before-matching-with-the-dictionary" class="nav-link" data-scroll-target="#before-matching-with-the-dictionary">Before matching with the dictionary</a></li>
+  <li><a href="#after-matching" id="toc-after-matching" class="nav-link" data-scroll-target="#after-matching">After matching</a></li>
+  </ul></li>
   <li><a href="#simulated-gfa" id="toc-simulated-gfa" class="nav-link" data-scroll-target="#simulated-gfa">Simulated (gfa)</a></li>
+  <li><a href="#dictionary" id="toc-dictionary" class="nav-link" data-scroll-target="#dictionary">Dictionary</a></li>
   </ul></li>
   <li><a href="#pytest" id="toc-pytest" class="nav-link" data-scroll-target="#pytest">Pytest</a></li>
   </ul>
@@ -240,7 +245,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Code suggestion to improve running eris</li>
 <li>Running eris: fragmented, before &amp; after sorting</li>
-<li>Precision and recall</li>
+<li>Precision and recall
+<ul>
+<li>Dictionary</li>
+</ul></li>
 <li>Pytest</li>
 </ul>
 </section>
@@ -252,7 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Required revision inside the <code>interval.py</code></li>
 </ul></li>
 </ul>
-<div id="b2d4bf65" class="cell" data-execution_count="1">
+<div id="3fa2af42" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import this inside interval.py</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> annotations</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -271,7 +279,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="sorting" class="level2">
 <h2 class="anchored" data-anchor-id="sorting">Sorting</h2>
 <p>We played around sorting in the <code>pipeline.py</code>&nbsp;in the function <code>_build_local</code></p>
-<p>The result is below: | Total IS | Complete | Simulated | Fragmented | |———|:—–|——|——:| | Total rows | 37 | 293 | 212 | | Total unique IS | 4 | 35 | 24 |</p>
+<p>The result is below:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Total IS</th>
+<th style="text-align: left;">Complete</th>
+<th>Simulated</th>
+<th style="text-align: right;">Fragmented</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Total rows</td>
+<td style="text-align: left;">37</td>
+<td>293</td>
+<td style="text-align: right;">212</td>
+</tr>
+<tr class="even">
+<td>Total unique IS</td>
+<td style="text-align: left;">4</td>
+<td>35</td>
+<td style="text-align: right;">24</td>
+</tr>
+</tbody>
+</table>
 <p>However, after we sorted it we found:</p>
 <table class="caption-top table">
 <thead>
@@ -303,7 +335,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Precision and recall</h1>
 <section id="complete" class="level2">
 <h2 class="anchored" data-anchor-id="complete">Complete</h2>
-<p>The result for each buffer:</p>
+<section id="before-matching-with-the-dictionary" class="level3">
+<h3 class="anchored" data-anchor-id="before-matching-with-the-dictionary">Before matching with the dictionary</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -364,7 +397,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<div id="4fa88b45" class="cell" data-execution_count="2">
+<div id="a170a9e9" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> pd.read_csv(<span class="st">"../result/complete_precision_recall.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
@@ -407,49 +440,148 @@ False Negative result:
 </div>
 </div>
 </section>
+<section id="after-matching" class="level3">
+<h3 class="anchored" data-anchor-id="after-matching">After matching</h3>
+<p>The result for each buffer:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">buffer</th>
+<th style="text-align: right;">TP</th>
+<th style="text-align: right;">FP</th>
+<th style="text-align: right;">FN</th>
+<th style="text-align: right;">precision</th>
+<th style="text-align: right;">recall</th>
+<th style="text-align: right;">f1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0.879</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0.879</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0.879</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0.879</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0.879</td>
+</tr>
+</tbody>
+</table>
+<div id="f768d3af" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> pd.read_csv(<span class="st">"../result/complete1_precision_recall.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>result_print <span class="op">=</span> [<span class="st">"name"</span>, <span class="st">"transcript"</span>, <span class="st">"chromStart"</span>, <span class="st">"chromEnd"</span>, <span class="st">"repeats"</span>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"False Positive result:"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">print</span>(matrix.loc[matrix[<span class="st">"buffer_0"</span>] <span class="op">==</span> <span class="st">"FP"</span>, result_print]))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"False Negative result:"</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(matrix.loc[matrix[<span class="st">"buffer_0"</span>] <span class="op">==</span> <span class="st">"FN"</span>, result_print])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>False Positive result:
+      name  transcript  chromStart  chromEnd  repeats
+8    IS682  HG941718.1     2239328   2239445      1.0
+31  ISEc49  HG941718.1     4162406   4163438      2.0
+38   IS629  HG941718.1     4954027   4954138      1.0
+52    IS26  HG941719.1      113738    114455      7.0
+None
+False Negative result:
+       name  transcript  chromStart  chromEnd  repeats
+55  MITEEc1  HG941718.1      814902    815025      1.0
+56   ISCfr4  HG941718.1     1365600   1366443      NaN
+57      IS4  HG941718.1     1417476   1418621      NaN
+58  MITEEc1  HG941718.1     3237314   3237436      2.0
+59    ISSd1  HG941718.1     3314362   3315303      NaN
+60  ISSen10  HG941718.1     4156066   4156581      NaN
+61      IS5  HG941718.1     4938940   4940135      NaN
+62   ISEc52  HG941718.1     4943650   4944441      3.0
+63   ISSen1  HG941718.1     4976678   4977300      NaN
+64     IS26  HG941719.1       37108     38748      2.0</code></pre>
+</div>
+</div>
+</section>
+</section>
 <section id="simulated-gfa" class="level2">
 <h2 class="anchored" data-anchor-id="simulated-gfa">Simulated (gfa)</h2>
-<div id="ff89dd89" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>paf_cols <span class="op">=</span> [</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"query_name"</span>, <span class="st">"query_length"</span>, <span class="st">"query_start"</span>, <span class="st">"query_end"</span>, <span class="st">"strand"</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"target_name"</span>, <span class="st">"target_length"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"num_matches"</span>, <span class="st">"alignment_length"</span>, <span class="st">"mapq"</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># PAF has no header row and is tab-separated; extra tag columns (tp:A:P, cm:i:..., etc.)</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>paf_df <span class="op">=</span> pd.read_csv(</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../result/aft_sort/sim_gfa/aln_gfa.paf"</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    header<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    usecols<span class="op">=</span><span class="bu">range</span>(<span class="dv">12</span>),</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    names<span class="op">=</span>paf_cols</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract just the real-genome (target) position info</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>gfa_pred <span class="op">=</span> paf_df[[<span class="st">"query_name"</span>, <span class="st">"target_name"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>, <span class="st">"strand"</span>]]</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>sim_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/aft_sort/sim_gfa/eris_new_gfa_sim_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>clean_gfa <span class="op">=</span> sim_gfa.iloc[:,:<span class="dv">3</span>]</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the name</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"name"</span>] <span class="op">=</span> clean_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"repeats"</span>] <span class="op">=</span> clean_gfa.groupby(<span class="st">"name"</span>)[<span class="st">"locus_id"</span>].transform(<span class="kw">lambda</span> x: pd.factorize(x)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># clean_gfa = clean_gfa.drop(columns=["gene_id", "locus_id", "target"])</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(clean_gfa)</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Match the location</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_pred.head(<span class="dv">10</span>))</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co"># How many unique locus in total based on their strand</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>strand_counts <span class="op">=</span> gfa_pred.groupby(<span class="st">"query_name"</span>)[<span class="st">"strand"</span>].value_counts().unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>gfa_loc <span class="op">=</span> gfa_pred.copy()</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_loc[gfa_loc[<span class="st">"query_name"</span>] <span class="op">==</span> <span class="st">"locus_split_419597b9"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e7890e65" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>paf_cols <span class="op">=</span> [</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"query_name"</span>, <span class="st">"query_length"</span>, <span class="st">"query_start"</span>, <span class="st">"query_end"</span>, <span class="st">"strand"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"target_name"</span>, <span class="st">"target_length"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"num_matches"</span>, <span class="st">"alignment_length"</span>, <span class="st">"mapq"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># PAF has no header row and is tab-separated; extra tag columns (tp:A:P, cm:i:..., etc.)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>paf_df <span class="op">=</span> pd.read_csv(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../result/aft_sort/sim_gfa/aln_gfa.paf"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    header<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    usecols<span class="op">=</span><span class="bu">range</span>(<span class="dv">12</span>),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    names<span class="op">=</span>paf_cols</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract just the real-genome (target) position info</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>gfa_pred <span class="op">=</span> paf_df[[<span class="st">"query_name"</span>, <span class="st">"target_name"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>, <span class="st">"strand"</span>]]</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>sim_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/aft_sort/sim_gfa/eris_new_gfa_sim_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>clean_gfa <span class="op">=</span> sim_gfa.iloc[:,:<span class="dv">3</span>]</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the name</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"name"</span>] <span class="op">=</span> clean_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"repeats"</span>] <span class="op">=</span> clean_gfa.groupby(<span class="st">"name"</span>)[<span class="st">"locus_id"</span>].transform(<span class="kw">lambda</span> x: pd.factorize(x)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># clean_gfa = clean_gfa.drop(columns=["gene_id", "locus_id", "target"])</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(clean_gfa)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Match the location</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_pred.head(<span class="dv">10</span>))</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co"># How many unique locus in total based on their strand</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>strand_counts <span class="op">=</span> gfa_pred.groupby(<span class="st">"query_name"</span>)[<span class="st">"strand"</span>].value_counts().unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>gfa_loc <span class="op">=</span> gfa_pred.copy()</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_loc[gfa_loc[<span class="st">"query_name"</span>] <span class="op">==</span> <span class="st">"locus_split_419597b9"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 locus_id                        target              gene_id  \
 0    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched        1116087_0_222   
@@ -501,6 +633,10 @@ False Negative result:
 </div>
 </div>
 <p>minimap2 found multiple locations for some loci</p>
+</section>
+<section id="dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="dictionary">Dictionary</h2>
+<p>I create a code to match the IS name with the dictionary to improved the precision and recall</p>
 </section>
 </section>
 <section id="pytest" class="level1">

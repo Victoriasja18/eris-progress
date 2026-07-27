@@ -13,6 +13,7 @@ All the summary that I do:
 - Code suggestion to improve running eris
 - Running eris: fragmented, before & after sorting
 - Precision and recall
+    - Dictionary
 - Pytest
 
 # Code suggestion
@@ -42,6 +43,7 @@ In result: More IS found after fragmentation
 We played around sorting in the `pipeline.py` in the function `_build_local`
 
 The result is below:
+
 | Total IS | Complete | Simulated | Fragmented |
 |---------|:-----|------|------:|
 | Total rows | 37 | 293 | 212 |
@@ -56,7 +58,7 @@ However, after we sorted it we found:
 
 # Precision and recall
 ## Complete
-The result for each buffer:
+### Before matching with the dictionary
 
 | buffer | TP | FP | FN | precision | recall | f1   |
 |-------:|---:|---:|---:|----------:|-------:|-----:|
@@ -70,6 +72,32 @@ The result for each buffer:
 import pandas as pd
 
 matrix = pd.read_csv("../result/complete_precision_recall.tsv", sep="\t")
+
+result_print = ["name", "transcript", "chromStart", "chromEnd", "repeats"]
+
+print("False Positive result:")
+print(print(matrix.loc[matrix["buffer_0"] == "FP", result_print]))
+
+print("False Negative result:")
+print(matrix.loc[matrix["buffer_0"] == "FN", result_print])
+
+```
+
+### After matching 
+The result for each buffer:
+
+| buffer | TP | FP | FN | precision | recall | f1   |
+|-------:|---:|---:|---:|----------:|-------:|-----:|
+| 0      | 51 | 4  | 10 | 0.927     | 0.836   | 0.879 |
+| 50     | 51 | 4  | 10 | 0.927     | 0.836   | 0.879 |
+| 100    | 51 | 4  | 10 | 0.927     | 0.836   | 0.879 |
+| 200    | 51 | 4  | 10 | 0.927     | 0.836   | 0.879 |
+| 400    | 51 | 4  | 10 | 0.927     | 0.836   | 0.879 |
+
+```{python}
+import pandas as pd
+
+matrix = pd.read_csv("../result/complete1_precision_recall.tsv", sep="\t")
 
 result_print = ["name", "transcript", "chromStart", "chromEnd", "repeats"]
 
@@ -127,5 +155,8 @@ print(gfa_loc[gfa_loc["query_name"] == "locus_split_419597b9"])
 ```
 
 minimap2 found multiple locations for some loci
+
+## Dictionary
+I create a code to match the IS name with the dictionary to improved the precision and recall
 
 # Pytest
