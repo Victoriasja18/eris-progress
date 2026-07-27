@@ -191,7 +191,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#fragmentation" id="toc-fragmentation" class="nav-link" data-scroll-target="#fragmentation">Fragmentation</a></li>
   <li><a href="#sorting" id="toc-sorting" class="nav-link" data-scroll-target="#sorting">Sorting</a></li>
   </ul></li>
-  <li><a href="#precision-and-recall" id="toc-precision-and-recall" class="nav-link" data-scroll-target="#precision-and-recall">Precision and recall</a></li>
+  <li><a href="#precision-and-recall" id="toc-precision-and-recall" class="nav-link" data-scroll-target="#precision-and-recall">Precision and recall</a>
+  <ul class="collapse">
+  <li><a href="#complete" id="toc-complete" class="nav-link" data-scroll-target="#complete">Complete</a></li>
+  <li><a href="#simulated-gfa" id="toc-simulated-gfa" class="nav-link" data-scroll-target="#simulated-gfa">Simulated (gfa)</a></li>
+  </ul></li>
+  <li><a href="#pytest" id="toc-pytest" class="nav-link" data-scroll-target="#pytest">Pytest</a></li>
   </ul>
 </nav>
     </div>
@@ -234,7 +239,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>All the summary that I do:</p>
 <ul>
 <li>Code suggestion to improve running eris</li>
-<li></li>
+<li>Running eris: fragmented, before &amp; after sorting</li>
+<li>Precision and recall</li>
+<li>Pytest</li>
 </ul>
 </section>
 <section id="code-suggestion" class="level1">
@@ -245,7 +252,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Required revision inside the <code>interval.py</code></li>
 </ul></li>
 </ul>
-<div id="4115b7f8" class="cell" data-execution_count="1">
+<div id="b2d4bf65" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import this inside interval.py</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> annotations</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -270,22 +277,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <thead>
 <tr class="header">
 <th>Total IS</th>
-<th>Complete (fa)</th>
-<th>Simulated (gfa)</th>
+<th style="text-align: right;">Complete (fa)</th>
+<th style="text-align: right;">Simulated (gfa)</th>
 <th style="text-align: right;"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Total rows</td>
-<td>513</td>
-<td>343</td>
+<td style="text-align: right;">513</td>
+<td style="text-align: right;">343</td>
 <td style="text-align: right;"></td>
 </tr>
 <tr class="even">
 <td>Total unique IS</td>
-<td>38</td>
-<td>40</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">40</td>
 <td style="text-align: right;"></td>
 </tr>
 </tbody>
@@ -294,6 +301,210 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="precision-and-recall" class="level1">
 <h1>Precision and recall</h1>
+<section id="complete" class="level2">
+<h2 class="anchored" data-anchor-id="complete">Complete</h2>
+<p>The result for each buffer:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">buffer</th>
+<th style="text-align: right;">TP</th>
+<th style="text-align: right;">FP</th>
+<th style="text-align: right;">FN</th>
+<th style="text-align: right;">precision</th>
+<th style="text-align: right;">recall</th>
+<th style="text-align: right;">f1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.855</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">0.81</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.855</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">0.81</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.855</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">0.81</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.855</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">0.81</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.855</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">0.81</td>
+</tr>
+</tbody>
+</table>
+<div id="4fa88b45" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> pd.read_csv(<span class="st">"../result/complete_precision_recall.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>result_print <span class="op">=</span> [<span class="st">"name"</span>, <span class="st">"transcript"</span>, <span class="st">"chromStart"</span>, <span class="st">"chromEnd"</span>, <span class="st">"repeats"</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"False Positive result:"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">print</span>(matrix.loc[matrix[<span class="st">"buffer_0"</span>] <span class="op">==</span> <span class="st">"FP"</span>, result_print]))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"False Negative result:"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(matrix.loc[matrix[<span class="st">"buffer_0"</span>] <span class="op">==</span> <span class="st">"FN"</span>, result_print])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>False Positive result:
+      name  transcript  chromStart  chromEnd  repeats
+8    IS682  HG941718.1     2239328   2239445      1.0
+15    IS1R  HG941718.1     2384729   2385394      1.0
+31  ISEc49  HG941718.1     4162406   4163438      2.0
+35  ISEcp1  HG941718.1     4937618   4940067      1.0
+36   ISSd1  HG941718.1     4942429   4944198      1.0
+38   IS629  HG941718.1     4954027   4954138      1.0
+44    IS15  HG941719.1       43486     44203      1.0
+52    IS26  HG941719.1      113738    114455      7.0
+None
+False Negative result:
+       name  transcript  chromStart  chromEnd  repeats
+55  MITEEc1  HG941718.1      814902    815025      1.0
+56   ISCfr4  HG941718.1     1365600   1366443      NaN
+57      IS4  HG941718.1     1417476   1418621      NaN
+58     IS1A  HG941718.1     2384714   2385482      1.0
+59  MITEEc1  HG941718.1     3237314   3237436      2.0
+60    ISSd1  HG941718.1     3314362   3315303      NaN
+61  ISSen10  HG941718.1     4156066   4156581      NaN
+62    ISEc9  HG941718.1     4937432   4938940      NaN
+63      IS5  HG941718.1     4938940   4940135      NaN
+64    IS600  HG941718.1     4942385   4943650      NaN
+65   ISEc52  HG941718.1     4943650   4944441      3.0
+66   ISSen1  HG941718.1     4976678   4977300      NaN
+67     IS26  HG941719.1       37108     38748      2.0
+68     IS26  HG941719.1       43434     44254      3.0</code></pre>
+</div>
+</div>
+</section>
+<section id="simulated-gfa" class="level2">
+<h2 class="anchored" data-anchor-id="simulated-gfa">Simulated (gfa)</h2>
+<div id="ff89dd89" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>paf_cols <span class="op">=</span> [</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"query_name"</span>, <span class="st">"query_length"</span>, <span class="st">"query_start"</span>, <span class="st">"query_end"</span>, <span class="st">"strand"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"target_name"</span>, <span class="st">"target_length"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"num_matches"</span>, <span class="st">"alignment_length"</span>, <span class="st">"mapq"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># PAF has no header row and is tab-separated; extra tag columns (tp:A:P, cm:i:..., etc.)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>paf_df <span class="op">=</span> pd.read_csv(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"../result/aft_sort/sim_gfa/aln_gfa.paf"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    header<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    usecols<span class="op">=</span><span class="bu">range</span>(<span class="dv">12</span>),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    names<span class="op">=</span>paf_cols</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract just the real-genome (target) position info</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>gfa_pred <span class="op">=</span> paf_df[[<span class="st">"query_name"</span>, <span class="st">"target_name"</span>, <span class="st">"target_start"</span>, <span class="st">"target_end"</span>, <span class="st">"strand"</span>]]</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>sim_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/aft_sort/sim_gfa/eris_new_gfa_sim_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>clean_gfa <span class="op">=</span> sim_gfa.iloc[:,:<span class="dv">3</span>]</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the name</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"name"</span>] <span class="op">=</span> clean_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"repeats"</span>] <span class="op">=</span> clean_gfa.groupby(<span class="st">"name"</span>)[<span class="st">"locus_id"</span>].transform(<span class="kw">lambda</span> x: pd.factorize(x)[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># clean_gfa = clean_gfa.drop(columns=["gene_id", "locus_id", "target"])</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(clean_gfa)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Match the location</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_pred.head(<span class="dv">10</span>))</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co"># How many unique locus in total based on their strand</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>strand_counts <span class="op">=</span> gfa_pred.groupby(<span class="st">"query_name"</span>)[<span class="st">"strand"</span>].value_counts().unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>gfa_loc <span class="op">=</span> gfa_pred.copy()</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_loc[gfa_loc[<span class="st">"query_name"</span>] <span class="op">==</span> <span class="st">"locus_split_419597b9"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 locus_id                        target              gene_id  \
+0    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched        1116087_0_222   
+1    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched       1244816_2_1133   
+2    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched       1176191_31_181   
+3    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched         1245048_2_80   
+4    locus_split_e96e3e49  ISEc23_IS66_unknown_stitched        1244700_0_438   
+..                    ...                           ...                  ...   
+338        locus_1bab84a1                IS629_IS3_IS51    1245106_4002_6087   
+339        locus_404bfd86              IS1R_IS1_unknown        1245136_1_181   
+340        locus_404bfd86              IS1R_IS1_unknown      1245136_225_444   
+341        locus_404bfd86              IS1R_IS1_unknown  1245038_98886_99339   
+342        locus_404bfd86              IS1R_IS1_unknown  1245038_98286_98805   
+
+       name  repeats  
+0    ISEc23        1  
+1    ISEc23        1  
+2    ISEc23        1  
+3    ISEc23        1  
+4    ISEc23        1  
+..      ...      ...  
+338   IS629        1  
+339    IS1R        1  
+340    IS1R        1  
+341    IS1R        1  
+342    IS1R        1  
+
+[343 rows x 5 columns]
+             query_name target_name  target_start  target_end strand
+0  locus_split_e96e3e49  HG941718.1       4926309     4942531      +
+1  locus_split_6683cf2e  HG941718.1        234948      243291      +
+2  locus_split_419597b9  HG941718.1       4943739     4944120      -
+3  locus_split_419597b9  HG941718.1       3558907     3559288      -
+4  locus_split_419597b9  HG941718.1       5007671     5008052      +
+5  locus_split_419597b9  HG941718.1       3559184     3559544      +
+6  locus_split_419597b9  HG941718.1       5007415     5007775      -
+7  locus_split_419597b9  HG941718.1       4944016     4944375      +
+8  locus_split_419597b9  HG941718.1       5007405     5007510      -
+9  locus_split_419597b9  HG941718.1       4944280     4944385      +
+             query_name target_name  target_start  target_end strand
+2  locus_split_419597b9  HG941718.1       4943739     4944120      -
+3  locus_split_419597b9  HG941718.1       3558907     3559288      -
+4  locus_split_419597b9  HG941718.1       5007671     5008052      +
+5  locus_split_419597b9  HG941718.1       3559184     3559544      +
+6  locus_split_419597b9  HG941718.1       5007415     5007775      -
+7  locus_split_419597b9  HG941718.1       4944016     4944375      +
+8  locus_split_419597b9  HG941718.1       5007405     5007510      -
+9  locus_split_419597b9  HG941718.1       4944280     4944385      +</code></pre>
+</div>
+</div>
+<p>minimap2 found multiple locations for some loci</p>
+</section>
+</section>
+<section id="pytest" class="level1">
+<h1>Pytest</h1>
 
 
 </section>

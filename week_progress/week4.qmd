@@ -252,7 +252,7 @@ for buf in [10, 15, 25, 50, 100]:
 
 ```
 
-## Precision and recall
+<!-- ## Precision and recall
 ```{python}
 # Calculate precision and recall
 def precision_recall(df1, df2, buffer):
@@ -319,7 +319,7 @@ print(comp_matrix.tail(10))
 
 # comp_matrix.to_csv("../result/complete_precision_recall.tsv", sep="\t", index=False)
 
-```
+``` -->
 
 As we increased the buffer, we can see that all the metrics were increased. However, we do have high recall but low precision. Which means we do have high number of false positive. 
 

@@ -70,210 +70,101 @@ gt["synonyms"] = gt["name"].apply(
 
 ```{python}
 
+import ast
+import pandas as pd
 from collections import defaultdict
 
-def find_location_matches(df1, df2, buffer):
+
+def precision_recall(df1, df2, buffer):
     """
-    Stage 1: find every (df2_idx, df1_idx) pair whose location overlaps within buffer.
-    df1 = ground truth, df2 = predictions
-    Returns a list of candidate matches with both rows' info.
+    df1 = ground truth, df2 = predictions.
+    A prediction is TP only if its location overlaps a truth (within buffer)
+    AND its name (or a synonym) matches. Any prediction whose location
+    matches but whose name doesn't is now scored as FP, not silently dropped.
     """
-    candidates = []
+    # --- Stage 1: location candidates ---
+    by_pred = defaultdict(list)
     for i, pred in df2.iterrows():
         for j, truth in df1.iterrows():
             if pred["transcript"] != truth["transcript"]:
                 continue
             if (pred["chromStart"] - buffer) <= truth["chromEnd"] and \
-               (pred["chromEnd"]   + buffer) >= truth["chromStart"]:
-                candidates.append({"pred_idx": i, "truth_idx": j})
-    return candidates
+               (pred["chromEnd"] + buffer) >= truth["chromStart"]:
+                by_pred[i].append(j)
 
-def name_matches(pred_row, truth_name):
-    """True if truth_name equals pred's name, or appears in pred's synonyms
-    (handles synonyms stored as a real list or as a stringified list)."""
-    if pred_row["name"] == truth_name:
-        return True
-    syns = pred_row.get("synonyms", pd.NA)
-
-    if isinstance(syns, str):
-        try:
-            syns = ast.literal_eval(syns)
-        except (ValueError, SyntaxError):
-            syns = []
-
-    if isinstance(syns, list):
-        return truth_name in syns
-    return False
-
-def precision_recall(df1, df2, buffer):
-    candidates = find_location_matches(df1, df2, buffer)
-
-    # group all candidates by which prediction they belong to
-    by_pred = defaultdict(list)
-    for c in candidates:
-        by_pred[c["pred_idx"]].append(c["truth_idx"])
-
+    # --- Stage 2: name check within each prediction's candidates ---
     matched_df1 = set()
     matched_df2 = set()
-    wrong_name_records = []
+    fp_wrong_name_records = []
 
     for i, truth_idxs in by_pred.items():
         pred = df2.loc[i]
         tp_found = False
 
-        # first pass: does ANY candidate match on name?
         for j in truth_idxs:
-            truth = df1.loc[j]
-            if name_matches(pred, truth["name"]):
+            truth_name = df1.loc[j, "name"]
+
+            name_match = pred["name"] == truth_name
+            if not name_match:
+                syns = pred.get("synonyms", pd.NA)
+                if isinstance(syns, str):
+                    try:
+                        syns = ast.literal_eval(syns)
+                    except (ValueError, SyntaxError):
+                        syns = []
+                if isinstance(syns, list):
+                    name_match = truth_name in syns
+
+            if name_match:
                 matched_df1.add(j)
                 matched_df2.add(i)
                 tp_found = True
                 break  # one correct match is enough for this prediction
 
-        # only log wrong_name if nothing matched
         if not tp_found:
-            j = truth_idxs[0]  # closest/first candidate location
-            truth = df1.loc[j]
             record = pred.to_dict()
-            wrong_name_records.append(record)
+            record[f"buffer_{buffer}"] = "FP"
+            record["fp_reason"] = "wrong_name"
+            fp_wrong_name_records.append(record)
 
+    # --- metrics ---
     tp = len(matched_df2)
-    wrong_name_pred_idx = {r_i for r_i in by_pred if r_i not in matched_df2}
-    fp_idx = set(df2.index) - matched_df2 - wrong_name_pred_idx
     fn = len(df1) - len(matched_df1)
+
+    no_candidate_idx = set(df2.index) - set(by_pred.keys())      # no location overlap at all
+    wrong_name_idx   = set(by_pred.keys()) - matched_df2          # location matched, name didn't
+    fp_idx = no_candidate_idx | wrong_name_idx
     fp = len(fp_idx)
 
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
     recall    = tp / (tp + fn) if (tp + fn) > 0 else 0
     f1        = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
 
-    summary = {"buffer": buffer, "TP": tp, "FP": fp, "FN": fn,
-               "precision": round(precision, 3), "recall": round(recall, 3), "f1": round(f1, 3)}
+    summary = {
+        "buffer": buffer, "TP": tp, "FP": fp, "FN": fn,
+        "precision": round(precision, 3), "recall": round(recall, 3), "f1": round(f1, 3),
+    }
 
+    # --- detail dataframe ---
     tp_df = df2.loc[list(matched_df2)].copy()
     tp_df[f"buffer_{buffer}"] = "TP"
 
-    wrong_name_df = pd.DataFrame(wrong_name_records)
+    fp_no_candidate_df = df2.loc[list(no_candidate_idx)].copy()
+    fp_no_candidate_df[f"buffer_{buffer}"] = "FP"
 
-    fp_df = df2.loc[list(fp_idx)].copy()
-    fp_df[f"buffer_{buffer}"] = "FP"
+    fp_wrong_name_df = pd.DataFrame(fp_wrong_name_records)
 
     fn_df = df1.loc[df1.index.difference(matched_df1)].copy()
     fn_df[f"buffer_{buffer}"] = "FN"
 
-    detail_df = pd.concat([tp_df, wrong_name_df, fp_df, fn_df], ignore_index=True)
+    detail_df = pd.concat(
+        [tp_df, fp_no_candidate_df, fp_wrong_name_df, fn_df],
+        ignore_index=True,
+    )
 
     return summary, detail_df
 ```
 
-
-```{python}
-# Run for all buffers
-results = []
-detail_dfs = {}
-
-for buf in [0, 25, 50, 100]:
-    summary, df = precision_recall(gt, pred_fa, buf)
-    detail_dfs[buf] = df
-    results.append(summary)
-
-print(pd.DataFrame(results).to_string(index=False))
-
-print(detail_dfs[50][detail_dfs[50]["truth_name"].notna()])
-```
-
-Re try the code
-<!-- ```{python}
-def precision_recall(gt, pred_df, buffer):
-    """
-    Doing precision recall based on position and names
-    """
-    candidates = []
-    unmatched_preds = []
-    tp, fp, fn = 0, 0, 0
-    matched_truth = set()
-
-    for i, pred in pred_df.iterrows():
-        matched = False
-        for j, truth in gt.iterrows():
-            if pred["transcript"] != truth["transcript"]:
-                continue
-
-            truth_synonyms = truth["synonyms"] if isinstance(truth["synonyms"], list) else []
-            name_match = (pred["name"] == truth["name"]) or (pred["name"] in truth_synonyms)
-
-            position_match = (
-                (pred["chromStart"] - buffer) <= truth["chromEnd"]
-                and (pred["chromEnd"] + buffer) >= truth["chromStart"]
-            )
-
-            if name_match and position_match:
-                candidates.append({
-                    "pred_idx": i,
-                    "truth_idx": j,
-                    **pred.to_dict(),
-                })
-                matched = True
-                matched_truth.add(j)
-
-            if matched:
-                tp += 1
-            else:
-                fp += 1
-
-    fn = len(gt) - len(matched_truth)
-
-
-    candidates = pd.DataFrame(candidates)
-    unmatched_preds_df = pd.DataFrame(unmatched_preds)
-    unmatched_truth_df = gt.loc[~gt.index.isin(matched_truth)]
-
-    return candidates, unmatched_preds_df, unmatched_truth_df
-
-def evaluate_across_buffers(gt, pred_df, buffers):
-    """
-    Run precision_recall across multiple buffer values.
-    Returns:
-      - all_candidates: combined candidates (matches) across all buffers, tagged by buffer
-      - summary_df: precision/recall/tp/fp/fn for each buffer
-    """
-
-    all_candidates = []
-    summary_rows = []
-
-    for buffer in buffers:
-        candidates, unmatched_preds_df, unmatched_truth_df = precision_recall(gt, pred_df, buffer)
-
-        tp = candidates["pred_idx"].nunique() if not candidates.empty else 0
-        fp = len(unmatched_preds_df)
-        fn = len(unmatched_truth_df)
-
-        precision = tp / (tp + fp) if (tp + fp) > 0 else 0
-        recall = tp / (tp + fn) if (tp + fn) > 0 else 0
-
-        if not candidates.empty:
-            candidates = candidates.copy()
-            candidates["buffer"] = buffer
-            all_candidates.append(candidates)
-
-        summary_rows.append({
-            "buffer": buffer,
-            "tp": tp,
-            "fp": fp,
-            "fn": fn,
-            "precision": precision,
-            "recall": recall,
-        })
-
-    all_candidates_df = pd.concat(all_candidates, ignore_index=True) if all_candidates else pd.DataFrame()
-    summary_df = pd.DataFrame(summary_rows)
-
-    return all_candidates_df, summary_df
-
-candidate, summary = evaluate_across_buffers(gt, pred_fa, [0, 10, 30, 50])
-
-print(summary)
- -->
 
 # Precision recall for the GFA
 
@@ -406,6 +297,28 @@ clean_fa = clean_fa[clean_fa["context"] == "INSIDE"]
 print(clean_fa)
 ```
 
+### Collapsing the locations
+```{python}
+clean_fa = clean_fa.sort_values(["transcript", "name", "repeats", "chromStart"]).reset_index(drop=True)
+
+gap = 1000  # max distance between rows to be considered the same instance, adjust as needed
+
+group_keys = ["context", "transcript", "name", "repeats"]
+new_group = (
+    (clean_fa[group_keys] != clean_fa[group_keys].shift()).any(axis=1)
+    | (clean_fa["chromStart"] > clean_fa["chromEnd"].shift() + gap)
+)
+clean_fa["cluster_id"] = new_group.cumsum()
+
+agg = {"chromStart": "min", "chromEnd": "max"}
+for c in clean_fa.columns:
+    if c not in group_keys and c not in agg and c != "cluster_id":
+        agg[c] = "first"
+
+clean_fa = clean_fa.groupby(["cluster_id"] + group_keys, dropna=False, as_index=False).agg(agg)
+clean_fa = clean_fa.drop(columns="cluster_id")
+
+```
 
 ## Re-run prediction recall
 ```{python}
@@ -423,7 +336,8 @@ key_cols = ["context", "transcript", "chromStart", "chromEnd", "name", "repeats"
 
 combined = None
 for buf, df in detail_dfs.items():
-    df_renamed = df.rename(columns={c: f"{c}" for c in df.columns if c not in key_cols})
+    rename_map = {c: f"{c}_{buf}" for c in df.columns if c not in key_cols and c != f"buffer_{buf}"}
+    df_renamed = df.rename(columns=rename_map)
     combined = df_renamed if combined is None else combined.merge(df_renamed, on=key_cols, how="outer")
 
 combined = pd.DataFrame(combined)
@@ -432,58 +346,3 @@ combined.to_csv("../result/complete_precision_recall.tsv", sep="\t", index=False
 ```
 
 
-# Collapse the datasets
-
-```{python}
-
-def collapse(df, gap=1000):
-    df = df.sort_values(["transcript", "name", "chromStart"]).reset_index(drop=True)
-    merged_rows = []
-    current = None
-
-    for _, row in df.iterrows():
-        if (current is not None
-            and row["transcript"] == current["transcript"]
-            and row["name"] == current["name"]
-            and row["chromStart"] - current["chromEnd"] <= gap):
-            # extend the current merged interval
-            current["chromEnd"] = max(current["chromEnd"], row["chromEnd"])
-        else:
-            if current is not None:
-                merged_rows.append(current)
-            current = row.copy()
-
-    if current is not None:
-        merged_rows.append(current)
-
-    return pd.DataFrame(merged_rows).reset_index(drop=True)
-
-collapse_fa = collapse(clean_fa, gap=1000)
-
-print(collapse_fa.head(10))
-
-```
-
-```{python}
-
-detail_dfs = {}
-results = []
-
-for buf in [0, 50, 100, 200, 400]:
-    summary, df = precision_recall(gt, clean_fa, buf)
-    detail_dfs[buf] = df
-    results.append(summary)
-
-print(pd.DataFrame(results).to_string(index=False))
-
-key_cols = ["context", "transcript", "chromStart", "chromEnd", "name", "repeats", "score", "strand"]
-
-# combined = None
-# for buf, df in detail_dfs.items():
-#     df_renamed = df.rename(columns={c: f"{c}" for c in df.columns if c not in key_cols})
-#     combined = df_renamed if combined is None else combined.merge(df_renamed, on=key_cols, how="outer")
-
-# combined = pd.DataFrame(combined)
-# combined.to_csv("../result/complete_precision_recall.tsv", sep="\t", index=False)
-
-```
