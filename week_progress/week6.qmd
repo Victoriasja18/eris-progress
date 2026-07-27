@@ -108,6 +108,7 @@ def name_matches(pred_row, truth_name):
 def precision_recall(df1, df2, buffer):
     candidates = find_location_matches(df1, df2, buffer)
 
+    # group all candidates by which prediction they belong to
     by_pred = defaultdict(list)
     for c in candidates:
         by_pred[c["pred_idx"]].append(c["truth_idx"])
@@ -120,23 +121,20 @@ def precision_recall(df1, df2, buffer):
         pred = df2.loc[i]
         tp_found = False
 
+        # first pass: does ANY candidate match on name?
         for j in truth_idxs:
-            if j in matched_df1:
-                continue  # already claimed by another prediction
             truth = df1.loc[j]
             if name_matches(pred, truth["name"]):
                 matched_df1.add(j)
                 matched_df2.add(i)
                 tp_found = True
-                break
+                break  # one correct match is enough for this prediction
 
+        # only log wrong_name if nothing matched
         if not tp_found:
-            j = truth_idxs[0]
+            j = truth_idxs[0]  # closest/first candidate location
             truth = df1.loc[j]
             record = pred.to_dict()
-            record["truth_name"] = truth["name"]
-            record["truth_idx"] = j
-            record[f"buffer_{buffer}"] = "wrong_name"
             wrong_name_records.append(record)
 
     tp = len(matched_df2)
@@ -472,7 +470,7 @@ detail_dfs = {}
 results = []
 
 for buf in [0, 50, 100, 200, 400]:
-    summary, df = precision_recall(gt, collapse_fa, buf)
+    summary, df = precision_recall(gt, clean_fa, buf)
     detail_dfs[buf] = df
     results.append(summary)
 
@@ -480,12 +478,12 @@ print(pd.DataFrame(results).to_string(index=False))
 
 key_cols = ["context", "transcript", "chromStart", "chromEnd", "name", "repeats", "score", "strand"]
 
-combined = None
-for buf, df in detail_dfs.items():
-    df_renamed = df.rename(columns={c: f"{c}" for c in df.columns if c not in key_cols})
-    combined = df_renamed if combined is None else combined.merge(df_renamed, on=key_cols, how="outer")
+# combined = None
+# for buf, df in detail_dfs.items():
+#     df_renamed = df.rename(columns={c: f"{c}" for c in df.columns if c not in key_cols})
+#     combined = df_renamed if combined is None else combined.merge(df_renamed, on=key_cols, how="outer")
 
-combined = pd.DataFrame(combined)
-combined.to_csv("../result/collapse_precision_recall.tsv", sep="\t", index=False)
+# combined = pd.DataFrame(combined)
+# combined.to_csv("../result/complete_precision_recall.tsv", sep="\t", index=False)
 
 ```

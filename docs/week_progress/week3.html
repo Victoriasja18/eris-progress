@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Victoria Sjalim">
+<meta name="dcterms.date" content="2026-06-23">
 
-<title>Eris progress – Eris Progress</title>
+<title>Progress report week 3 – Eris Progress</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,26 +25,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-209258432f336cc574c0f847bd0a7210.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-209258432f336cc574c0f847bd0a7210.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -82,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Eris Progress</span>
     </a>
   </div>
@@ -93,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -102,33 +138,33 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-weekly-updates">    
         <li>
-    <a class="dropdown-item" href="./week_progress/week1.html">
+    <a class="dropdown-item" href="../week_progress/week1.html">
  <span class="dropdown-text">Week 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./week_progress/week2.html">
+    <a class="dropdown-item" href="../week_progress/week2.html">
  <span class="dropdown-text">Week 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./week_progress/week3.html">
+    <a class="dropdown-item" href="../week_progress/week3.html">
  <span class="dropdown-text">Week 3</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./week_progress/week4.html">
+    <a class="dropdown-item" href="../week_progress/week4.html">
  <span class="dropdown-text">Week 4</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./week_progress/week5.html">
+    <a class="dropdown-item" href="../week_progress/week5.html">
  <span class="dropdown-text">Week 5</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./week_progress/week6.html">
+    <a class="dropdown-item" href="../week_progress/week6.html">
  <span class="dropdown-text">Week 6</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="./week_progress/eris_meeting.html"> 
+    <a class="nav-link" href="../week_progress/eris_meeting.html"> 
 <span class="menu-text">Eris Meeting</span></a>
   </li>  
 </ul>
@@ -142,15 +178,25 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#analysing-eris-github" id="toc-analysing-eris-github" class="nav-link active" data-scroll-target="#analysing-eris-github">Analysing Eris Github</a></li>
+  <li><a href="#analysing-the-pipeline" id="toc-analysing-the-pipeline" class="nav-link" data-scroll-target="#analysing-the-pipeline">Analysing the pipeline</a>
+  <ul class="collapse">
+  <li><a href="#minimap2" id="toc-minimap2" class="nav-link" data-scroll-target="#minimap2">Minimap2</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Eris progress</h1>
+<h1 class="title">Progress report week 3</h1>
 </div>
 
 
@@ -164,6 +210,12 @@ ul.task-list li input[type="checkbox"] {
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 23, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -173,10 +225,128 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Welcome to the Eris progress page! Here, I will be sharing regular updates on my work and progress on the Eris project. Stay tuned for insights, milestones, and reflections as I continue to develop and enhance Eris.</p>
-<p>Any questions please reach out to me!</p>
+<section id="analysing-eris-github" class="level1">
+<h1>Analysing Eris Github</h1>
+<p>Which modules has mappy:</p>
+<ul>
+<li><code>alignment.py</code></li>
+<li><code>pipeline.py</code></li>
+<li><code>io.py</code></li>
+</ul>
+<p>Which modules inherited the mappy:</p>
+<ul>
+<li><code>graph.py</code></li>
+<li><code>interval.py</code></li>
+</ul>
+</section>
+<section id="analysing-the-pipeline" class="level1">
+<h1>Analysing the pipeline</h1>
+<p>The pipeline for Eris is below:</p>
+<ul>
+<li>Contig processing (mostly from alignment.py)</li>
+<li>Target mapping ()</li>
+<li>Gene calling</li>
+<li>Graph building (assuming from graph.py)</li>
+<li>Locus assembly</li>
+</ul>
+<p>Problem with the pipeline:</p>
+<ul>
+<li>The pipeline ultimately only handles multi-contigs because it relied on the overlapped between sequences.
+<ul>
+<li>Lack of condition for long-reads data</li>
+</ul></li>
+<li>Some filtering that lead to less IS found</li>
+</ul>
+<section id="minimap2" class="level2">
+<h2 class="anchored" data-anchor-id="minimap2">Minimap2</h2>
+<p>Let’s run the mappy without any eris and see what is the result.</p>
+<p>After reading the minimap2 API, it seems minimap2 required tuning for specific data type (i.e., differ between long vs short reads, ONT vs pac-bio)</p>
+<div id="fb4d8dfc" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mappy <span class="im">as</span> mp</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtain the query first </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># !bedtools getfasta -fi data/EC958_complete_genome.fasta \</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     -bed data/complete_ec958_IS.reanotated.sorted.bed -s -name &gt; data/IS_elements.fa</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Path</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>comp_fa_path <span class="op">=</span> <span class="st">"../../data/EC958_complete_genome.fasta"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Align the complete genome assembly fasta file</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>comp_fa_aln <span class="op">=</span> mp.Aligner(comp_fa_path)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Read IS sequences and map them</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../result/minimap2_IS.bed"</span>, <span class="st">"w"</span>) <span class="im">as</span> bed:</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> is_name, is_seq, _ <span class="kw">in</span> mp.fastx_read(<span class="st">"../../data/IS_n.mmi"</span>):</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> hit <span class="kw">in</span> comp_fa_aln.<span class="bu">map</span>(is_seq):</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(hit)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> hit.is_primary:</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            strand <span class="op">=</span> <span class="st">"+"</span> <span class="cf">if</span> hit.strand <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> <span class="st">"-"</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>            bed.write(<span class="ss">f"</span><span class="sc">{</span>hit<span class="sc">.</span>ctg<span class="sc">}</span><span class="ch">\t</span><span class="sc">{</span>hit<span class="sc">.</span>r_st<span class="sc">}</span><span class="ch">\t</span><span class="sc">{</span>hit<span class="sc">.</span>r_en<span class="sc">}</span><span class="ch">\t</span><span class="sc">{</span>is_name<span class="sc">}</span><span class="ch">\t</span><span class="sc">{</span>hit<span class="sc">.</span>mapq<span class="sc">}</span><span class="ch">\t</span><span class="sc">{</span>strand<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"It's done!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>It's done!</code></pre>
+</div>
+</div>
+<p>Nothing hit want to try other way</p>
+<pre class="{bash}"><code># Map this to the query
+# minimap2 -c --cs -x asm5 data/EC958_complete_genome.fasta data/IS_elements.fa &gt; progress/result/complete_map_IS.paf
+
+# # Indexing
+# minimap2 -d data/IS.mmi data/EC958_complete_genome.fasta 
+</code></pre>
+<div id="92da42e9" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../result/minimap2/complete_map_IS.paf"</span>) <span class="im">as</span> f:</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        cols <span class="op">=</span> line.strip().split(<span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        q_name  <span class="op">=</span> cols[<span class="dv">0</span>]</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        t_name  <span class="op">=</span> cols[<span class="dv">5</span>]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        t_st    <span class="op">=</span> <span class="bu">int</span>(cols[<span class="dv">7</span>])</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        t_en    <span class="op">=</span> <span class="bu">int</span>(cols[<span class="dv">8</span>])</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        strand  <span class="op">=</span> cols[<span class="dv">4</span>]</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        mapq    <span class="op">=</span> <span class="bu">int</span>(cols[<span class="dv">11</span>])</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        rows.append([t_name, t_st, t_en, q_name, mapq, strand])</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>total_is_file <span class="op">=</span> pd.DataFrame(rows, columns<span class="op">=</span>[<span class="st">"transcript"</span>,<span class="st">"start"</span>,<span class="st">"end"</span>,<span class="st">"name"</span>,<span class="st">"score"</span>,<span class="st">"strand"</span>])</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>total_is_file.to_csv(<span class="st">"../result/complete_map_IS.bed"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, index<span class="op">=</span><span class="va">False</span>, header<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(total_is_file.head(<span class="dv">10</span>))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(total_is_file.shape)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   transcript    start      end                                     name  \
+0  HG941718.1   233727   236259    ISEc23_1::HG941718.1:233727-236259(+)   
+1  HG941719.1   131258   133790    ISEc23_1::HG941718.1:233727-236259(+)   
+2  HG941718.1  4925088  4927620    ISEc23_1::HG941718.1:233727-236259(+)   
+3  HG941718.1  2265833  2268365    ISEc23_1::HG941718.1:233727-236259(+)   
+4  HG941718.1  1365600  1366443    ISCfr4::HG941718.1:1365600-1366443(+)   
+5  HG941718.1  1372287  1373517    ISEc24::HG941718.1:1372287-1373517(-)   
+6  HG941718.1  1417476  1418621       IS4::HG941718.1:1417476-1418621(-)   
+7  HG941718.1  3111919  3114368  ISEc12_1::HG941718.1:1480031-1482480(+)   
+8  HG941718.1  2271181  2273630  ISEc12_1::HG941718.1:1480031-1482480(+)   
+9  HG941718.1  4971900  4974349  ISEc12_1::HG941718.1:1480031-1482480(+)   
+
+   score strand  
+0      0      +  
+1      0      -  
+2      0      +  
+3      0      +  
+4     60      +  
+5     60      -  
+6     60      -  
+7      0      +  
+8      0      +  
+9      0      +  
+(164, 6)</code></pre>
+</div>
+</div>
+<p>In total, there are 163 IS found just solely using minimap2.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

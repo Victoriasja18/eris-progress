@@ -123,7 +123,7 @@ Weakness of this might be not real topological information of the genome assembl
 
 ```{python}
 # Load the new output file
-complete_gfa_df = pd.read_csv("../result/com_gfa/eris_complete_gfa_report.tsv", sep="\t")
+complete_gfa_df = pd.read_csv("../result/bfr_sort/com_gfa/eris_complete_gfa_report.tsv", sep="\t")
 
 # Check the dimension of the new dataframe
 print("Dimension of the new dataframe:", complete_gfa_df.shape)
