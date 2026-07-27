@@ -1,0 +1,12 @@
+{
+  "hash": "2f5aaa83a89965d3de94b123b40f914d",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Eris Meeting\"\nauthor: \"Victoria Sjalim\"\ndate: \"2026-07-28\"\nexecute: \n  freeze: auto\n---\n\n# Overview \n\nAll the summary that I do:\n\n- Code suggestion to improve running eris\n- \n\n# Code suggestion\n\n- The code will not work when we run eris without UV \n    - Required revision inside the `interval.py`\n\n::: {#4115b7f8 .cell execution_count=1}\n``` {.python .cell-code}\n# import this inside interval.py\nfrom __future__ import annotations\n```\n:::\n\n\n# Number of IS found\n## Initial running\n\nInitial findings using fasta\n- Fasta: found only 38 IS [4 unique IS]\n    - Suspected because there only 3 contigs and eris used those long contigs to analyse the data\n- More IS found using GFA\n\n## Fragmentation\nWhen I looked at the data, I found that the assembly graph are more fragmented compared to the fasta file. That is why I fragmented it.\n\nIn result: More IS found after fragmentation\n\n## Sorting \nWe played around sorting in the `pipeline.py` in the function `_build_local`\n\nThe result is below:\n| Total IS | Complete | Simulated | Fragmented |\n|---------|:-----|------|------:|\n| Total rows | 37 | 293 | 212 |\n| Total unique IS | 4 | 35 | 24 |\n\nHowever, after we sorted it we found:\n\n| Total IS | Complete (fa) | Simulated (gfa)|\n|---------|-----|------|------:|\n| Total rows | 513 |343 |\n| Total unique IS | 38 | 40 |\n\n# Precision and recall\n\n",
+    "supporting": [
+      "eris_meeting_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

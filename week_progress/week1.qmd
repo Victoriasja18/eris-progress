@@ -43,7 +43,7 @@ Try downloading UV
 #     -o output/eris_output_simulated
 
 # # For the complete genome assembly
-# uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/eris_new_complete -q
+# uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/eris_comp_prec --mode collapse 
 
 # mkdir -p result/complete_genome && mv result/eris_output_complete* result/complete_genome/
 ```

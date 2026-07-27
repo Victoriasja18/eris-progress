@@ -171,6 +171,8 @@ for file in folder_bfr.rglob("*.tsv"):
 
 # Extract the location from the loci
 
+Using minimap2 to extract the position from the genome with the loci
+
 ```{bash}
 grep "^>" result/aft_sort/sim_gfa/eris_new_gfa_sim_loci.fasta | wc -l
 minimap2 ../data/EC958_complete_genome.fasta result/aft_sort/sim_gfa/eris_new_gfa_sim_loci.fasta >  result/aft_sort/sim_gfa/aln_gfa.paf

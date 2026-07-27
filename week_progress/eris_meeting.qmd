@@ -1,0 +1,55 @@
+---
+title: "Eris Meeting"
+author: "Victoria Sjalim"
+date: "2026-07-28"
+execute: 
+  freeze: auto
+---
+
+# Overview 
+
+All the summary that I do:
+
+- Code suggestion to improve running eris
+- 
+
+# Code suggestion
+
+- The code will not work when we run eris without UV 
+    - Required revision inside the `interval.py`
+
+```{python}
+# import this inside interval.py
+from __future__ import annotations
+```
+
+# Number of IS found
+## Initial running
+
+Initial findings using fasta
+- Fasta: found only 38 IS [4 unique IS]
+    - Suspected because there only 3 contigs and eris used those long contigs to analyse the data
+- More IS found using GFA
+
+## Fragmentation
+When I looked at the data, I found that the assembly graph are more fragmented compared to the fasta file. That is why I fragmented it.
+
+In result: More IS found after fragmentation
+
+## Sorting 
+We played around sorting in the `pipeline.py` in the function `_build_local`
+
+The result is below:
+| Total IS | Complete | Simulated | Fragmented |
+|---------|:-----|------|------:|
+| Total rows | 37 | 293 | 212 |
+| Total unique IS | 4 | 35 | 24 |
+
+However, after we sorted it we found:
+
+| Total IS | Complete (fa) | Simulated (gfa)|
+|---------|-----|------|------:|
+| Total rows | 513 |343 |
+| Total unique IS | 38 | 40 |
+
+# Precision and recall

@@ -23,6 +23,8 @@ website:
             href: week_progress/week5.qmd
           - text: "Week 6"
             href: week_progress/week6.qmd
+      - text: "Eris Meeting"
+        href: week_progress/eris_meeting.qmd
 
 execute: 
   freeze: auto

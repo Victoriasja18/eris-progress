@@ -108,7 +108,6 @@ def name_matches(pred_row, truth_name):
 def precision_recall(df1, df2, buffer):
     candidates = find_location_matches(df1, df2, buffer)
 
-    # group all candidates by which prediction they belong to
     by_pred = defaultdict(list)
     for c in candidates:
         by_pred[c["pred_idx"]].append(c["truth_idx"])
@@ -121,29 +120,28 @@ def precision_recall(df1, df2, buffer):
         pred = df2.loc[i]
         tp_found = False
 
-        # first pass: does ANY candidate match on name?
         for j in truth_idxs:
+            if j in matched_df1:
+                continue  # already claimed by another prediction
             truth = df1.loc[j]
             if name_matches(pred, truth["name"]):
                 matched_df1.add(j)
                 matched_df2.add(i)
                 tp_found = True
-                break  # one correct match is enough for this prediction
+                break
 
-        # only log wrong_name if nothing matched
         if not tp_found:
-            j = truth_idxs[0]  # closest/first candidate location
+            j = truth_idxs[0]
             truth = df1.loc[j]
             record = pred.to_dict()
             record["truth_name"] = truth["name"]
             record["truth_idx"] = j
-            record["category"] = "wrong_name"
+            record[f"buffer_{buffer}"] = "wrong_name"
             wrong_name_records.append(record)
 
     tp = len(matched_df2)
-    wrong_name_pred_idx = {r["truth_idx"] for r in []}  # not used for exclusion below; see fp_idx
-    wrong_name_pred_idx = set(pred_fa.loc[[r_i for r_i in by_pred if r_i not in matched_df2]].index)
-    fp_idx = set(pred_fa.index) - matched_df2 - wrong_name_pred_idx
+    wrong_name_pred_idx = {r_i for r_i in by_pred if r_i not in matched_df2}
+    fp_idx = set(df2.index) - matched_df2 - wrong_name_pred_idx
     fn = len(df1) - len(matched_df1)
     fp = len(fp_idx)
 
@@ -155,18 +153,17 @@ def precision_recall(df1, df2, buffer):
                "precision": round(precision, 3), "recall": round(recall, 3), "f1": round(f1, 3)}
 
     tp_df = df2.loc[list(matched_df2)].copy()
-    tp_df["category"] = "TP"
+    tp_df[f"buffer_{buffer}"] = "TP"
 
     wrong_name_df = pd.DataFrame(wrong_name_records)
 
     fp_df = df2.loc[list(fp_idx)].copy()
-    fp_df["category"] = "FP"
+    fp_df[f"buffer_{buffer}"] = "FP"
 
     fn_df = df1.loc[df1.index.difference(matched_df1)].copy()
-    fn_df["category"] = "FN"
+    fn_df[f"buffer_{buffer}"] = "FN"
 
     detail_df = pd.concat([tp_df, wrong_name_df, fp_df, fn_df], ignore_index=True)
-    detail_df["buffer"] = buffer
 
     return summary, detail_df
 ```
@@ -175,11 +172,16 @@ def precision_recall(df1, df2, buffer):
 ```{python}
 # Run for all buffers
 results = []
+detail_dfs = {}
+
 for buf in [0, 25, 50, 100]:
     summary, df = precision_recall(gt, pred_fa, buf)
+    detail_dfs[buf] = df
     results.append(summary)
 
 print(pd.DataFrame(results).to_string(index=False))
+
+print(detail_dfs[50][detail_dfs[50]["truth_name"].notna()])
 ```
 
 Re try the code
@@ -279,7 +281,7 @@ print(summary)
 
 We already did the minimap and match it. The problem is some of the sequence match to multiple contigs. 
 
-## Analyse the data
+## Analyse the minimap data
 ```{python}
 
 paf_cols = [
@@ -320,11 +322,170 @@ print(gfa_pred.head(10))
 strand_counts = gfa_pred.groupby("query_name")["strand"].value_counts().unstack(fill_value=0)
 ```
 
-Debugging
+minimap2 found multiple locations for some loci
 
 ```{python}
 gfa_loc = gfa_pred.copy()
 
 print(gfa_loc[gfa_loc["query_name"] == "locus_split_419597b9"])
+
+```
+
+# Validations 
+
+```{python}
+import pytest
+from eris.pipeline import Locus 
+
+class FakeGenome:
+    """Minimal indexable stand-in for GenomeAssembly."""
+    def __init__(self, contigs: dict[str, str]):
+        self._contigs = contigs
+
+    def __getitem__(self, contig_id):
+        return self._contigs[contig_id]
+
+
+def test_single_contig_locus_slices_correctly():
+    genome = FakeGenome({"ctg1": "AAAACCCCGGGGTTTT"})
+    locus = Locus(
+        id="l1", contig="ctg1", start=4, end=8,
+        targets=[], passengers=[], upstream_flanks=[], downstream_flanks=[],
+    )
+    assert locus.extract_sequence(genome) == "CCCC"
+
+
+def test_multi_contig_locus_should_not_return_whole_contigs():
+    """
+    Regression test for extract_sequence: a stitched locus must return only
+    the region within [start, end] on each fragment, not the full contig.
+    """
+    genome = FakeGenome({
+        "ctgA": "AAAAAAAAAA" + "CCCC",   # 10bp junk + 4bp real locus
+        "ctgB": "GGGG" + "TTTTTTTTTT",   # 4bp real locus + 10bp junk
+    })
+    locus = Locus(
+        id="l2", contig="ctgA|ctgB", start=10, end=4,
+        targets=[], passengers=[], upstream_flanks=[], downstream_flanks=[],
+    )
+    seq = locus.extract_sequence(genome)
+    assert len(seq) == 8, (
+        f"got {len(seq)}bp back, expected 8bp — extract_sequence is "
+        "returning full contig sequences instead of slicing each fragment"
+    )
+    assert seq == "CCCCGGGG"
+```
+
+have this in separate file and they found that it might be a wrong extractions of loci. 
+
+`FAILED test/test_locus.py::test_multi_contig_locus_should_not_return_whole_contigs - AssertionError: got 28bp back, expected 8bp — extract_sequence is returning full contig sequences instead of slicing each fragment`
+
+Re-try eris again 
+
+uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/eris_new_complete -q
+
+# Re-cleaning the data
+only keep the inside and used Dimas's code
+
+```{python}
+clean_fa = pd.read_csv("../result/aft_sort/eris_clean/eris_comp_prec_report.tsv", sep="\t")
+
+clean_fa = clean_fa.iloc[:,:4]
+
+# Extract the locations
+clean_fa["transcript"] = clean_fa['gene_id'].str.split('_').str[0]
+clean_fa["chromStart"] = clean_fa['gene_id'].str.split('_').str[1].astype(int)
+clean_fa["chromEnd"] = clean_fa['gene_id'].str.split('_').str[2].astype(int)
+
+# Extract the name
+clean_fa["name"] = clean_fa["target"].str.split("_").str[0]
+clean_fa["repeats"] = clean_fa.groupby("name")["locus_id"].transform(lambda x: pd.factorize(x)[0] + 1)
+
+clean_fa = clean_fa.drop(columns=["gene_id", "locus_id", "target"])
+
+clean_fa = clean_fa[clean_fa["context"] == "INSIDE"]
+
+print(clean_fa)
+```
+
+
+## Re-run prediction recall
+```{python}
+detail_dfs = {}
+results = []
+
+for buf in [0, 50, 100, 200, 400]:
+    summary, df = precision_recall(gt, clean_fa, buf)
+    detail_dfs[buf] = df
+    results.append(summary)
+
+print(pd.DataFrame(results).to_string(index=False))
+
+key_cols = ["context", "transcript", "chromStart", "chromEnd", "name", "repeats", "score", "strand"]
+
+combined = None
+for buf, df in detail_dfs.items():
+    df_renamed = df.rename(columns={c: f"{c}" for c in df.columns if c not in key_cols})
+    combined = df_renamed if combined is None else combined.merge(df_renamed, on=key_cols, how="outer")
+
+combined = pd.DataFrame(combined)
+combined.to_csv("../result/complete_precision_recall.tsv", sep="\t", index=False)
+
+```
+
+
+# Collapse the datasets
+
+```{python}
+
+def collapse(df, gap=1000):
+    df = df.sort_values(["transcript", "name", "chromStart"]).reset_index(drop=True)
+    merged_rows = []
+    current = None
+
+    for _, row in df.iterrows():
+        if (current is not None
+            and row["transcript"] == current["transcript"]
+            and row["name"] == current["name"]
+            and row["chromStart"] - current["chromEnd"] <= gap):
+            # extend the current merged interval
+            current["chromEnd"] = max(current["chromEnd"], row["chromEnd"])
+        else:
+            if current is not None:
+                merged_rows.append(current)
+            current = row.copy()
+
+    if current is not None:
+        merged_rows.append(current)
+
+    return pd.DataFrame(merged_rows).reset_index(drop=True)
+
+collapse_fa = collapse(clean_fa, gap=1000)
+
+print(collapse_fa.head(10))
+
+```
+
+```{python}
+
+detail_dfs = {}
+results = []
+
+for buf in [0, 50, 100, 200, 400]:
+    summary, df = precision_recall(gt, collapse_fa, buf)
+    detail_dfs[buf] = df
+    results.append(summary)
+
+print(pd.DataFrame(results).to_string(index=False))
+
+key_cols = ["context", "transcript", "chromStart", "chromEnd", "name", "repeats", "score", "strand"]
+
+combined = None
+for buf, df in detail_dfs.items():
+    df_renamed = df.rename(columns={c: f"{c}" for c in df.columns if c not in key_cols})
+    combined = df_renamed if combined is None else combined.merge(df_renamed, on=key_cols, how="outer")
+
+combined = pd.DataFrame(combined)
+combined.to_csv("../result/collapse_precision_recall.tsv", sep="\t", index=False)
 
 ```
