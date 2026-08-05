@@ -1,0 +1,265 @@
+---
+title: "Progress report week 7"
+author: "Victoria Sjalim"
+date: "2026-08-04"
+execute: 
+  freeze: auto
+---
+
+# What changed from the code?
+
+## Additional pipeline for the Fasta file
+
+- Additional class for the `LinearPipeline`
+- New if-else in the assemble that handles if topology engines are `None`
+- Fix the `cli.py`
+- The result will be inside one folder instead of scattered files
+
+### Re-run the file
+```{bash}
+uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline --mode collapse 
+# Ensure it's right for the assembly graph
+uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_gfa --mode collapse 
+
+```
+
+```{python}
+import matrix as mt
+
+# New prediction data
+new_path = "../result/new_pipeline/new_pipeline_report.tsv"
+new_fa = mt.format_fa(new_path, "INSIDE")
+
+print(new_fa.head(10))
+
+# Inspect the data
+print(f'Total rows: {new_fa.shape[0]}')
+
+# ground truth data
+gt = mt.format_gt('../../data/complete_ec958_IS.reanotated.sorted.bed')
+# print(gt)
+```
+
+
+### Precision and recall
+```{python}
+import pandas as pd
+
+detail_dfs = {}
+results = []
+
+for buf in [0, 50, 100, 200, 400]:
+    summary, df = mt.precision_recall(gt, new_fa, buf)
+    detail_dfs[buf] = df
+    results.append(summary)
+
+print(pd.DataFrame(results).to_string(index=False))
+
+key_cols = ["context", "transcript", "chromStart", "chromEnd", "name", "repeats", "score", "strand"]
+
+combined = None
+for buf, df in detail_dfs.items():
+    rename_map = {c: f"{c}_{buf}" for c in df.columns if c not in key_cols and c != f"buffer_{buf}"}
+    df_renamed = df.rename(columns=rename_map)
+    combined = df_renamed if combined is None else combined.merge(df_renamed, on=key_cols, how="outer")
+
+combined = pd.DataFrame(combined)
+combined.to_csv("../result/PR_new_pipeline.tsv", sep="\t", index=False)
+```
+
+
+# Precision and recall for the assembly graph
+```{python}
+import importlib
+import matrix as mt
+
+importlib.reload(mt)
+
+# read the assembly graph result
+gfa_path = "../result/new_pipeline_gfa/new_pipeline_gfa_report.tsv"
+
+gfa_out = pd.read_csv(gfa_path, sep="\t")
+print(gfa_out.tail(20))
+
+```
+
+
+```{python}
+# This is what inside
+pred_gfa = mt.format_fa(gfa_path, "INSIDE")
+
+## Look at the upstream and downstream
+up_gfa = mt.format_fa(gfa_path, "UPSTREAM")
+print(up_gfa.head(10))
+
+down_gfa = mt.format_fa(gfa_path, "DOWNSTREAM")
+print(down_gfa.head(10))
+
+# combined upstream and downstream
+combined_up_down = pd.concat([up_gfa, down_gfa], ignore_index=True)
+
+```
+
+
+My problem with the downstream and upstream:
+
+- Some of the IS found only have either upstream/downstream
+
+
+## Reading the ground truth for only chromosome
+
+```{python}
+gt_gfa = "../../data/ec958_IS.reannotated.sorted.bed"
+
+gt_gfa = mt.format_gt(gt_gfa)
+print(gt_gfa)
+
+```
+
+## Alingment
+```{python}
+
+segments = {}
+with open("../../data/contigs_shovill_simulated.gfa") as f:
+    for line in f:
+        if line.startswith('S'):
+            fields = line.rstrip('\n').split('\t')
+            segments[fields[1]] = fields[2]
+
+with open("../../data/extracted_IS_gfa.fasta", "w") as out:
+    for i, row in pred_gfa.iterrows():
+        seg_id = str(row['transcript'])
+        repeats = str(row['repeats'])
+        start, end = int(row['chromStart']), int(row['chromEnd'])
+
+        seg_seq = segments.get(seg_id)
+        if seg_seq is None:
+            print(f"Warning: segment {seg_id} not found in GFA")
+            continue
+
+        subseq = seg_seq[start:end]
+        out.write(f">{row['name']}_{seg_id}_{start}_{end}_{repeats}\n")
+        out.write(subseq + "\n")
+
+
+```
+
+```{bash}
+# minimap2 EC958_complete_genome.fasta extracted_IS_gfa.fasta > aligned_gfa.paf
+
+# awk 'BEGIN{OFS="\t"} $6=="HG941718.1" {print $6, $8, $9, $1, $12, $5}' aligned_gfa.paf > aligned_gfa.bed
+```
+
+## Look at the minimap data
+
+```{python}
+clean_gfa = "../../data/aligned_gfa.bed"
+
+bed_columns = ['transcript', 'chromStart', 'chromEnd', 'gene_id', 'score', 'strand']
+
+clean_gfa = pd.read_table(clean_gfa, header=None, names=bed_columns[:6])
+
+clean_gfa["name"] = clean_gfa['gene_id'].str.split('_').str[0]
+clean_gfa["segment"] = clean_gfa['gene_id'].str.split('_').str[1]
+clean_gfa["local_start"] = clean_gfa['gene_id'].str.split('_').str[2].astype(int)
+clean_gfa["local_end"] = clean_gfa['gene_id'].str.split('_').str[3].astype(int)
+clean_gfa["repeats"] = clean_gfa['gene_id'].str.split('_').str[4]
+
+# drop unnecessary column
+clean_gfa = clean_gfa.drop(columns="gene_id")
+print(clean_gfa)
+
+# # Count how many score > 0
+# count = (clean_gfa["score"] > 0).sum()
+# print(f'Total values that > 0 : {count}')
+```
+
+## Try using upstream downstream
+```{python}
+
+from Bio import SeqIO
+from Bio.Seq import Seq
+import re
+
+genome_records = {rec.id: str(rec.seq) for rec in SeqIO.parse("../../data/EC958_complete_genome.fasta", "fasta")}
+
+for rec_id, seq in genome_records.items():
+    print(rec_id, len(seq))
+
+def locate_subseq(subseq):
+    hits = []
+    for rec_id, seq in genome_records.items():
+        for m in re.finditer(re.escape(subseq), seq):
+            hits.append((rec_id, m.start(), m.end(), '+'))
+        rc = str(Seq(subseq).reverse_complement())
+        for m in re.finditer(re.escape(rc), seq):
+            hits.append((rec_id, m.start(), m.end(), '-'))
+    return hits
+
+results = []
+for i, row in combined_up_down.iterrows():
+    seg_id = str(row['transcript'])
+    start, end = int(row['chromStart']), int(row['chromEnd'])
+    seg_seq = segments.get(seg_id)
+    if seg_seq is None:
+        print(f"Warning: segment {seg_id} not found in GFA")
+        continue
+
+    subseq = seg_seq[start:end]
+    hits = locate_subseq(subseq)
+
+    if len(hits) == 0:
+        status = "no_match"
+    elif len(hits) == 1:
+        status = "unique"
+    else:
+        status = "ambiguous"  # expected for INSIDE (repeated IS body)
+
+    results.append({
+        "locus": row['name'],
+        "segment": seg_id,
+        "local_start": start,
+        "local_end": end,
+        "category": row.get('repeats', row.get('category')),
+        "genome_hits": hits,
+        "status": status,
+    })
+
+res_df = pd.DataFrame(results)
+
+count_ambi = 0
+for name, grp in res_df.groupby("locus"):
+    flanks = grp[grp['category'].isin(['UPSTREAM', 'DOWNSTREAM'])]
+    unique_flanks = flanks[flanks['status'] == 'unique']
+    if not unique_flanks.empty:
+        # pick the flank hit(s) — these tell you the true genome region for this locus
+        print(name, unique_flanks[['category','genome_hits']].to_dict('records'))
+    else:
+        count_ambi += 1
+        print(name, "— no unique flank found, needs manual review")
+
+print(f'Total ambiguous is: {count_ambi}')
+
+res_df.to_csv("../result/genome_loc_gfa.tsv", index=False, sep="\t")
+```
+
+### Merging 2 informations
+```{python}
+res_df['segment'] = res_df['segment'].astype(str)
+clean_gfa['segment'] = clean_gfa['segment'].astype(str)
+
+merged = res_df.merge(
+    clean_gfa[['transcript', 'chromStart', 'chromEnd', 'strand', 'segment', 'local_start', 'local_end','score']],
+    on=['segment', 'local_start', 'local_end'],
+    how='left'
+)
+
+ambiguous = merged[merged['status'] == 'ambiguous']
+print(ambiguous[['locus', 'segment', 'local_start', 'local_end', 'category', 'score']])
+
+print("Ambiguous score stats:")
+print(ambiguous['score'].describe())
+
+print("\nUnique/unambiguous score stats:")
+print(merged[merged['status'] != 'ambiguous']['score'].describe())
+```
