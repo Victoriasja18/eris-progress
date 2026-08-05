@@ -161,6 +161,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../week_progress/week6.html">
  <span class="dropdown-text">Week 6</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week7.html">
+ <span class="dropdown-text">Week 7</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -250,11 +254,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <section id="re-run-the-file" class="level3">
 <h3 class="anchored" data-anchor-id="re-run-the-file">Re-run the file</h3>
-<pre class="{bash}"><code>uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline --mode collapse 
-# Ensure it's right for the assembly graph
-uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_gfa --mode collapse 
+<pre class="{bash}"><code># uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline --mode collapse 
+# # Ensure it's right for the assembly graph
+# uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_gfa --mode collapse 
 </code></pre>
-<div id="72d9249b" class="cell" data-execution_count="1">
+<div id="5a798e3c" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># New prediction data</span></span>
@@ -299,7 +303,7 @@ Total rows: 53</code></pre>
 </section>
 <section id="precision-and-recall" class="level3">
 <h3 class="anchored" data-anchor-id="precision-and-recall">Precision and recall</h3>
-<div id="584658ad" class="cell" data-execution_count="2">
+<div id="8ba23b7f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>detail_dfs <span class="op">=</span> {}</span>
@@ -336,7 +340,7 @@ Total rows: 53</code></pre>
 </section>
 <section id="precision-and-recall-for-the-assembly-graph" class="level1">
 <h1>Precision and recall for the assembly graph</h1>
-<div id="429ca39d" class="cell" data-execution_count="3">
+<div id="1522d949" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> importlib</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -393,7 +397,7 @@ Total rows: 53</code></pre>
 292        0          0      same strand   NONE          2.0  </code></pre>
 </div>
 </div>
-<div id="0e27ecfd" class="cell" data-execution_count="4">
+<div id="fd5c3048" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is what inside</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pred_gfa <span class="op">=</span> mt.format_fa(gfa_path, <span class="st">"INSIDE"</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -461,7 +465,7 @@ Total rows: 53</code></pre>
 </ul>
 <section id="reading-the-ground-truth-for-only-chromosome" class="level2">
 <h2 class="anchored" data-anchor-id="reading-the-ground-truth-for-only-chromosome">Reading the ground truth for only chromosome</h2>
-<div id="cbaab4d3" class="cell" data-execution_count="5">
+<div id="80b4748f" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gt_gfa <span class="op">=</span> <span class="st">"../../data/ec958_IS.reannotated.sorted.bed"</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>gt_gfa <span class="op">=</span> mt.format_gt(gt_gfa)</span>
@@ -573,7 +577,7 @@ Total rows: 53</code></pre>
 </section>
 <section id="alingment" class="level2">
 <h2 class="anchored" data-anchor-id="alingment">Alingment</h2>
-<div id="81265e02" class="cell" data-execution_count="6">
+<div id="0a34f5b4" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>segments <span class="op">=</span> {}</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../../data/contigs_shovill_simulated.gfa"</span>) <span class="im">as</span> f:</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
@@ -602,7 +606,7 @@ Total rows: 53</code></pre>
 </section>
 <section id="look-at-the-minimap-data" class="level2">
 <h2 class="anchored" data-anchor-id="look-at-the-minimap-data">Look at the minimap data</h2>
-<div id="eb2fb831" class="cell" data-execution_count="7">
+<div id="4dcf6d86" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>clean_gfa <span class="op">=</span> <span class="st">"../../data/aligned_gfa.bed"</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>bed_columns <span class="op">=</span> [<span class="st">'transcript'</span>, <span class="st">'chromStart'</span>, <span class="st">'chromEnd'</span>, <span class="st">'gene_id'</span>, <span class="st">'score'</span>, <span class="st">'strand'</span>]</span>
@@ -655,7 +659,7 @@ Total rows: 53</code></pre>
 </section>
 <section id="try-using-upstream-downstream" class="level2">
 <h2 class="anchored" data-anchor-id="try-using-upstream-downstream">Try using upstream downstream</h2>
-<div id="6d12235b" class="cell" data-execution_count="8">
+<div id="fd3ea5b6" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio <span class="im">import</span> SeqIO</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Seq <span class="im">import</span> Seq</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
@@ -763,7 +767,7 @@ Total ambiguous is: 34</code></pre>
 </div>
 <section id="merging-2-informations" class="level3">
 <h3 class="anchored" data-anchor-id="merging-2-informations">Merging 2 informations</h3>
-<div id="08a63ba2" class="cell" data-execution_count="9">
+<div id="192147ec" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>res_df[<span class="st">'segment'</span>] <span class="op">=</span> res_df[<span class="st">'segment'</span>].astype(<span class="bu">str</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">'segment'</span>] <span class="op">=</span> clean_gfa[<span class="st">'segment'</span>].astype(<span class="bu">str</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>

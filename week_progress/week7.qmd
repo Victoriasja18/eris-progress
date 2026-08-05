@@ -17,9 +17,9 @@ execute:
 
 ### Re-run the file
 ```{bash}
-uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline --mode collapse 
-# Ensure it's right for the assembly graph
-uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_gfa --mode collapse 
+# uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline --mode collapse 
+# # Ensure it's right for the assembly graph
+# uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_gfa --mode collapse 
 
 ```
 
