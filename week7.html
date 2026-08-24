@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Victoria Sjalim">
+<meta name="dcterms.date" content="2026-08-04">
+
+<title>Progress report week 7 – Eris Progress</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-209258432f336cc574c0f847bd0a7210.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Eris Progress</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.qmd"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-weekly-updates" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Weekly Updates</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-weekly-updates">    
+        <li>
+    <a class="dropdown-item" href="./week1.html">
+ <span class="dropdown-text">Week 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./week2.html">
+ <span class="dropdown-text">Week 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./week3.html">
+ <span class="dropdown-text">Week 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./week4.html">
+ <span class="dropdown-text">Week 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./week5.html">
+ <span class="dropdown-text">Week 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./week6.html">
+ <span class="dropdown-text">Week 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./week7.html">
+ <span class="dropdown-text">Week 7</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-eris-meeting" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Eris Meeting</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-eris-meeting">    
+        <li>
+    <a class="dropdown-item" href="./eris_meeting.html">
+ <span class="dropdown-text">28th July</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./eris_meeting2.html">
+ <span class="dropdown-text">25 Aug</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-changed-from-the-code" id="toc-what-changed-from-the-code" class="nav-link active" data-scroll-target="#what-changed-from-the-code">What changed from the code?</a>
+  <ul class="collapse">
+  <li><a href="#additional-pipeline-for-the-fasta-file" id="toc-additional-pipeline-for-the-fasta-file" class="nav-link" data-scroll-target="#additional-pipeline-for-the-fasta-file">Additional pipeline for the Fasta file</a>
+  <ul class="collapse">
+  <li><a href="#re-run-the-file" id="toc-re-run-the-file" class="nav-link" data-scroll-target="#re-run-the-file">Re-run the file</a></li>
+  <li><a href="#precision-and-recall" id="toc-precision-and-recall" class="nav-link" data-scroll-target="#precision-and-recall">Precision and recall</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#precision-and-recall-for-the-assembly-graph" id="toc-precision-and-recall-for-the-assembly-graph" class="nav-link" data-scroll-target="#precision-and-recall-for-the-assembly-graph">Precision and recall for the assembly graph</a>
+  <ul class="collapse">
+  <li><a href="#reading-the-ground-truth-for-only-chromosome" id="toc-reading-the-ground-truth-for-only-chromosome" class="nav-link" data-scroll-target="#reading-the-ground-truth-for-only-chromosome">Reading the ground truth for only chromosome</a></li>
+  <li><a href="#alingment" id="toc-alingment" class="nav-link" data-scroll-target="#alingment">Alingment</a></li>
+  <li><a href="#look-at-the-minimap-data" id="toc-look-at-the-minimap-data" class="nav-link" data-scroll-target="#look-at-the-minimap-data">Look at the minimap data</a></li>
+  <li><a href="#try-using-upstream-downstream" id="toc-try-using-upstream-downstream" class="nav-link" data-scroll-target="#try-using-upstream-downstream">Try using upstream downstream</a>
+  <ul class="collapse">
+  <li><a href="#merging-2-informations" id="toc-merging-2-informations" class="nav-link" data-scroll-target="#merging-2-informations">Merging 2 informations</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Progress report week 7</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Victoria Sjalim </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 4, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="what-changed-from-the-code" class="level1">
+<h1>What changed from the code?</h1>
+<section id="additional-pipeline-for-the-fasta-file" class="level2">
+<h2 class="anchored" data-anchor-id="additional-pipeline-for-the-fasta-file">Additional pipeline for the Fasta file</h2>
+<ul>
+<li>Additional class for the <code>LinearPipeline</code></li>
+<li>New if-else in the assemble that handles if topology engines are <code>None</code></li>
+<li>Fix the <code>cli.py</code></li>
+<li>The result will be inside one folder instead of scattered files</li>
+</ul>
+<section id="re-run-the-file" class="level3">
+<h3 class="anchored" data-anchor-id="re-run-the-file">Re-run the file</h3>
+<pre class="{bash}"><code># uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline --mode collapse 
+# # Ensure it's right for the assembly graph
+# uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_gfa --mode collapse 
+</code></pre>
+<div id="608a79fb" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># New prediction data</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>new_path <span class="op">=</span> <span class="st">"../result/new_pipeline/new_pipeline_report.tsv"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>new_fa <span class="op">=</span> mt.format_fa(new_path, <span class="st">"INSIDE"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(new_fa.head(<span class="dv">10</span>))</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect the data</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Total rows: </span><span class="sc">{</span>new_fa<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ground truth data</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>gt <span class="op">=</span> mt.format_gt(<span class="st">'../../data/complete_ec958_IS.reanotated.sorted.bed'</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># print(gt)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  context  transcript      name  repeats  chromStart  chromEnd  \
+0  INSIDE  HG941718.1  IS100kyp        1     2252431   2254146   
+1  INSIDE  HG941718.1    IS1203        1     3293265   3294392   
+2  INSIDE  HG941718.1    IS1397        1     1997599   1998948   
+3  INSIDE  HG941718.1    IS1397        2     2135397   2136746   
+4  INSIDE  HG941718.1      IS1A        1     3288145   3288872   
+5  INSIDE  HG941718.1      IS1A        2     3290161   3290826   
+6  INSIDE  HG941718.1      IS1F        1     4140093   4140791   
+7  INSIDE  HG941718.1      IS1F        2     4953170   4953868   
+8  INSIDE  HG941718.1      IS1R        1     2384729   2385394   
+9  INSIDE  HG941718.1       IS2        1     3323700   3324929   
+
+                                            synonyms  
+0                            [IS100, IS100L, IS100X]  
+1         [IS1203E, IS3411, IS3411L, IS3411R, IS629]  
+2                                               &lt;NA&gt;  
+3                                               &lt;NA&gt;  
+4  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+5  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+6                        [IS1T, IS1X1, IS1X2, IS1X4]  
+7                        [IS1T, IS1X1, IS1X2, IS1X4]  
+8  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+9                                 [IS4521L, IS4521R]  
+Total rows: 53</code></pre>
+</div>
+</div>
+</section>
+<section id="precision-and-recall" class="level3">
+<h3 class="anchored" data-anchor-id="precision-and-recall">Precision and recall</h3>
+<div id="c3b4aa46" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>detail_dfs <span class="op">=</span> {}</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> buf <span class="kw">in</span> [<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">400</span>]:</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    summary, df <span class="op">=</span> mt.precision_recall(gt, new_fa, buf)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    detail_dfs[buf] <span class="op">=</span> df</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    results.append(summary)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame(results).to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>key_cols <span class="op">=</span> [<span class="st">"context"</span>, <span class="st">"transcript"</span>, <span class="st">"chromStart"</span>, <span class="st">"chromEnd"</span>, <span class="st">"name"</span>, <span class="st">"repeats"</span>, <span class="st">"score"</span>, <span class="st">"strand"</span>]</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>combined <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> buf, df <span class="kw">in</span> detail_dfs.items():</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    rename_map <span class="op">=</span> {c: <span class="ss">f"</span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>buf<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> c <span class="kw">in</span> df.columns <span class="cf">if</span> c <span class="kw">not</span> <span class="kw">in</span> key_cols <span class="kw">and</span> c <span class="op">!=</span> <span class="ss">f"buffer_</span><span class="sc">{</span>buf<span class="sc">}</span><span class="ss">"</span>}</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    df_renamed <span class="op">=</span> df.rename(columns<span class="op">=</span>rename_map)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    combined <span class="op">=</span> df_renamed <span class="cf">if</span> combined <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> combined.merge(df_renamed, on<span class="op">=</span>key_cols, how<span class="op">=</span><span class="st">"outer"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>combined <span class="op">=</span> pd.DataFrame(combined)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>combined.to_csv(<span class="st">"../result/PR_new_pipeline.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> buffer  TP  FP  FN  precision  recall    f1
+      0  51   2  10      0.962   0.836 0.895
+     50  51   2  10      0.962   0.836 0.895
+    100  51   2  10      0.962   0.836 0.895
+    200  51   2  10      0.962   0.836 0.895
+    400  51   2  10      0.962   0.836 0.895</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="precision-and-recall-for-the-assembly-graph" class="level1">
+<h1>Precision and recall for the assembly graph</h1>
+<div id="837edc34" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> importlib</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>importlib.<span class="bu">reload</span>(mt)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># read the assembly graph result</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>gfa_path <span class="op">=</span> <span class="st">"../result/new_pipeline_gfa/new_pipeline_gfa_report.tsv"</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>gfa_out <span class="op">=</span> pd.read_csv(gfa_path, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gfa_out.tail(<span class="dv">20</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           locus_id               target              gene_id     context  \
+273  locus_9a0631a2  ISEc38_ISL3_unknown  1245062_64524_65559  DOWNSTREAM   
+274  locus_d8c6469a  ISEc1_ISAs1_unknown  1245096_46134_47271      INSIDE   
+275  locus_d8c6469a  ISEc1_ISAs1_unknown  1245096_45535_45655    UPSTREAM   
+276  locus_d8c6469a  ISEc1_ISAs1_unknown  1245096_43823_45323    UPSTREAM   
+277  locus_d8c6469a  ISEc1_ISAs1_unknown  1245096_42649_43711    UPSTREAM   
+278  locus_d8c6469a  ISEc1_ISAs1_unknown  1245096_47341_47911  DOWNSTREAM   
+279  locus_d8c6469a  ISEc1_ISAs1_unknown  1245096_48085_48931  DOWNSTREAM   
+280  locus_d8c6469a  ISEc1_ISAs1_unknown  1245096_49026_49920  DOWNSTREAM   
+281  locus_39cb0fbd       IS629_IS3_IS51    1245106_2885_3272      INSIDE   
+282  locus_39cb0fbd       IS629_IS3_IS51    1245106_1200_2709    UPSTREAM   
+283  locus_39cb0fbd       IS629_IS3_IS51    1245106_1039_1162    UPSTREAM   
+284  locus_39cb0fbd       IS629_IS3_IS51     1245106_890_1004    UPSTREAM   
+285  locus_39cb0fbd       IS629_IS3_IS51    1245106_3321_3399  DOWNSTREAM   
+286  locus_39cb0fbd       IS629_IS3_IS51    1245106_3432_3738  DOWNSTREAM   
+287  locus_39cb0fbd       IS629_IS3_IS51    1245106_4002_6087  DOWNSTREAM   
+288  locus_1e53f7ff     IS1R_IS1_unknown        1245136_1_181      INSIDE   
+289  locus_1e53f7ff     IS1R_IS1_unknown      1245136_225_444      INSIDE   
+290  locus_1e53f7ff     IS1R_IS1_unknown     1236016_562_1078  DOWNSTREAM   
+291  locus_1e53f7ff     IS1R_IS1_unknown      1236016_211_325  DOWNSTREAM   
+292  locus_2dec6d6c     IS1A_IS1_unknown       1245138_99_444      INSIDE   
+
+     dist_bp  topo_hops      orientation effect  copy_number  
+273      383          0  opposite strand   NONE          1.0  
+274        0          0      same strand   NONE          1.0  
+275      335          0      same strand   NONE          1.0  
+276      667          0  opposite strand   NONE          1.0  
+277     2279          0      same strand   NONE          1.0  
+278       60          0  opposite strand   NONE          1.0  
+279      804          0      same strand   NONE          1.0  
+280     1745          0  opposite strand   NONE          1.0  
+281        0          0      same strand   NONE          1.0  
+282       81          0      same strand   NONE          1.0  
+283     1628          0      same strand   NONE          1.0  
+284     1786          0      same strand   NONE          1.0  
+285        7          0  opposite strand   NONE          1.0  
+286      118          0      same strand   NONE          1.0  
+287      688          0  opposite strand   NONE          1.0  
+288        0          0      same strand   NONE          1.0  
+289        0          0      same strand   NONE          1.0  
+290      685          2      same strand   NONE          1.0  
+291     1438          2  opposite strand   NONE          1.0  
+292        0          0      same strand   NONE          2.0  </code></pre>
+</div>
+</div>
+<div id="bcc998f7" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is what inside</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pred_gfa <span class="op">=</span> mt.format_fa(gfa_path, <span class="st">"INSIDE"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Look at the upstream and downstream</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>up_gfa <span class="op">=</span> mt.format_fa(gfa_path, <span class="st">"UPSTREAM"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(up_gfa.head(<span class="dv">10</span>))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>down_gfa <span class="op">=</span> mt.format_fa(gfa_path, <span class="st">"DOWNSTREAM"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(down_gfa.head(<span class="dv">10</span>))</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># combined upstream and downstream</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>combined_up_down <span class="op">=</span> pd.concat([up_gfa, down_gfa], ignore_index<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    context transcript      name  repeats  chromStart  chromEnd  \
+0  UPSTREAM    1203713      IS1G        1           2       292   
+1  UPSTREAM    1206755    ISEc52        1           1       400   
+2  UPSTREAM    1228204    ISEc52        1           2       239   
+3  UPSTREAM    1240608    ISEc22        1           0       192   
+4  UPSTREAM    1242046      IS1G        1          28       220   
+5  UPSTREAM    1243278    ISEc12        1          58      2952   
+6  UPSTREAM    1243600    ISKox3        1       15262     16593   
+7  UPSTREAM    1244402  IS100kyp        1        9127     11101   
+8  UPSTREAM    1244402    ISEc20        1       17063     18212   
+9  UPSTREAM    1244434    ISEc52        1           0       249   
+
+                                            synonyms  
+0  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1K, IS1R, IS1...  
+1                                               &lt;NA&gt;  
+2                                               &lt;NA&gt;  
+3                                               &lt;NA&gt;  
+4  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1K, IS1R, IS1...  
+5                                               &lt;NA&gt;  
+6                                               &lt;NA&gt;  
+7                            [IS100, IS100L, IS100X]  
+8                                               &lt;NA&gt;  
+9                                               &lt;NA&gt;  
+      context transcript    name  repeats  chromStart  chromEnd  \
+0  DOWNSTREAM    1125059   IS682        1           2       221   
+1  DOWNSTREAM    1176191  ISEc23        3          31       181   
+2  DOWNSTREAM    1208153    IS1G        1           0       267   
+3  DOWNSTREAM    1227142    IS1A        1          12       144   
+4  DOWNSTREAM    1234604   IS682        1           2       221   
+5  DOWNSTREAM    1235120   IS682        1           0       363   
+6  DOWNSTREAM    1236016    IS1A        1        1227      1353   
+7  DOWNSTREAM    1236016    IS1R        1         211      1078   
+8  DOWNSTREAM    1240840  ISEc12        1         118      1478   
+9  DOWNSTREAM    1242486   IS600        1           0       270   
+
+                                            synonyms  
+0                                               &lt;NA&gt;  
+1                                               &lt;NA&gt;  
+2  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1K, IS1R, IS1...  
+3  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+4                                               &lt;NA&gt;  
+5                                               &lt;NA&gt;  
+6  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+7  [IS1A, IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1...  
+8                                               &lt;NA&gt;  
+9                                      [ISS1, ISSd1]  </code></pre>
+</div>
+</div>
+<p>My problem with the downstream and upstream:</p>
+<ul>
+<li>Some of the IS found only have either upstream/downstream</li>
+</ul>
+<section id="reading-the-ground-truth-for-only-chromosome" class="level2">
+<h2 class="anchored" data-anchor-id="reading-the-ground-truth-for-only-chromosome">Reading the ground truth for only chromosome</h2>
+<div id="2061c184" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gt_gfa <span class="op">=</span> <span class="st">"../../data/ec958_IS.reannotated.sorted.bed"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>gt_gfa <span class="op">=</span> mt.format_gt(gt_gfa)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gt_gfa)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    transcript  chromStart  chromEnd      name  score strand repeats  \
+0   HG941718.1      233727    236259    ISEc23      0      +       1   
+1   HG941718.1      814902    815025   MITEEc1      0      -       1   
+2   HG941718.1     1365600   1366443    ISCfr4      0      +     NaN   
+3   HG941718.1     1372287   1373517    ISEc24      0      -     NaN   
+4   HG941718.1     1417476   1418621       IS4      0      -     NaN   
+5   HG941718.1     1480031   1482480    ISEc12      0      +       1   
+6   HG941718.1     1647528   1648819     ISEc1      0      +     NaN   
+7   HG941718.1     1997567   1998999    IS1397      0      -       1   
+8   HG941718.1     2103782   2104446     IS609      0      +       1   
+9   HG941718.1     2135365   2136797    IS1397      0      -       2   
+10  HG941718.1     2142423   2143132    IS200C      0      -       1   
+11  HG941718.1     2244066   2245788    ISEc38      0      -     NaN   
+12  HG941718.1     2248880   2250339    ISEc20      0      +     NaN   
+13  HG941718.1     2252365   2254232  IS100kyp      0      -     NaN   
+14  HG941718.1     2265833   2268365    ISEc23      0      +       2   
+15  HG941718.1     2271108   2273665    ISEc12      0      +       2   
+16  HG941718.1     2284842   2285551    IS200C      0      -       1   
+17  HG941718.1     2384714   2385482      IS1A      0      -       1   
+18  HG941718.1     3111919   3114403    ISEc12      0      +       3   
+19  HG941718.1     3237314   3237436   MITEEc1      0      -       2   
+20  HG941718.1     3288119   3288887      IS1A      0      +       2   
+21  HG941718.1     3290146   3290914      IS1A      0      -       3   
+22  HG941718.1     3293136   3294446    IS1203      0      -     NaN   
+23  HG941718.1     3295103   3295881    ISKox3      0      -     NaN   
+24  HG941718.1     3313143   3314364      IS30      0      +     NaN   
+25  HG941718.1     3314362   3315303     ISSd1      0      +     NaN   
+26  HG941718.1     3316099   3317706   ISEch14      0      +     NaN   
+27  HG941718.1     3323689   3325020       IS2      0      -     NaN   
+28  HG941718.1     3334553   3336544     IS682      0      +     NaN   
+29  HG941718.1     3336528   3338118    ISEc22      0      +     NaN   
+30  HG941718.1     3360526   3362935    ISEc10      0      +     NaN   
+31  HG941718.1     3558365   3559615    ISEc52      0      +       2   
+32  HG941718.1     3820313   3821771     IS609      0      -       2   
+33  HG941718.1     4140077   4140846      IS1F      0      -       1   
+34  HG941718.1     4156066   4156581   ISSen10      0      -     NaN   
+35  HG941718.1     4158851   4159646     IS629      0      -     NaN   
+36  HG941718.1     4171128   4173827    ISCro1      0      +     NaN   
+37  HG941718.1     4175107   4177238      IS21      0      -     NaN   
+38  HG941718.1     4925088   4927620    ISEc23      0      +       3   
+39  HG941718.1     4937432   4938940     ISEc9      0      +     NaN   
+40  HG941718.1     4938940   4940135       IS5      0      -     NaN   
+41  HG941718.1     4942385   4943650     IS600      0      -     NaN   
+42  HG941718.1     4943650   4944441    ISEc52      0      +       3   
+43  HG941718.1     4953115   4953883      IS1F      0      +       2   
+44  HG941718.1     4956000   4958289     ISEc8      0      -     NaN   
+45  HG941718.1     4971900   4974384    ISEc12      0      +       4   
+46  HG941718.1     4976678   4977300    ISSen1      0      +     NaN   
+47  HG941718.1     5007344   5008594    ISEc52      0      -       4   
+48  HG941718.1     5014813   5016698    ISEc53      0      -     NaN   
+
+                                             synonyms  
+0                                                &lt;NA&gt;  
+1                                                &lt;NA&gt;  
+2                                                &lt;NA&gt;  
+3                                                &lt;NA&gt;  
+4                                                &lt;NA&gt;  
+5                                                &lt;NA&gt;  
+6   [H-ISEc3ISEc2ISEc4ISEc6ISEc7, H-rptB, H-rptC1,...  
+7                                                &lt;NA&gt;  
+8                                                &lt;NA&gt;  
+9                                                &lt;NA&gt;  
+10  [IS1469, IS200, IS200-SAO, IS200B, IS200F, IS2...  
+11                                               &lt;NA&gt;  
+12                                               &lt;NA&gt;  
+13                            [IS100, IS100L, IS100X]  
+14                                               &lt;NA&gt;  
+15                                               &lt;NA&gt;  
+16  [IS1469, IS200, IS200-SAO, IS200B, IS200F, IS2...  
+17  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+18                                               &lt;NA&gt;  
+19                                               &lt;NA&gt;  
+20  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+21  [IS1B, IS1C, IS1D, IS1E, IS1G, IS1K, IS1R, IS1...  
+22         [IS1203E, IS3411, IS3411L, IS3411R, IS629]  
+23                                               &lt;NA&gt;  
+24              [IS121, IS30D, IS30H, Tn2700, Tn2702]  
+25                                      [IS600, ISS1]  
+26                                               &lt;NA&gt;  
+27                                 [IS4521L, IS4521R]  
+28                                               &lt;NA&gt;  
+29                                               &lt;NA&gt;  
+30                                               &lt;NA&gt;  
+31                                               &lt;NA&gt;  
+32                                               &lt;NA&gt;  
+33                        [IS1T, IS1X1, IS1X2, IS1X4]  
+34                                               &lt;NA&gt;  
+35        [IS1203, IS1203E, IS3411, IS3411L, IS3411R]  
+36                                               &lt;NA&gt;  
+37                                       [IS640, IS8]  
+38                                               &lt;NA&gt;  
+39                                  [ISEcp1, ISEcp1B]  
+40                                  [IS5-Delta, IS5D]  
+41                                      [ISS1, ISSd1]  
+42                                               &lt;NA&gt;  
+43                        [IS1T, IS1X1, IS1X2, IS1X4]  
+44                                               &lt;NA&gt;  
+45                                               &lt;NA&gt;  
+46                                               &lt;NA&gt;  
+47                                               &lt;NA&gt;  
+48                                               &lt;NA&gt;  </code></pre>
+</div>
+</div>
+</section>
+<section id="alingment" class="level2">
+<h2 class="anchored" data-anchor-id="alingment">Alingment</h2>
+<div id="b3df191e" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>segments <span class="op">=</span> {}</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../../data/contigs_shovill_simulated.gfa"</span>) <span class="im">as</span> f:</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> line.startswith(<span class="st">'S'</span>):</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            fields <span class="op">=</span> line.rstrip(<span class="st">'</span><span class="ch">\n</span><span class="st">'</span>).split(<span class="st">'</span><span class="ch">\t</span><span class="st">'</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            segments[fields[<span class="dv">1</span>]] <span class="op">=</span> fields[<span class="dv">2</span>]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"../../data/extracted_IS_gfa.fasta"</span>, <span class="st">"w"</span>) <span class="im">as</span> out:</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, row <span class="kw">in</span> pred_gfa.iterrows():</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        seg_id <span class="op">=</span> <span class="bu">str</span>(row[<span class="st">'transcript'</span>])</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        repeats <span class="op">=</span> <span class="bu">str</span>(row[<span class="st">'repeats'</span>])</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        start, end <span class="op">=</span> <span class="bu">int</span>(row[<span class="st">'chromStart'</span>]), <span class="bu">int</span>(row[<span class="st">'chromEnd'</span>])</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        seg_seq <span class="op">=</span> segments.get(seg_id)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> seg_seq <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"Warning: segment </span><span class="sc">{</span>seg_id<span class="sc">}</span><span class="ss"> not found in GFA"</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        subseq <span class="op">=</span> seg_seq[start:end]</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        out.write(<span class="ss">f"&gt;</span><span class="sc">{</span>row[<span class="st">'name'</span>]<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>seg_id<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>start<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>end<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>repeats<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        out.write(subseq <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre class="{bash}"><code># minimap2 EC958_complete_genome.fasta extracted_IS_gfa.fasta &gt; aligned_gfa.paf
+
+# awk 'BEGIN{OFS="\t"} $6=="HG941718.1" {print $6, $8, $9, $1, $12, $5}' aligned_gfa.paf &gt; aligned_gfa.bed</code></pre>
+</section>
+<section id="look-at-the-minimap-data" class="level2">
+<h2 class="anchored" data-anchor-id="look-at-the-minimap-data">Look at the minimap data</h2>
+<div id="760309ac" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>clean_gfa <span class="op">=</span> <span class="st">"../../data/aligned_gfa.bed"</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>bed_columns <span class="op">=</span> [<span class="st">'transcript'</span>, <span class="st">'chromStart'</span>, <span class="st">'chromEnd'</span>, <span class="st">'gene_id'</span>, <span class="st">'score'</span>, <span class="st">'strand'</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>clean_gfa <span class="op">=</span> pd.read_table(clean_gfa, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>bed_columns[:<span class="dv">6</span>])</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"name"</span>] <span class="op">=</span> clean_gfa[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"segment"</span>] <span class="op">=</span> clean_gfa[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">1</span>]</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"local_start"</span>] <span class="op">=</span> clean_gfa[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">2</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"local_end"</span>] <span class="op">=</span> clean_gfa[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">3</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">"repeats"</span>] <span class="op">=</span> clean_gfa[<span class="st">'gene_id'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">4</span>]</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># drop unnecessary column</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>clean_gfa <span class="op">=</span> clean_gfa.drop(columns<span class="op">=</span><span class="st">"gene_id"</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(clean_gfa)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># # Count how many score &gt; 0</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co"># count = (clean_gfa["score"] &gt; 0).sum()</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co"># print(f'Total values that &gt; 0 : {count}')</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     transcript  chromStart  chromEnd  score strand    name  segment  \
+0    HG941718.1     1997827   1998037      6      +  IS1397  1015060   
+1    HG941718.1     2135625   2135835      0      +  IS1397  1015060   
+2    HG941718.1     2267054   2267266     10      +  ISEc23  1116087   
+3    HG941718.1      234948    235160      0      +  ISEc23  1116087   
+4    HG941718.1     4926309   4926521      0      +  ISEc23  1116087   
+..          ...         ...       ...    ...    ...     ...      ...   
+99   HG941718.1     2384889   2385219      0      -    IS1A  1245138   
+100  HG941718.1     5007405   5007510      0      -  ISEc52   238677   
+101  HG941718.1     4944280   4944385      0      +  ISEc52   238677   
+102  HG941718.1     3559449   3559554      0      +  ISEc52   238677   
+103  HG941718.1     4943286   4943419     47      -   IS600   976171   
+
+     local_start  local_end repeats  
+0              0        222       1  
+1              0        222       1  
+2              0        222       1  
+3              0        222       1  
+4              0        222       1  
+..           ...        ...     ...  
+99            99        444       2  
+100            0        114       1  
+101            0        114       1  
+102            0        114       1  
+103            2        143       1  
+
+[104 rows x 10 columns]</code></pre>
+</div>
+</div>
+</section>
+<section id="try-using-upstream-downstream" class="level2">
+<h2 class="anchored" data-anchor-id="try-using-upstream-downstream">Try using upstream downstream</h2>
+<div id="5c1af546" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio <span class="im">import</span> SeqIO</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio.Seq <span class="im">import</span> Seq</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>genome_records <span class="op">=</span> {rec.<span class="bu">id</span>: <span class="bu">str</span>(rec.seq) <span class="cf">for</span> rec <span class="kw">in</span> SeqIO.parse(<span class="st">"../../data/EC958_complete_genome.fasta"</span>, <span class="st">"fasta"</span>)}</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> rec_id, seq <span class="kw">in</span> genome_records.items():</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(rec_id, <span class="bu">len</span>(seq))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> locate_subseq(subseq):</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> []</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> rec_id, seq <span class="kw">in</span> genome_records.items():</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> m <span class="kw">in</span> re.finditer(re.escape(subseq), seq):</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>            hits.append((rec_id, m.start(), m.end(), <span class="st">'+'</span>))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        rc <span class="op">=</span> <span class="bu">str</span>(Seq(subseq).reverse_complement())</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> m <span class="kw">in</span> re.finditer(re.escape(rc), seq):</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>            hits.append((rec_id, m.start(), m.end(), <span class="st">'-'</span>))</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> hits</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, row <span class="kw">in</span> combined_up_down.iterrows():</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    seg_id <span class="op">=</span> <span class="bu">str</span>(row[<span class="st">'transcript'</span>])</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    start, end <span class="op">=</span> <span class="bu">int</span>(row[<span class="st">'chromStart'</span>]), <span class="bu">int</span>(row[<span class="st">'chromEnd'</span>])</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    seg_seq <span class="op">=</span> segments.get(seg_id)</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> seg_seq <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Warning: segment </span><span class="sc">{</span>seg_id<span class="sc">}</span><span class="ss"> not found in GFA"</span>)</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    subseq <span class="op">=</span> seg_seq[start:end]</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> locate_subseq(subseq)</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(hits) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>        status <span class="op">=</span> <span class="st">"no_match"</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="bu">len</span>(hits) <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>        status <span class="op">=</span> <span class="st">"unique"</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>        status <span class="op">=</span> <span class="st">"ambiguous"</span>  <span class="co"># expected for INSIDE (repeated IS body)</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    results.append({</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>        <span class="st">"locus"</span>: row[<span class="st">'name'</span>],</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">"segment"</span>: seg_id,</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">"local_start"</span>: start,</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>        <span class="st">"local_end"</span>: end,</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>        <span class="st">"category"</span>: row.get(<span class="st">'repeats'</span>, row.get(<span class="st">'category'</span>)),</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>        <span class="st">"genome_hits"</span>: hits,</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>        <span class="st">"status"</span>: status,</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>res_df <span class="op">=</span> pd.DataFrame(results)</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>count_ambi <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, grp <span class="kw">in</span> res_df.groupby(<span class="st">"locus"</span>):</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>    flanks <span class="op">=</span> grp[grp[<span class="st">'category'</span>].isin([<span class="st">'UPSTREAM'</span>, <span class="st">'DOWNSTREAM'</span>])]</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    unique_flanks <span class="op">=</span> flanks[flanks[<span class="st">'status'</span>] <span class="op">==</span> <span class="st">'unique'</span>]</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> unique_flanks.empty:</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>        <span class="co"># pick the flank hit(s) — these tell you the true genome region for this locus</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(name, unique_flanks[[<span class="st">'category'</span>,<span class="st">'genome_hits'</span>]].to_dict(<span class="st">'records'</span>))</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>        count_ambi <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(name, <span class="st">"— no unique flank found, needs manual review"</span>)</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Total ambiguous is: </span><span class="sc">{</span>count_ambi<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>res_df.to_csv(<span class="st">"../result/genome_loc_gfa.tsv"</span>, index<span class="op">=</span><span class="va">False</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>HG941718.1 5109767
+HG941719.1 135602
+HG941720.1 4080
+IS100kyp — no unique flank found, needs manual review
+IS1203 — no unique flank found, needs manual review
+IS1397 — no unique flank found, needs manual review
+IS1A — no unique flank found, needs manual review
+IS1F — no unique flank found, needs manual review
+IS1G — no unique flank found, needs manual review
+IS1R — no unique flank found, needs manual review
+IS2 — no unique flank found, needs manual review
+IS21 — no unique flank found, needs manual review
+IS30 — no unique flank found, needs manual review
+IS4 — no unique flank found, needs manual review
+IS600 — no unique flank found, needs manual review
+IS609 — no unique flank found, needs manual review
+IS629 — no unique flank found, needs manual review
+IS682 — no unique flank found, needs manual review
+ISCfr4 — no unique flank found, needs manual review
+ISCro1 — no unique flank found, needs manual review
+ISEc1 — no unique flank found, needs manual review
+ISEc10 — no unique flank found, needs manual review
+ISEc12 — no unique flank found, needs manual review
+ISEc20 — no unique flank found, needs manual review
+ISEc22 — no unique flank found, needs manual review
+ISEc23 — no unique flank found, needs manual review
+ISEc24 — no unique flank found, needs manual review
+ISEc38 — no unique flank found, needs manual review
+ISEc49 — no unique flank found, needs manual review
+ISEc52 — no unique flank found, needs manual review
+ISEc53 — no unique flank found, needs manual review
+ISEc8 — no unique flank found, needs manual review
+ISEc9 — no unique flank found, needs manual review
+ISEch14 — no unique flank found, needs manual review
+ISKox3 — no unique flank found, needs manual review
+ISSd1 — no unique flank found, needs manual review
+MITEEc1 — no unique flank found, needs manual review
+Total ambiguous is: 34</code></pre>
+</div>
+</div>
+<section id="merging-2-informations" class="level3">
+<h3 class="anchored" data-anchor-id="merging-2-informations">Merging 2 informations</h3>
+<div id="2ee35d7d" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>res_df[<span class="st">'segment'</span>] <span class="op">=</span> res_df[<span class="st">'segment'</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>clean_gfa[<span class="st">'segment'</span>] <span class="op">=</span> clean_gfa[<span class="st">'segment'</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>merged <span class="op">=</span> res_df.merge(</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    clean_gfa[[<span class="st">'transcript'</span>, <span class="st">'chromStart'</span>, <span class="st">'chromEnd'</span>, <span class="st">'strand'</span>, <span class="st">'segment'</span>, <span class="st">'local_start'</span>, <span class="st">'local_end'</span>,<span class="st">'score'</span>]],</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">'segment'</span>, <span class="st">'local_start'</span>, <span class="st">'local_end'</span>],</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    how<span class="op">=</span><span class="st">'left'</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>ambiguous <span class="op">=</span> merged[merged[<span class="st">'status'</span>] <span class="op">==</span> <span class="st">'ambiguous'</span>]</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ambiguous[[<span class="st">'locus'</span>, <span class="st">'segment'</span>, <span class="st">'local_start'</span>, <span class="st">'local_end'</span>, <span class="st">'category'</span>, <span class="st">'score'</span>]])</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ambiguous score stats:"</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ambiguous[<span class="st">'score'</span>].describe())</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Unique/unambiguous score stats:"</span>)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(merged[merged[<span class="st">'status'</span>] <span class="op">!=</span> <span class="st">'ambiguous'</span>][<span class="st">'score'</span>].describe())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      locus  segment  local_start  local_end  category  score
+2    ISEc52  1228204            2        239         1    NaN
+3    ISEc22  1240608            0        192         1    0.0
+4    ISEc22  1240608            0        192         1    0.0
+5      IS1G  1242046           28        220         1    NaN
+10   ISEc52  1244434            0        249         1    NaN
+20   ISEc23  1244700            0       1241         1    0.0
+21   ISEc23  1244700            0       1241         1    0.0
+22   ISEc23  1244700            0       1241         1    0.0
+28     IS1G  1245046       512122     512206         1    NaN
+35   ISEc12    46145           27        111         1    NaN
+38   ISEc23  1176191           31        181         3    0.0
+39   ISEc23  1176191           31        181         3    0.0
+40   ISEc23  1176191           31        181         3    0.0
+41     IS1G  1208153            0        267         1    0.0
+42     IS1G  1208153            0        267         1    0.0
+43     IS1G  1208153            0        267         1    0.0
+44     IS1A  1227142           12        144         1    NaN
+46    IS682  1235120            0        363         1    0.0
+47    IS682  1235120            0        363         1    0.0
+52    ISSd1  1242486          785        890         1    0.0
+53    ISSd1  1242486          785        890         1    0.0
+54     IS30  1242602            2         80         1    NaN
+59     IS30  1243758            1        889         1    0.0
+60     IS30  1243758            1        889         1    0.0
+61     IS30  1243758            1        889         1    0.0
+62     IS30  1243758            1        889         1    0.0
+85     IS1G  1245038        99340      99433         1    NaN
+86     IS30  1245048        14919      15024         1    NaN
+94     IS1G  1245136            1        444         1    0.0
+95     IS1G  1245136            1        444         1    0.0
+96     IS1G  1245136            1        444         1    0.0
+97     IS1G  1245138           99        444         1    0.0
+98     IS1G  1245138           99        444         1    0.0
+99     IS1G  1245138           99        444         1    0.0
+100   IS609   832167            1        112         1    NaN
+Ambiguous score stats:
+count    25.0
+mean      0.0
+std       0.0
+min       0.0
+25%       0.0
+50%       0.0
+75%       0.0
+max       0.0
+Name: score, dtype: float64
+
+Unique/unambiguous score stats:
+count    2.000000
+mean     1.000000
+std      1.414214
+min      0.000000
+25%      0.500000
+50%      1.000000
+75%      1.500000
+max      2.000000
+Name: score, dtype: float64</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/Victoriasja18\.github\.io\/eris-progress\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
