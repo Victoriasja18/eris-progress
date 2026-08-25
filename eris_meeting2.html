@@ -25,6 +25,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -94,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.qmd"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -130,6 +165,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="./week7.html">
  <span class="dropdown-text">Week 7</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./week9.html">
+ <span class="dropdown-text">Week 9</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -164,6 +203,9 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#what-was-updated-from-last-meeting" id="toc-what-was-updated-from-last-meeting" class="nav-link active" data-scroll-target="#what-was-updated-from-last-meeting">What was updated from last meeting?</a></li>
+  <li><a href="#what-we-need-to-figure-out" id="toc-what-we-need-to-figure-out" class="nav-link" data-scroll-target="#what-we-need-to-figure-out">What we need to figure out?</a></li>
+  <li><a href="#investigating-the-false-negative" id="toc-investigating-the-false-negative" class="nav-link" data-scroll-target="#investigating-the-false-negative">Investigating the false negative</a></li>
+  <li><a href="#minimap2" id="toc-minimap2" class="nav-link" data-scroll-target="#minimap2">Minimap2</a></li>
   </ul>
 </nav>
     </div>
@@ -203,6 +245,57 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="what-was-updated-from-last-meeting" class="level1">
 <h1>What was updated from last meeting?</h1>
+<ul>
+<li>Added pipeline only for the fasta file
+<ul>
+<li>See if we can find edges; else use other pipeline</li>
+</ul></li>
+<li>Compilation of all files become one folder</li>
+</ul>
+</section>
+<section id="what-we-need-to-figure-out" class="level1">
+<h1>What we need to figure out?</h1>
+<ul>
+<li>Precision and recall for the GFA</li>
+<li>Interesting discover of the false negative</li>
+<li>Play around with mappy</li>
+</ul>
+</section>
+<section id="investigating-the-false-negative" class="level1">
+<h1>Investigating the false negative</h1>
+<p>We have <strong>10 False negatives</strong></p>
+<p>I wanted to investigate the false negative (found by GT but not using eris in complete genome). I extracted the sequences that identified as false negative from the complete genome and I run eris again. Eris somehow found the IS, but some still incorrect. \</p>
+<p>Why Eris cannot detect it beforehand?</p>
+<pre class="{bash}"><code>less ../result/fn/fn_report.tsv </code></pre>
+<p>There are:</p>
+<ul>
+<li>TP: 4 (MITEEc1, ISSD1, IS5, ISEc52)</li>
+<li>FP: 2 (IS26 as ISEc9, ISSen10 as IS629)</li>
+<li>Marked as overlapping end: ISCfr4, IS4</li>
+<li>FN: 2 (MITEEc1 [2nd repeat], ISSen1)</li>
+</ul>
+<p>Suggest probably there is a problem about the alignment (?)</p>
+</section>
+<section id="minimap2" class="level1">
+<h1>Minimap2</h1>
+<div id="d3a1a65f" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import sys</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !{sys.executable} -m pip install pafpy</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># from typing import List</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># from pafpy import PafFile</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># path = "../result/mmi/map_ont.paf"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># identities: List[float] = []</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># with PafFile(path) as paf:</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     for record in paf:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         if record.is_primary():</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#             identity = record.blast_identity()</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#             identities.append(identity)</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># print(identities)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
 </section>
