@@ -1,0 +1,499 @@
+---
+title: "Progress report week 5"
+author: "Victoria Sjalim"
+date: "2026-08-18"
+format: html
+execute: 
+  freeze: auto
+---
+
+# Collapse the ground truth file 
+```{python}
+import pandas as pd 
+import matrix as mt
+
+gt = mt.format_gt('../../data/complete_ec958_IS.reanotated.sorted.bed')
+
+gt_dict = {}
+
+for i, rows in gt.iterrows():
+    name = rows['name']
+    loc = (rows['chromStart'], rows['chromEnd'], rows["strand"])
+
+    if pd.isna(rows['repeats']):
+      # don't have repeats
+        gt_dict.setdefault(name, []).append(loc)
+    else:
+      # has repeats
+        gt_dict.setdefault(name, []).append(loc)
+
+print(gt_dict)
+
+# Save this as the 
+```
+
+
+## Visualisation
+```{python}
+import matplotlib
+matplotlib.rcParams['savefig.bbox'] = 'standard'
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+import matplotlib.cm as cm
+
+def plot_swimlane(gt_dict, figsize=(16, None)):
+    families = sorted(gt_dict.keys())
+    n = len(families)
+    height_per_row = 0.4
+    figsize = (figsize[0], max(3, n * height_per_row + 1)) if figsize[1] is None else figsize
+
+    palette = cm.get_cmap("tab20", n)
+    color_map = {fam: palette(i) for i, fam in enumerate(families)}
+
+    fig, ax = plt.subplots(figsize=figsize)
+    bar_height = 0.5
+
+    all_starts, all_ends = [], []
+
+    # alternating row background bands, one per family lane
+    for row_idx, fam in enumerate(families):
+        if row_idx % 2 == 0:
+            ax.axhspan(row_idx - 0.5, row_idx + 0.5, facecolor="grey", alpha=0.07, zorder=0)
+
+    for row_idx, fam in enumerate(families):
+        for start, end, strand in gt_dict[fam]:
+            all_starts.append(start)
+            all_ends.append(end)
+            ax.add_patch(patches.Rectangle(
+                (start, row_idx - bar_height / 2), end - start, bar_height,
+                facecolor=color_map[fam], edgecolor="black", linewidth=0.5, zorder=2
+            ))
+            mid = (start + end) / 2
+            marker = ">" if strand == "+" else "<"
+            ax.plot(mid, row_idx, marker=marker, color="black", markersize=5, zorder=3)
+
+    ax.set_yticks(range(n))
+    ax.set_yticklabels(families, fontsize=8)
+    ax.set_xlim(min(all_starts) - 5000, max(all_ends) + 5000)
+    ax.set_xlabel("Genomic position (bp)")
+    ax.set_title("IS element instances by family")
+
+    # horizontal gridline at every family row boundary
+    for row_idx in range(n + 1):
+        ax.axhline(row_idx - 0.5, color="grey", linewidth=0.5, alpha=0.4, zorder=1)
+
+    # vertical gridlines at regular genomic intervals
+    ax.grid(axis="x", linestyle="--", alpha=0.3, zorder=1)
+    ax.set_axisbelow(True)
+
+    plt.tight_layout()
+    plt.show()
+
+plot_swimlane(gt_dict)
+```
+
+### Using plotly
+```{python}
+import plotly.graph_objects as go
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+
+def using_plotly(gt_dict):
+    families = sorted(gt_dict.keys())
+    n = len(families)
+    palette = cm.get_cmap("tab20", n)
+    color_map = {fam: mcolors.to_hex(palette(i)) for i, fam in enumerate(families)}
+    fam_to_row = {fam: i for i, fam in enumerate(families)}
+
+    fig = go.Figure()
+
+    # alternating row bands
+    for i, fam in enumerate(families):
+        if i % 2 == 0:
+            fig.add_hrect(y0=i - 0.5, y1=i + 0.5, fillcolor="grey", opacity=0.07, line_width=0)
+
+    for fam in families:
+        row = fam_to_row[fam]
+        for start, end, strand in gt_dict[fam]:
+            fig.add_shape(
+                type="rect",
+                x0=start, x1=end, y0=row - 0.25, y1=row + 0.25,
+                fillcolor=color_map[fam], line=dict(color="black", width=0.5),
+            )
+            # invisible scatter point on top of each bar, for hover tooltip
+            fig.add_trace(go.Scatter(
+                x=[(start + end) / 2], y=[row],
+                mode="markers",
+                marker=dict(size=8, color=color_map[fam], symbol="triangle-right" if strand == "+" else "triangle-left"),
+                hovertemplate=f"{fam}<br>start={start:,}<br>end={end:,}<br>strand={strand}<extra></extra>",
+                showlegend=False
+            ))
+
+    fig.update_yaxes(
+        tickmode="array", tickvals=list(range(n)), ticktext=families,
+        title="IS family"
+    )
+    fig.update_xaxes(title="Genomic position (bp)", tickformat=",")
+    fig.update_layout(
+        title="IS element instances by family (zoom/pan to inspect clusters)",
+        height=max(400, n * 30),
+        width=1200,
+        plot_bgcolor="white"
+    )
+    fig.show()
+
+using_plotly(gt_dict)
+```
+
+# Checking the validity of the Ground Truth
+
+We used the database from this link to validate the data:
+https://raw.githubusercontent.com/thanhleviet/ISfinder-sequences/master/IS.csv
+
+The problem is the csv might be not up to date (last update was 2020)
+
+```{python}
+
+import IS_dict as IS
+
+is_db = IS.load_is_table()
+gt_db = pd.DataFrame(is_db[1:], columns=is_db[0])
+gt_db
+
+print(gt_db[gt_db["Family"] == "IS26"])
+# columns: N°, Name, Family, Group, Synomyns, Iso, Origin, Length, IR, DR, ORF, Accession Number, url
+
+# # 2. Build a lookup set: every known Name + every listed synonym, normalized
+known_names = set(gt_db["Name"].str.strip().str.upper())
+
+for syns in gt_db["Synomyns"].dropna():
+    for s in syns.split(","):
+        known_names.add(s.strip().upper())
+
+# 3. Check your ground-truth families against it
+gt["family"] = gt["name"].str.replace(r"_\d+$", "", regex=True)
+
+def check_valid(name):
+    return name.strip().upper() in known_names
+
+gt["is_valid"] = gt["family"].apply(check_valid)
+
+print(gt[["name", "family", "is_valid"]])
+print(f"\n{gt['is_valid'].sum()} / {len(gt)} entries match a known IS name")
+print("Unmatched families:", sorted(gt.loc[~gt['is_valid'], 'family'].unique()))
+```
+
+Still confused due to we need to match it with the sequence as well. 
+
+# Combine the ground truth
+## Combine everything as one fasta file 
+
+```{python}
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
+# load the reference genome
+reference = SeqIO.to_dict(SeqIO.parse("../../data/EC958_complete_genome.fasta", "fasta"))
+chrom_seq = reference["HG941718.1"].seq
+
+records = []
+
+for name, locs in gt_dict.items():
+    concatenated = Seq("")
+    coords_used = []
+
+    for start, end, strand in sorted(locs, key=lambda x: x[0]):
+        subseq = chrom_seq[start:end]
+        if strand == "-":
+            subseq = subseq.reverse_complement()
+        concatenated += subseq
+        coords_used.append(f"{start}-{end}({strand})")
+
+    record = SeqRecord(
+        concatenated,
+        id=name,
+        description=f"{len(locs)} instance(s): {'; '.join(coords_used)}"
+    )
+    records.append(record)
+
+
+SeqIO.write(records, "../../data/gt_IS_sequences.fasta", "fasta")
+```
+
+## If there is any update based on the position
+
+using mmseq2 
+```{bash}
+# mmseqs createdb ../../../data/EC958_complete_genome.fasta targetDB
+# mmseqs createdb ../../result/new_pipeline_gfa/new_pipeline_gfa_cds.fna cdsDB
+# mmseqs createdb ../../result/new_pipeline_gfa/new_pipeline_gfa_proteins.faa protDB
+
+# mmseqs createindex targetDB tmp
+# mmseqs easy-search ../../result/new_pipeline_gfa/new_pipeline_gfa_proteins.faa ../../../data/EC958_complete_genome.fasta result_prot.tsv tmp --search-type 2
+
+```
+
+
+### retry mmseqs2
+```{bash}
+# # create MMseqs2 database from ground truth of IS
+# mmseqs createdb ../../../data/gt_sequences.fasta IS_db
+
+# # run the search
+# mmseqs search cdsDB IS_db result_cds tmp --search-type 3 \ --split-memory-limit 4G
+
+# # convert results to a readable format
+# mmseqs convertalis cdsDB IS_db result_cds result_cds.tsv
+
+```
+
+
+# Run fraggenescan 
+```{bash}
+# mkdir progress/result/fgs
+# FragGeneScanRs -s ../data/EC958_complete_genome.fasta -o ../progress/result/fgs/complete_genome -t complete -w 1
+
+# FragGeneScanRs -s ../data/EC958_complete_genome.fasta -o ../progress/result/fgs/complete_genome -t complete -w 1
+
+# Error 
+# FragGeneScanRs -s ../data/contigs_shovill_simulated.gfa -o ../progress/result/fgs/gfa -t complete -w 1
+
+```
+
+
+# Analysing the false negative 
+False negative is when there is IS found in the truth file but doesn't found in ERIS 
+
+Which row is false negative and what  does eris found 
+```{python}
+import pandas as pd
+
+# Extract the false negative 
+prec_rec = pd.read_csv("../result/complete1_precision_recall.tsv", sep="\t")
+
+fn = prec_rec[prec_rec["buffer_50"] == "FN"]
+
+fn = fn.iloc[:, 1:6]
+fn["distance"] = fn["chromEnd"] - fn["chromStart"]
+fn
+
+# Investigate what was eris predicted 
+import matrix as mt
+
+comp = mt.format_fa("../result/new_pipeline/new_pipeline_report.tsv", "INSIDE")
+comp = comp.iloc[:, 1:6]
+comp
+
+```
+
+Analysing it 
+```{python}
+
+def match(gt_df, pred_df, buffer_bp):
+    """
+    gt_df, pred_df: DataFrames with columns ['name', 'start', 'end']
+    Returns matched pairs where predicted start/end fall within buffer_bp
+    of the ground truth start/end (i.e. "almost the same location").
+    """
+    matches = []
+    used_pred = set()
+
+    for gt_idx, gt in gt_df.iterrows():
+        candidates = pred_df[
+            (pred_df['chromStart'].between(gt['chromStart'] - buffer_bp, gt['chromStart'] + buffer_bp)) &
+            (pred_df['chromEnd'].between(gt['chromEnd'] - buffer_bp, gt['chromEnd'] + buffer_bp))
+        ]
+        candidates = candidates[~candidates.index.isin(used_pred)]
+
+        if not candidates.empty:
+            # pick closest by combined start+end distance
+            candidates = candidates.copy()
+            candidates['dist'] = (
+                (candidates['chromStart'] - gt['chromStart']).abs() +
+                (candidates['chromEnd'] - gt['chromEnd']).abs()
+            )
+            best = candidates.sort_values('dist').iloc[0]
+            matches.append({
+                'gt_name': gt['name'], 'gt_start': gt['chromStart'], 'gt_end': gt['chromEnd'],
+                'pred_name': best['name'], 'pred_start': best['chromStart'], 'pred_end': best['chromEnd'],
+                'buffer_bp': buffer_bp
+            })
+            used_pred.add(best.name)
+        else:
+            matches.append({
+                'gt_name': gt['name'], 'gt_start': gt['chromStart'], 'gt_end': gt['chromEnd'],
+                'pred_name': None, 'pred_start': None, 'pred_end': None,
+                'buffer_bp': buffer_bp
+            })
+
+    return pd.DataFrame(matches)
+
+# Run across multiple buffer sizes for a sensitivity comparison
+res_match = {b: match(fn, comp, b) for b in (1000, 1500, 2000)}
+res_match
+# If it's all none which mean Eris completely missed the IS
+```
+
+What if we isolate the sequences, will eris found the IS?
+```{python}
+# Isolate only the sequence
+# the reference genome is from above (vars reference)
+
+records = []
+for _, row in fn.iterrows():
+    seq = reference[row['transcript']].seq[row['chromStart']:row['chromEnd']]
+    if row.get('strand') == '-':
+        seq = seq.reverse_complement()
+
+    record = SeqRecord(
+        Seq(str(seq)),
+        id=row['name'],
+        description=f"{row['transcript']}:{row['chromStart']}-{row['chromEnd']}"
+    )
+    records.append(record)
+
+SeqIO.write(records, "../../data/fn_comp.fasta", "fasta")
+
+
+```
+
+re-try ERIS 
+```{bash}
+# uv run eris -i ../data/fn_comp.fasta -d ../data/IS_n.mmi -o ../progress/result/fn
+
+less result/fn/fn_report.tsv
+wc -l result/fn/fn_report.tsv
+```
+
+See which sequence is not there
+```{python}
+# Extract the sequence 
+gt = gt.drop("distance", axis=1)
+
+fp = prec_rec[prec_rec["buffer_50"] == "FP"]
+
+fp = fp.iloc[:, 1:6]
+fp["distance"] = fp["chromEnd"] - fp["chromStart"]
+fp
+
+```
+
+
+# Precision and recall
+```{python}
+gfa = pd.read_csv("../result/new_pipeline_gfa/new_pipeline_gfa_report.tsv", sep="\t")
+
+gfa = gfa.iloc[:,:4]
+
+# Extract the locations
+gfa["transcript"] = gfa['gene_id'].str.split('_').str[0]
+gfa["chromStart"] = gfa['gene_id'].str.split('_').str[1].astype(int)
+gfa["chromEnd"] = gfa['gene_id'].str.split('_').str[2].astype(int)
+
+# Extract the name
+gfa["name"] = gfa["target"].str.split("_").str[0]
+gfa["repeats"] = gfa.groupby("name")["locus_id"].transform(lambda x: pd.factorize(x)[0] + 1)
+
+# Exclude unnecessary columns
+gfa = gfa.drop(columns=["gene_id", "locus_id", "target"])
+gfa = gfa[gfa["context"]== "INSIDE"]
+# %%
+print(gfa)
+
+
+```
+
+The name of the CDS match the gene_id 
+
+Create a new fasta file that collapse all the transcript together then rename the headings with name_repeats
+
+```{python}
+from Bio import SeqIO
+# Create lookup from gfa
+lookup = {
+    (
+        str(row.transcript),
+        int(row.chromStart),
+        int(row.chromEnd)
+    ): (
+        row.name,
+        row.repeats
+    )
+    for row in gfa.itertuples()}
+
+matched = 0
+excluded = 0
+
+new_records = []
+
+for record in SeqIO.parse("../result/new_pipeline_gfa/new_pipeline_gfa_cds.fna", "fasta"):
+    parts = record.description.split()
+    coordinate = parts[1]
+    transcript = coordinate.split(":")[0]
+    start, end = coordinate.split(":")[1].split("-")
+
+    key = (
+        str(transcript),
+        int(start) -1 ,
+        int(end)
+    )
+
+    # Only keep exact matches
+    if key in lookup:
+        name, repeats = lookup[key]
+
+        record.id = f"{name}_{repeats}_{transcript}"
+        record.description = ""
+
+        new_records.append(record)
+        matched += 1
+
+    else:
+        excluded += 1
+
+SeqIO.write(new_records, "../result/new_pipeline_gfa/extract_inside_new_gfa.fna", "fasta")
+
+print(f"Matched: {matched}")
+
+```
+
+minimap this with the complete genome
+```{bash}
+minimap2 -a ../data/EC958_complete_genome.fasta result/new_pipeline_gfa/extract_inside_new_gfa.fna > result/new_pipeline_gfa/mappy_result.paf 
+
+```
+
+```{python}
+import pandas as pd
+map_gfa = pd.read_csv("../result/new_pipeline_gfa/mappy_result.paf",
+    sep="\t", skiprows=5, header=None, usecols=range(12))
+
+map_gfa.columns = ["query", "query_length", "query_start","query_end", "strand", "target", "target_length", "target_start", "target_end","matches", "alignment_block_length", "mapping_quality"]
+
+```
+
+pytest tests/test_alignment.py::test_asymmetric_overlap_bug -v
+
+# Testing minimap2 
+```{bash}
+
+# for k in 11 15 19; do
+#   for w in 5 10 20; do
+#     minimap2 -a -k $k -w $w ../data/IS_n.mmi ../data/EC958_complete_genome.fasta > progress/result/aln_k${k}_w${w}.sam
+#     samtools flagstat aln_k${k}_w${w}.sam > progress/result/stats_k${k}_w${w}.txt
+#   done
+# done
+
+# # no preset, proper SAM
+# minimap2 -a data/IS_n.mmi data/EC958_complete_genome.fasta > progress/result/mmi/nothing.sam
+
+# # map-ont preset, proper SAM
+# minimap2 -ax map-ont data/IS_n.mmi data/EC958_complete_genome.fasta > progress/result/mmi/map_ont.sam
+
+# # same preset, but this time actually vary a parameter (e.g. secondary alignment count) — since ref/query order and format now match the others
+# minimap2 -ax map-ont -N 5 data/IS_n.mmi data/EC958_complete_genome.fasta > progress/result/mmi/map_ont_noisy.sam
+
+```
+
+grep "^>" data/IS_n.mmi | sort | uniq -d

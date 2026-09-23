@@ -1,0 +1,136 @@
+---
+title: "Week 10 - Update"
+author: "Victoria Sjalim"
+date: "2026-09-10"
+format: html
+execute: 
+  freeze: auto
+---
+
+# Overview 
+
+- Testing minimap2 parameters
+- Precision and recall for GFA
+- Some bug fix (mismatch classification, when IS close together, )
+
+# Testing minimap2 parameters
+
+There are 2 steps that I want to investigate:
+
+* Cross-file comparison (Same reference, same baseline params, different query fasta)
+
+  - Complete genome fasta file
+  - The locus assembly (for the complete genome, assembly graph)
+  - Only using the ground truth fasta file
+
+* Per-file parameter tests
+  - For EACH query fasta separately, run several mapping-time parameter varuants and compare them against each other
+
+Everything can be seen in validate_minimap2.py and run_grid.sh
+
+```{bash}
+# ./run_grid.sh ../../data/IS.mmi ../result/mmi_compare \
+#       complete_genome=../../data/EC958_complete_genome.fasta \
+#       locus_assembly=../result/new_pipeline_gfa/new_pipeline_gfa_loci.fasta \
+#       ground_truth=../../data/gt_IS_nc_new.fasta
+```
+
+Parameters:
+
+- Baseline: default
+- no_secondary:--secondary=no -> secondary alignment turned off
+- high_N: -N 20 -> controls how many secondary alignment is allowed to report per query
+- relaxed scoring: -A2 -B4 -O4,24 -E2,1, overrides minimap2 alignment scoring, to be more tolerant with indels or be stricter around mistmatches. 
+
+# Grill me session
+
+1. OVERLAPPING_END (ISCfr4, IS4, ISEc22): `_core_relate` returns 6 when `s_b >= s_a AND e_b > e_a` — the pyfgs-called gene starts inside the IS locus but its end reaches past the locus boundary. Root cause: the locus boundary t_end is slightly shorter than the true IS end due to alignment soft-clipping, so genes near the IS 3′ boundary extend past the truncated locus.
+
+To fix this we do CIGAR-aware boundary recovery: After the alignment, read the CIGAR soft-clipped bases and extend `t_start/t_end` by exactly those bases. Precise, only extends where the aligner actually soft-clipped
+
+2. IS26 FP (detected at 113K, ground truth at 30K): With 7 IS26 copies, eris can correctly produce 7 hits — but the copy at 30K may have enough sequence divergence from the ISfinder reference that mappy assigns it a low score, and `cull_overlaps` (or mappy's own soft-clipping) produces a locus at the wrong position entirely.
+
+alignment.py
+Fix 2: from_mappy() now accepts min_identity=0.75. Replaces if h.is_primary with if h.mlen / max(1, h.blen) >= min_identity — lets secondary alignments (e.g. ISSd1 next to IS30) survive; cull_overlaps handles deduplication
+Fix 1: New extend_is_bounds() method — after swap_sides(), q_start/q_length tell us how many IS reference bases are unaligned at each flank; extends the contig locus boundaries by those amounts so genes at the IS terminus are classified INSIDE not OVERLAPPING_END
+Bonus: Fixed pre-existing cull_overlaps bug where overlap fraction was divided by the candidate's own length; now divides by the shorter of the two intervals (what the failing test test_asymmetric_overlap_bug was testing)
+
+pipeline.py
+Fix 2: Pipeline.__init__ / __slots__ now carry min_identity; _process_contig chains .extend_is_bounds() and passes min_identity to from_mappy()
+
+cli.py
+Fix 3: Both Pipeline and LinearPipeline kwargs now include min_coverage and min_identity
+Fix 4: New --reference / -r flag; new --min-identity flag; calls build_contig_liftover() if GFA + reference given; passes liftover to OutputManager
+
+io.py
+Fix 4: ReportRow gains optional ref_contig, ref_start, ref_end fields (default "."); header(with_ref=) and to_tsv(with_ref=) control whether those columns appear; build_contig_liftover() aligns contigs to reference with asm5 preset; OutputManager accepts liftover dict and does linear interpolation per locus
+
+
+# Run eris again after the fix 
+
+I made a new flag for -ar (assembly reference) just for validation sake. It compared the loci sequences between genome assembly and complete chromosome genome if IS name between those identified were the same. 
+
+I ran it thrice, where I investigate each of the bug one by one. 
+
+```{bash}
+# uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/gfa_grill4 -ar ../data/EC958_chromosome.fasta -m collapse
+```
+
+
+# Do the precision and recall for the GFA
+```{python}
+import matrix as mt
+import pandas as pd
+import IS_dict as isd
+
+# Read the frame 
+gfa = pd.read_csv("../result/gfa_grill_me/gfa_grill_me_ref_positions.tsv", sep = "\t")
+
+gfa["name"] = gfa["target"].str.split("_").str[0]
+rows = isd.load_is_table()
+name_to_synonyms, synonym_to_name = isd.build_synonym_dicts(rows)
+gfa["synonyms"] = gfa["name"].apply(
+        lambda n: isd.get_synonyms(n, name_to_synonyms, synonym_to_name) or pd.NA)
+
+print(gfa)
+```
+
+Problem was:
+- ISEc8 has 1 sequence found in fasta, but 3 found in GFA
+
+
+## Name match only
+```{python}
+name_gfa = pd.read_csv("../result/gfa_grill3/gfa_grill3_report.tsv", sep = "\t")
+name_gfa["name"] = name_gfa["target"].str.split("_").str[0]
+
+```
+
+
+# Visualisations
+
+RE-open IGV
+
+```{python}
+import matrix as mt
+path = "../result/new_pipeline/new_pipeline_report.tsv"
+
+fa_inside = mt.format_fa(path, "INSIDE")
+fa_overend = mt.format_fa(path, "OVERLAPPING_END")
+fa_ups = mt.format_fa(path, "UPSTREAM")
+
+def change_name(df):
+  df["name"] = df["name"].astype(str) + "_" + df["repeats"].astype(str)
+  df = df[["transcript", "chromStart", "chromEnd", "name", "repeats", "context"]]
+  return df
+
+fa_inside = change_name(fa_inside)
+fa_overend = change_name(fa_overend)
+fa_ups = change_name(fa_ups)
+
+fa_inside.to_csv("../result/new_pipeline/fa_inside.bed", sep="\t", index=False, header=False)
+fa_overend.to_csv("../result/new_pipeline/fa_overend.bed", sep="\t", index=False, header=False)
+fa_ups.to_csv("../result/new_pipeline/fa_ups.bed", sep="\t", index=False, header=False)
+
+```
+

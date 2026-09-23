@@ -52,7 +52,7 @@ def label_is(df, is_col="IS_name", locus_col="locus_id", synonym_lookup=None):
         # order of first appearance of each locus_id within this IS group
         first_seen = group[locus_col].drop_duplicates()
         locus_to_num = {loc: i + 1 for i, loc in enumerate(first_seen)}
-        group["IS_label"] = group["canonical_IS"] + "_" + group[locus_col].map(locus_to_num).astype(str)
+        group["IS_label"] = str(group.name) + "_" + group[locus_col].map(locus_to_num).astype(str)
         return group
 
     df = df.groupby("canonical_IS", group_keys=False, sort=False).apply(assign_labels)

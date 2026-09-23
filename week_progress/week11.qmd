@@ -1,0 +1,52 @@
+---
+title: "Week 11 - Update"
+author: "Victoria Sjalim"
+date: "2026-09-17"
+format: html
+execute: 
+  freeze: auto
+---
+
+# Try Precision recall with new pipeline
+```{bash}
+# uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_block -m collapse
+```
+
+
+```{python}
+# Precision and recall
+import importlib
+import matrix as mt
+importlib.reload(mt)
+import pandas as pd
+
+# Ground truth 
+gt = mt.format_gt(mt.GT)
+
+# New dataframe
+fa_new = mt.format_fa("../result/fa_22_9/fa_22_9_report.tsv", "INSIDE")
+
+summary, df = mt.precision_recall(gt, fa_new, 0)
+print(summary)
+
+# Convert df 
+df.to_csv("../result/fa_22_9/precision_recall.tsv", sep="\t", index=False)
+
+# Convert to bed so I can view it in IGV
+fa_bed = fa_new[["transcript", "chromStart", "chromEnd", "name", "repeats"]]
+fa_bed.to_csv("../result/fa_22_9/new_pipeline.bed", sep="\t", index=False)
+```
+
+New pipeline block
+```{python}
+fa_block= mt.format_fa("../result/new_pipeline_block/new_pipeline_block_report.tsv", "INSIDE")
+
+summary_block, df_block = mt.precision_recall(gt, fa_block, 0)
+print(summary_block)
+
+df_block.to_csv("../result/new_pipeline_block/precision_recall.tsv", sep="\t", index=False)
+
+fa_bed = fa_block[["transcript", "chromStart", "chromEnd", "name", "repeats"]]
+fa_bed.to_csv("../result/new_pipeline_block/new_pipeline_block.bed", sep="\t", index=False)
+```
+

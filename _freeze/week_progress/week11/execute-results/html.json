@@ -1,0 +1,12 @@
+{
+  "hash": "f2b56c6665f7af424227a903463c7f8b",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Week 11 - Update\"\nauthor: \"Victoria Sjalim\"\ndate: \"2026-09-17\"\nformat: html\nexecute: \n  freeze: auto\n---\n\n# Try Precision recall with new pipeline\n```{bash}\n# uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_block -m collapse\n```\n\n::: {#2a98902f .cell execution_count=1}\n``` {.python .cell-code}\n# Precision and recall\nimport importlib\nimport matrix as mt\nimportlib.reload(mt)\nimport pandas as pd\n\n# Ground truth \ngt = mt.format_gt(mt.GT)\n\n# New dataframe\nfa_new = mt.format_fa(\"../result/fa_22_9/fa_22_9_report.tsv\", \"INSIDE\")\n\nsummary, df = mt.precision_recall(gt, fa_new, 0)\nprint(summary)\n\n# Convert df \ndf.to_csv(\"../result/fa_22_9/precision_recall.tsv\", sep=\"\\t\", index=False)\n\n# Convert to bed so I can view it in IGV\nfa_bed = fa_new[[\"transcript\", \"chromStart\", \"chromEnd\", \"name\", \"repeats\"]]\nfa_bed.to_csv(\"../result/fa_22_9/new_pipeline.bed\", sep=\"\\t\", index=False)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n{'buffer': 0, 'TP': 52, 'FP': 1, 'FN': 9, 'precision': 0.981, 'recall': 0.852, 'f1': 0.912}\n```\n:::\n:::\n\n\nNew pipeline block\n\n::: {#1278019e .cell execution_count=2}\n``` {.python .cell-code}\nfa_block= mt.format_fa(\"../result/new_pipeline_block/new_pipeline_block_report.tsv\", \"INSIDE\")\n\nsummary_block, df_block = mt.precision_recall(gt, fa_block, 0)\nprint(summary_block)\n\ndf_block.to_csv(\"../result/new_pipeline_block/precision_recall.tsv\", sep=\"\\t\", index=False)\n\nfa_bed = fa_block[[\"transcript\", \"chromStart\", \"chromEnd\", \"name\", \"repeats\"]]\nfa_bed.to_csv(\"../result/new_pipeline_block/new_pipeline_block.bed\", sep=\"\\t\", index=False)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n{'buffer': 0, 'TP': 56, 'FP': 3, 'FN': 5, 'precision': 0.949, 'recall': 0.918, 'f1': 0.933}\n```\n:::\n:::\n\n\n",
+    "supporting": [
+      "week11_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

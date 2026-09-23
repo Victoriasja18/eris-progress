@@ -1,0 +1,59 @@
+---
+title: "Eris meeting - Aug"
+author: "Victoria Sjalim"
+date: "2026-08-25"
+format: html
+execute: 
+  freeze: auto
+---
+
+# What was updated from last meeting?
+
+- Added pipeline only for the fasta file 
+  - See if we can find edges; else use other pipeline 
+- Compilation of all files become one folder 
+
+# What we need to figure out?
+- Precision and recall for the GFA
+- Interesting discover of the false negative
+- Play around with mappy 
+
+# Investigating the false negative
+We have **10 False negatives**
+
+I wanted to investigate the false negative (found by GT but not using eris in complete genome). I extracted the sequences that identified as false negative from the complete genome and I run eris again. Eris somehow found the IS, but some still incorrect. \\
+
+Why Eris cannot detect it beforehand?
+
+```{bash}
+less ../result/fn/fn_report.tsv 
+```
+
+There are: 
+
+- TP: 4 (MITEEc1, ISSD1, IS5, ISEc52)
+- FP: 2 (IS26 as ISEc9, ISSen10 as IS629)
+- Marked as overlapping end: ISCfr4, IS4
+- FN: 2 (MITEEc1 [2nd repeat], ISSen1)
+
+Suggest probably there is a problem about the alignment (?)
+
+# Minimap2
+```{python}
+# import sys
+# !{sys.executable} -m pip install pafpy
+
+# from typing import List
+# from pafpy import PafFile
+
+# path = "../result/mmi/map_ont.paf"
+
+# identities: List[float] = []
+# with PafFile(path) as paf:
+#     for record in paf:
+#         if record.is_primary():
+#             identity = record.blast_identity()
+#             identities.append(identity)
+
+# print(identities)
+```

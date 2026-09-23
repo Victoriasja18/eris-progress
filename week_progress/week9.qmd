@@ -1,0 +1,320 @@
+---
+title: "Week 9 - Update"
+author: "Victoria Sjalim"
+date: "2026-08-25"
+format: html
+execute: 
+  freeze: auto
+---
+
+# Overall summary
+ 
+- Update the .ffn
+- Extract the truth file 
+- Play around with minimap2
+
+# Eris with only the ground truth
+
+## Extract the sequence first
+```{python}
+import sys
+# !{sys.executable} -m pip install biopython
+# !{sys.executable} -m pip install pandas
+
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
+from Bio import SeqIO
+
+import matrix as mt
+
+gt = mt.format_gt("../../data/complete_ec958_IS.reanotated.sorted.bed")
+
+reference = SeqIO.to_dict(SeqIO.parse("../../data/EC958_complete_genome.fasta", "fasta"))
+
+records = []
+for _, row in gt.iterrows():
+    seq = reference[row['transcript']].seq[row['chromStart']:row['chromEnd']]
+    if row.get('strand') == '-':
+        seq = seq.reverse_complement()
+
+    record = SeqRecord(
+        Seq(str(seq)),
+        id=f"{row['name']}_{row['repeats']}",
+        description=f"{row['transcript']}:{row['chromStart']}-{row['chromEnd']}"
+    )
+    records.append(record)
+
+SeqIO.write(records, "../../data/gt_IS_nc_new.fasta", "fasta")
+
+```
+
+
+## Checking the validity of the ground truth
+```{bash}
+grep "^>" ../data/gt_IS_nc.fasta | sed 's/^>//' | awk '{print $1}' | sort | uniq -d
+
+minimap2 -ax asm5 --cs ../data/IS.mmi ../data/gt_IS_nc.fasta > result/mmi/gt_IS_validity.sam
+
+samtools flagstat result/mmi/gt_IS_validity.sam
+
+samtools sort -o result/mmi/gt_IS_validity.sorted.bam result/mmi/gt_IS_validity.sam
+
+samtools index result/mmi/gt_IS_validity.sorted.bam
+
+samtools stats result/mmi/gt_IS_validity.sorted.bam | grep ^SN
+
+samtools view result/mmi/gt_IS_validity.sorted.bam | \
+  awk '{
+    for(i=12;i<=NF;i++) if ($i ~ /^NM:i:/) nm=substr($i,6);
+    print $1, $3, $4, "NM="nm, "CIGAR="$6
+  }' > result/mmi/gt_IS_valid_sam.txt
+```
+
+There are 2 mismatch which are MITEEc1_1 and MITEEc_2. 
+Exclude this from the truth file
+
+## Remove IS that doesn't align
+```{python}
+import pandas as pd
+
+gt_n = gt.copy()
+gt_n = gt_n[gt_n["name"] != "MITEEc1"]
+gt_n.shape
+
+# Re-run code above
+```
+
+# Run eris again only using the ground truth
+```{bash}
+# This is before removing miteec
+uv run eris -i ../data/gt_IS_nc.fasta -d ../data/IS_n.mmi -o ../progress/result/gt
+
+# This is after removing miteec
+uv run eris -i ../data/gt_IS_nc_new.fasta -d ../data/IS_n.mmi -o ../progress/result/gt_aft
+```
+
+Interesting findings:
+
+- ISCfr4, IS4, ISEc22 marks as "OVERLAPPING END" instead of "INSIDE"
+
+## Precision and recall
+```{python}
+import matrix as mt 
+# Open the new report after 
+eris_gt = pd.read_csv("../result/gt_aft/gt_aft_report.tsv", sep="\t")
+eris_gt["name"] = eris_gt["target"].str.split("_").str[0]
+
+# Target dataframe (what eris found)
+target = pd.DataFrame()
+target["target_name"] = eris_gt["target"].str.split("_").str[0]
+target["target_repeats"] = eris_gt.groupby("name")["locus_id"].transform(lambda x: pd.factorize(x)[0] + 1)
+target = target.drop_duplicates()
+
+# What is expected 
+expected = pd.DataFrame()
+expected["exp_name"] = eris_gt["gene_id"].str.split("_").str[0]
+expected["exp_repeats"] = eris_gt["gene_id"].str.split("_").str[1]
+expected = expected.drop_duplicates()
+
+print(target, expected)
+print(target.shape, expected.shape)
+
+# Concatenate
+combine = pd.concat([target, expected], axis=1)
+print(combine)
+
+# Precision and recall 
+FP, TP = 0, 0
+fp_list = {}
+for i, rows in combine.iterrows():
+    print(rows)
+    if rows["target_name"] == rows["exp_name"]:
+        TP += 1
+    else:
+        FP +=1
+        fp_list[rows["target_name"]] = rows["exp_name"]
+
+
+print(f'Total True positive is:{TP} \nTotal False positive is: {FP}')
+print(fp_list)
+
+```
+
+I forgot they have a synonyms - update the DF
+PLEASE NOTE: that we still have the other two IS that was found as overlapping not INSIDE.
+
+```{python}
+import IS_dict as isd
+
+rows = isd.load_is_table()
+name_to_synonyms, synonym_to_name = isd.build_synonym_dicts(rows)
+
+combine["synonyms"] = combine["exp_name"].apply(
+lambda n: isd.get_synonyms(n, name_to_synonyms, synonym_to_name) or pd.NA)
+
+# recalculate the precision recall 
+FP, TP, FN = 0, 0, 0
+fp_list = {}
+
+for i, row in combine.iterrows():
+    target = row["target_name"]
+    expected = row["exp_name"]
+    synonyms = row["synonyms"]
+
+    # synonyms may be pd.NA (no synonyms found) -- guard before using `in`
+    synonym_match = False
+    if isinstance(synonyms, (list, set, tuple)):
+        synonym_match = target in synonyms
+
+    if target == expected or synonym_match:
+        TP += 1
+    else:
+        FP += 1
+        fp_list[target] = expected
+
+# False negatives
+gt_keys = set(gt_n["name"])
+found_names = set()
+for _, row in combine.iterrows():
+    found_names.add(row["target_name"])
+    found_names.add(row["exp_name"])
+    if isinstance(row["synonyms"], (list, set, tuple)):
+        found_names.update(row["synonyms"])
+
+missing_keys = gt_keys - found_names
+FN = len(missing_keys)
+
+print(f'Total True positive is: {TP} \nTotal False positive is: {FP} \nTotal False negative is: {FN}')
+print(fp_list)
+print("FN list:", missing_keys)
+
+```
+
+# Playing with minimap2
+The parameters:
+
+There is not much problem when running the ground truth only file. Eris found a hard time to locate it if there is a noise. 
+
+We can create a new fasta file but we add a buffer from the actual ground truth, see if eris can actually found the sequence.
+
+```{python}
+FLANK = 1000
+
+reference = SeqIO.to_dict(SeqIO.parse("../../data/EC958_complete_genome.fasta", "fasta"))
+
+records = []
+for _, row in gt.iterrows():
+    chrom = reference[row['transcript']]
+    chrom_len = len(chrom.seq)
+
+    start = max(0, row['chromStart'] - FLANK)
+    end = min(chrom_len, row['chromEnd'] + FLANK)
+
+    seq = chrom.seq[start:end]
+    if row.get('strand') == '-':
+        seq = seq.reverse_complement()
+
+    record = SeqRecord(
+        Seq(str(seq)),
+        id=f"{row['name']}_{row['repeats']}",
+        description=f"{row['transcript']}:{start}-{end} (flank={FLANK}, orig={row['chromStart']}-{row['chromEnd']})"
+    )
+    records.append(record)
+
+SeqIO.write(records, "../../data/gt_IS_nc_trial.fasta", "fasta")
+```
+
+run eris again
+```{bash}
+uv run eris -i ../data/gt_IS_nc_trial.fasta -d ../data/IS_n.mmi -o ../progress/result/gt_trial_1000
+
+# Running minimap2
+minimap2 -ax asm5 --cs ../data/IS.mmi ../data/gt_IS_nc_trial.fasta > result/mmi/gt_IS_trial_1k.sam
+
+samtools flagstat result/mmi/gt_IS_trial_1k.sam
+
+samtools sort -o result/mmi/gt_IS_trial_1k.sorted.bam result/mmi/gt_IS_trial_1k.sam
+
+samtools index result/mmi/gt_IS_trial_1k.sorted.bam
+
+samtools stats result/mmi/gt_IS_vgt_IS_trial_1kalidity.sorted.bam | grep ^SN
+
+samtools view result/mmi/gt_IS_trial_1k.sorted.bam | \
+  awk '{
+    for(i=12;i<=NF;i++) if ($i ~ /^NM:i:/) nm=substr($i,6);
+    print $1, $3, $4, "NM="nm, "CIGAR="$6
+  }' > result/mmi/gt_IS_trial_1k.txt
+```
+
+What to watchout?
+
+Since some IS were really close together, eris found 2 IS simultaneously and lead to ambiguity. 
+
+```{python}
+from eris import alignment
+import mappy as mp
+
+# Import files 
+fasta_path = "../../data/gt_IS_nc_trial.fasta"
+mmi = "../../data/IS_n.mmi"
+
+aligner = mp.Aligner(mmi)
+
+batches = {}  # read name -> AlignmentBatch
+
+for name, seq, qual in mp.fastx_read(fasta_path):
+    hits = list(aligner.map(seq))
+    if not hits:
+        print(f"{name}: no alignments found")
+        continue
+    try:
+        batches[name] = alignment.AlignmentBatch.from_mappy(name, len(seq), hits)
+    except ValueError:
+        print(f"{name}: no primary alignments found")
+
+print(f"\nBuilt {len(batches)} batch(es) from {fasta_path}")
+```
+
+```{python}
+import numpy as np 
+#  See what is inside 
+max_overlap_fraction = 0.1
+
+def batch_to_df(batch: alignment.AlignmentBatch) -> pd.DataFrame:
+    if len(batch) == 0:
+        return pd.DataFrame(columns=[
+            "q_name", "t_name", "t_start", "t_end",
+            "score", "matches", "mismatches", "mapq"
+        ])
+    return pd.DataFrame({
+        "q_name": batch.q_names,
+        "t_name": batch.t_names,
+        "t_start": batch.t_starts,
+        "t_end": batch.t_ends,
+        "score": batch.scores,
+        "matches": batch.matches,
+        "mismatches": batch.mismatches,
+        "mapq": batch.qualities,
+    }).sort_values("score", ascending=False).reset_index(drop=True)
+
+for name, batch in batches.items():
+    print(f"### {name}\n")
+
+    before_df = batch_to_df(batch)
+    culled = batch.cull_overlaps(max_overlap_fraction=max_overlap_fraction)
+    after_df = batch_to_df(culled)
+
+    print(f"**Before** ({len(batch)} alignments):\n")
+    print(before_df.to_string(index=False))
+    print(f"\n**After cull_overlaps** ({len(culled)} alignments, "
+          f"max_overlap_fraction={max_overlap_fraction}):\n")
+    print(after_df.to_string(index=False))
+    print("\n---\n")
+```
+
+
+
+# Notes from the meeting 
+
+- Create a new output only for the fasta file
+- play around iwth the 

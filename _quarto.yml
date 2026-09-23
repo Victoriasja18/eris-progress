@@ -1,16 +1,20 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "week_progress/*.qmd"
+    - "!week_progress/week8.qmd"
 
 website:
   title: "Eris Progress"
-  navbar: 
+  navbar:
     background: primary
-    left: 
+    left:
       - text: "Home"
         href: index.qmd
       - text: "Weekly Updates"
-        menu: 
+        menu:
           - text: "Week 1"
             href: week_progress/week1.qmd
           - text: "Week 2"
@@ -25,11 +29,25 @@ website:
             href: week_progress/week6.qmd
           - text: "Week 7"
             href: week_progress/week7.qmd
+          - text: "Week 9"
+            href: week_progress/week9.qmd
+          - text: "Week 10"
+            href: week_progress/week10.qmd
+          - text: "Week 11"
+            href: week_progress/week11.qmd
       - text: "Eris Meeting"
-        href: week_progress/eris_meeting.qmd
+        menu:
+          - text: "28th July"
+            href: week_progress/eris_meeting.qmd
+          - text: "25 Aug"
+            href: week_progress/eris_meeting2.qmd
+          - text: "1 Oct"
+            href: week_progress/eris_meeting3.qmd
 
-execute: 
+execute:
   freeze: auto
+
+jupyter: eris-venv
 
 format:
   html:

@@ -1,0 +1,12 @@
+{
+  "hash": "46d5b6a843e7711c25c0b14bc6d4c214",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Eris meeting - Aug\"\nauthor: \"Victoria Sjalim\"\ndate: \"2026-08-25\"\nformat: html\nexecute: \n  freeze: auto\n---\n\n# What was updated from last meeting?\n\n- Added pipeline only for the fasta file \n  - See if we can find edges; else use other pipeline \n- Compilation of all files become one folder \n\n# What we need to figure out?\n- Precision and recall for the GFA\n- Interesting discover of the false negative\n- Play around with mappy \n\n# Investigating the false negative\nWe have **10 False negatives**\n\nI wanted to investigate the false negative (found by GT but not using eris in complete genome). I extracted the sequences that identified as false negative from the complete genome and I run eris again. Eris somehow found the IS, but some still incorrect. \\\\\n\nWhy Eris cannot detect it beforehand?\n\n```{bash}\nless ../result/fn/fn_report.tsv \n```\n\nThere are: \n\n- TP: 4 (MITEEc1, ISSD1, IS5, ISEc52)\n- FP: 2 (IS26 as ISEc9, ISSen10 as IS629)\n- Marked as overlapping end: ISCfr4, IS4\n- FN: 2 (MITEEc1 [2nd repeat], ISSen1)\n\nSuggest probably there is a problem about the alignment (?)\n\n# Minimap2\n\n::: {#d3a1a65f .cell execution_count=1}\n``` {.python .cell-code}\n# import sys\n# !{sys.executable} -m pip install pafpy\n\n# from typing import List\n# from pafpy import PafFile\n\n# path = \"../result/mmi/map_ont.paf\"\n\n# identities: List[float] = []\n# with PafFile(path) as paf:\n#     for record in paf:\n#         if record.is_primary():\n#             identity = record.blast_identity()\n#             identities.append(identity)\n\n# print(identities)\n```\n:::\n\n\n",
+    "supporting": [
+      "eris_meeting2_files/figure-html"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
