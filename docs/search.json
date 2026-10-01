@@ -172,7 +172,7 @@
     "href": "week_progress/eris_meeting3.html",
     "title": "Eris Meeting - 1 Oct 2026",
     "section": "",
-    "text": "Re-naming headers for _cds.fna become 0 index\n\nI also removed any CDS or protein sequences that not related with IS\n\nBug fixed - See how the pipeline works below\nExplore the score of Mappy and minimap2"
+    "text": "Re-naming headers for _cds.fna become 0 index\n\nI also removed any gene, CDS, or protein sequences that not related with IS &gt;ISEc23_IS66_unknown_DOWNSTREAM_FGS_228 HG941718.1:236781-238499 strand=-\n\nBug fixed - See how the pipeline works below"
   },
   {
     "objectID": "week_progress/eris_meeting3.html#cull-overlaps-problem",

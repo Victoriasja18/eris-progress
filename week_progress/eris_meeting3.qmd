@@ -10,9 +10,9 @@ execute:
 # The Update
 
 - Re-naming headers for \_cds.fna become 0 index
-  - I also removed any CDS or protein sequences that not related with IS
+  - I also removed any gene, CDS, or protein sequences that not related with IS
+  `>ISEc23_IS66_unknown_DOWNSTREAM_FGS_228 HG941718.1:236781-238499 strand=-`
 - Bug fixed - See how the pipeline works below
-- Explore the score of Mappy and minimap2
 
 # How does the pipeline works now?
 
@@ -71,7 +71,8 @@ This is for the complete genome
 | Model                           | TP  | FP  | FN  | Precision | Recall | F1    |
 |---------------------------------|-----|-----|-----|-----------|--------|-------|
 | Initial Pipeline                | 51  | 4   | 10  | 0.927     | 0.836  | 0.879 |
-| After fix the cull overlaps     | 52  | 1   | 9   | 0.981     | 0.852  | 0.933 |
+| After fix the cull overlaps     | 52  | 1   | 9   | 0.981     | 0.852  | 0.912 |
 | After fix the one block problem | 56  | 3   | 5   | 0.949     | 0.918  | 0.933 |
 
 # Upstream/downstream validation
+Still working on this 

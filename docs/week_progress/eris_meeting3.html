@@ -229,10 +229,9 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>Re-naming headers for _cds.fna become 0 index
 <ul>
-<li>I also removed any CDS or protein sequences that not related with IS</li>
+<li>I also removed any gene, CDS, or protein sequences that not related with IS <code>&gt;ISEc23_IS66_unknown_DOWNSTREAM_FGS_228 HG941718.1:236781-238499 strand=-</code></li>
 </ul></li>
 <li>Bug fixed - See how the pipeline works below</li>
-<li>Explore the score of Mappy and minimap2</li>
 </ul>
 </section>
 <section id="how-does-the-pipeline-works-now" class="level1">
@@ -325,7 +324,7 @@ for i in range(len(macro_intervals)):
 <td>9</td>
 <td>0.981</td>
 <td>0.852</td>
-<td>0.933</td>
+<td>0.912</td>
 </tr>
 <tr class="odd">
 <td>After fix the one block problem</td>
@@ -341,6 +340,7 @@ for i in range(len(macro_intervals)):
 </section>
 <section id="upstreamdownstream-validation" class="level1">
 <h1>Upstream/downstream validation</h1>
+<p>Still working on this</p>
 
 
 </section>
