@@ -177,6 +177,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../week_progress/week11.html">
  <span class="dropdown-text">Week 11</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week12.html">
+ <span class="dropdown-text">Week 12</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -276,7 +280,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Eris with only the ground truth</h1>
 <section id="extract-the-sequence-first" class="level2">
 <h2 class="anchored" data-anchor-id="extract-the-sequence-first">Extract the sequence first</h2>
-<div id="da6c286f" class="cell" data-execution_count="1">
+<div id="0e189486" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># !{sys.executable} -m pip install biopython</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># !{sys.executable} -m pip install pandas</span></span>
@@ -333,7 +337,7 @@ samtools view result/mmi/gt_IS_validity.sorted.bam | \
 </section>
 <section id="remove-is-that-doesnt-align" class="level2">
 <h2 class="anchored" data-anchor-id="remove-is-that-doesnt-align">Remove IS that doesn’t align</h2>
-<div id="5e4e4b93" class="cell" data-execution_count="2">
+<div id="189d2f19" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>gt_n <span class="op">=</span> gt.copy()</span>
@@ -360,7 +364,7 @@ uv run eris -i ../data/gt_IS_nc_new.fasta -d ../data/IS_n.mmi -o ../progress/res
 </ul>
 <section id="precision-and-recall" class="level2">
 <h2 class="anchored" data-anchor-id="precision-and-recall">Precision and recall</h2>
-<div id="e7bced6c" class="cell" data-execution_count="3">
+<div id="d8710a52" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Open the new report after </span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>eris_gt <span class="op">=</span> pd.read_csv(<span class="st">"../result/gt_aft/gt_aft_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
@@ -865,7 +869,7 @@ Total False positive is: 7
 </div>
 </div>
 <p>I forgot they have a synonyms - update the DF PLEASE NOTE: that we still have the other two IS that was found as overlapping not INSIDE.</p>
-<div id="3ccefc2d" class="cell" data-execution_count="4">
+<div id="20aacbdf" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> IS_dict <span class="im">as</span> isd</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> isd.load_is_table()</span>
@@ -924,7 +928,7 @@ FN list: {'ISSen1'}</code></pre>
 <p>The parameters:</p>
 <p>There is not much problem when running the ground truth only file. Eris found a hard time to locate it if there is a noise.</p>
 <p>We can create a new fasta file but we add a buffer from the actual ground truth, see if eris can actually found the sequence.</p>
-<div id="551bceec" class="cell" data-execution_count="5">
+<div id="448c23ec" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>FLANK <span class="op">=</span> <span class="dv">1000</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>reference <span class="op">=</span> SeqIO.to_dict(SeqIO.parse(<span class="st">"../../data/EC958_complete_genome.fasta"</span>, <span class="st">"fasta"</span>))</span>
@@ -974,7 +978,7 @@ samtools view result/mmi/gt_IS_trial_1k.sorted.bam | \
   }' &gt; result/mmi/gt_IS_trial_1k.txt</code></pre>
 <p>What to watchout?</p>
 <p>Since some IS were really close together, eris found 2 IS simultaneously and lead to ambiguity.</p>
-<div id="90515449" class="cell" data-execution_count="6">
+<div id="c9e4b16d" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris <span class="im">import</span> alignment</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mappy <span class="im">as</span> mp</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1002,7 +1006,7 @@ samtools view result/mmi/gt_IS_trial_1k.sorted.bam | \
 Built 60 batch(es) from ../../data/gt_IS_nc_trial.fasta</code></pre>
 </div>
 </div>
-<div id="9e91fd1a" class="cell" data-execution_count="7">
+<div id="14ba7db5" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  See what is inside </span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>max_overlap_fraction <span class="op">=</span> <span class="fl">0.1</span></span>

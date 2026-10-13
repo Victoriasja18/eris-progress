@@ -181,7 +181,7 @@ all_is = all_is[["chrom", "start", "end", "IS", "strand", "identity", "coverage"
 all_is.index = range(1, len(all_is) + 1)
 
 # print(all_is.to_string())
-``````
+```
 
 ```{python}
 # Copies per IS (repetitions), kept vs dropped
@@ -194,3 +194,6 @@ all_is.groupby("IS")["in_bed"].agg(kept="sum", total="count").sort_values("total
 # kept[["chrom", "start", "end", "name", "score", "strand", "identity", "coverage", "pieces"]] \
 #     .to_csv("../data/new_ec958_IS.realigned.bed", sep="\t", header=False, index=False)
 ```
+
+# Re-run eris to check about the ISEc49
+

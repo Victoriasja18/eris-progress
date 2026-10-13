@@ -177,6 +177,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../week_progress/week11.html">
  <span class="dropdown-text">Week 11</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week12.html">
+ <span class="dropdown-text">Week 12</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -259,7 +263,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Precision and recall for the simulated data</h1>
 <p>The simulated data has a tricky part where the location or the position of the IS is not equivalent as the fasta or the ground truth.</p>
 <p>In here, I just take the name and the locus position (indicating different positions) and compared with the ground truth file. It might lead to different IS found due to the locaitons.</p>
-<div id="778d44d3" class="cell" data-execution_count="1">
+<div id="c55e9d0e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Open the ground truth file</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>bed_columns <span class="op">=</span> [<span class="st">'transcript'</span>, <span class="st">'chromStart'</span>, <span class="st">'chromEnd'</span>, <span class="st">'name'</span>, <span class="st">'score'</span>, <span class="st">'strand'</span>]</span>
@@ -277,7 +281,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 4  HG941718.1     1417476   1418621        IS4      0      -</code></pre>
 </div>
 </div>
-<div id="e2aa66cf" class="cell" data-execution_count="2">
+<div id="a2df4013" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sim_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/aft_sort/sim_gfa/eris_new_gfa_sim_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sim_gfa[<span class="st">"IS_name"</span>] <span class="op">=</span> sim_gfa[<span class="st">'target'</span>].<span class="bu">str</span>.split(<span class="st">'_'</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
@@ -325,7 +329,7 @@ Total unique locus IDs: 53
 Common names: 16</code></pre>
 </div>
 </div>
-<div id="83dc9623" class="cell" data-execution_count="3">
+<div id="2aa7f321" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate precision and recall</span></span>
@@ -391,7 +395,7 @@ Common names: 16</code></pre>
 <p>For some reason, I cannot scrape the database from the github. It mentioned that there was a hostname mistmatch and certificate not valid. I found online that they put everything into a CSV file in other repo.</p>
 RAW_URL = "https://raw.githubusercontent.com/thanhleviet/ISfinder-sequences/master/IS.csv"
 <p>I create (well claude is with few revisions from me) a separate python script to create a dictionary of IS synonyms from the IS that we found. All available in <code>IS_dict.py</code></p>
-<div id="83dcc5d1" class="cell" data-execution_count="4">
+<div id="ff0763ef" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> IS_dict <span class="im">as</span> isd</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>pred_IS_names <span class="op">=</span> sim_named[<span class="st">"IS_name"</span>].unique().tolist()</span>
@@ -405,7 +409,7 @@ RAW_URL = "https://raw.githubusercontent.com/thanhleviet/ISfinder-sequences/mast
 </section>
 <section id="recalculate-total-unique-is" class="level1">
 <h1>Recalculate total unique IS</h1>
-<div id="3f1df004" class="cell" data-execution_count="5">
+<div id="7379d603" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_unique(pathway):</span>

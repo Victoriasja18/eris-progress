@@ -177,6 +177,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../week_progress/week11.html">
  <span class="dropdown-text">Week 11</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week12.html">
+ <span class="dropdown-text">Week 12</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -318,7 +322,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="do-the-precision-and-recall-for-the-gfa" class="level1">
 <h1>Do the precision and recall for the GFA</h1>
-<div id="806d5e39" class="cell" data-execution_count="1">
+<div id="3e56a141" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> IS_dict <span class="im">as</span> isd</span>
@@ -491,7 +495,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Problem was: - ISEc8 has 1 sequence found in fasta, but 3 found in GFA</p>
 <section id="name-match-only" class="level2">
 <h2 class="anchored" data-anchor-id="name-match-only">Name match only</h2>
-<div id="291e7648" class="cell" data-execution_count="2">
+<div id="ed1835a1" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>name_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/gfa_grill3/gfa_grill3_report.tsv"</span>, sep <span class="op">=</span> <span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>name_gfa[<span class="st">"name"</span>] <span class="op">=</span> name_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -500,7 +504,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="visualisations" class="level1">
 <h1>Visualisations</h1>
 <p>RE-open IGV</p>
-<div id="7a7a7b87" class="cell" data-execution_count="3">
+<div id="fbe05a0e" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"../result/new_pipeline/new_pipeline_report.tsv"</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>

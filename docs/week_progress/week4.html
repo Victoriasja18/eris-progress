@@ -177,6 +177,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../week_progress/week11.html">
  <span class="dropdown-text">Week 11</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week12.html">
+ <span class="dropdown-text">Week 12</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -263,7 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="analysing-the-file-after-sorting-the-location" class="level1">
 <h1>Analysing the file after sorting the location</h1>
 <p>The complete genome assembly has more IS found compared to the .gfa file after sorting it.</p>
-<div id="887c9a8a" class="cell" data-execution_count="1">
+<div id="d6e71854" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> Bio <span class="im">import</span> SeqIO</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -356,7 +360,7 @@ grep "^&gt;" result/bfr_sort/com_fa/com_fa_loci.fasta | wc -l</code></pre>
 <p>The before sorting only have 4 loci assembled, while after sorting have 60 assembled loci</p>
 <p>In the <code>pipeline.py</code> in <strong>extract_sequence</strong> function it mentioned that they are “Extracts the full nucleotide sequence of the locus from the assembly. Handles multi-contig loci by stitching segments together in graph order”.</p>
 <p>I want to see how does Eris create the locus and the position they retained before and after sorting</p>
-<div id="0bd2166a" class="cell" data-execution_count="2">
+<div id="6b2f33c8" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> importlib</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> eris.pipeline</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.pipeline <span class="im">import</span> Pipeline</span>
@@ -393,7 +397,7 @@ grep "^&gt;" result/bfr_sort/com_fa/com_fa_loci.fasta | wc -l</code></pre>
 </div>
 <p>I used the same code, however, I changed the code inside pipeline.py manually (deleting/adding <code>.sort()</code>)</p>
 <p>Re-running it for the gfa file</p>
-<div id="e30fdeb0" class="cell" data-execution_count="3">
+<div id="facda426" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Do genome assembly for the simulated</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>genome_sim <span class="op">=</span> GenomeAssembly.from_file(<span class="st">"../../data/contigs_shovill_simulated.gfa"</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -404,7 +408,7 @@ grep "^&gt;" result/bfr_sort/com_fa/com_fa_loci.fasta | wc -l</code></pre>
 </section>
 <section id="debug-the-build-local" class="level2">
 <h2 class="anchored" data-anchor-id="debug-the-build-local">Debug the build local</h2>
-<div id="cd3b0643" class="cell" data-execution_count="4">
+<div id="24e33a47" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from eris.pipeline import Pipeline, LocusBuilder</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># import eris.pipeline as ep</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -434,7 +438,7 @@ grep "^&gt;" result/bfr_sort/com_fa/com_fa_loci.fasta | wc -l</code></pre>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co"># LocusBuilder._build_local = original_build_local</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>With coordinates</p>
-<div id="04cd9fdd" class="cell" data-execution_count="5">
+<div id="24c15380" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> importlib</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> eris.pipeline</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.pipeline <span class="im">import</span> Pipeline</span>
@@ -473,7 +477,7 @@ grep "^&gt;" result/bfr_sort/com_fa/com_fa_loci.fasta | wc -l</code></pre>
 </section>
 <section id="precision-and-recall" class="level1">
 <h1>Precision and recall</h1>
-<div id="834892d3" class="cell" data-execution_count="6">
+<div id="31a2ce7d" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, classification_report</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -536,7 +540,7 @@ grep "^&gt;" result/bfr_sort/com_fa/com_fa_loci.fasta | wc -l</code></pre>
 </div>
 <section id="find-how-many-locations-hits" class="level2">
 <h2 class="anchored" data-anchor-id="find-how-many-locations-hits">Find how many locations hits</h2>
-<div id="c5c6eaf6" class="cell" data-execution_count="7">
+<div id="c2d0357f" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> intersect_loc(df1, df2, <span class="bu">buffer</span>):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    matched <span class="op">=</span> []</span>
