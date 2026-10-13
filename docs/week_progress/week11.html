@@ -177,6 +177,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../week_progress/week11.html">
  <span class="dropdown-text">Week 11</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week12.html">
+ <span class="dropdown-text">Week 12</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -215,6 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#try-precision-recall-with-new-pipeline" id="toc-try-precision-recall-with-new-pipeline" class="nav-link active" data-scroll-target="#try-precision-recall-with-new-pipeline">Try Precision recall with new pipeline</a></li>
+  <li><a href="#check-this-on-gfa" id="toc-check-this-on-gfa" class="nav-link" data-scroll-target="#check-this-on-gfa">Check this on GFA</a></li>
   </ul>
 </nav>
     </div>
@@ -254,8 +259,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="try-precision-recall-with-new-pipeline" class="level1">
 <h1>Try Precision recall with new pipeline</h1>
-<pre class="{bash}"><code># uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_block -m collapse</code></pre>
-<div id="2a98902f" class="cell" data-execution_count="1">
+<pre class="{bash}"><code># uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/test_out_file -m collapse</code></pre>
+<div id="2e8764f0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Precision and recall</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> importlib</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
@@ -282,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>New pipeline block</p>
-<div id="1278019e" class="cell" data-execution_count="2">
+<div id="663ca522" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fa_block<span class="op">=</span> mt.format_fa(<span class="st">"../result/new_pipeline_block/new_pipeline_block_report.tsv"</span>, <span class="st">"INSIDE"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>summary_block, df_block <span class="op">=</span> mt.precision_recall(gt, fa_block, <span class="dv">0</span>)</span>
@@ -295,6 +300,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>{'buffer': 0, 'TP': 56, 'FP': 3, 'FN': 5, 'precision': 0.949, 'recall': 0.918, 'f1': 0.933}</code></pre>
 </div>
+</div>
+</section>
+<section id="check-this-on-gfa" class="level1">
+<h1>Check this on GFA</h1>
+<pre class="{bash}"><code>uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_pipeline_block_gfa -m collapse</code></pre>
+<p>Precision and recall (match the name)</p>
+<div id="3e503db5" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import pandas as pd</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># from collections import Counter</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># import IS_dict as isd</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># report = pd.read_csv("../result/new_pipeline_block_gfa/new_pipeline_block_gfa_report.tsv", sep="\t")</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># bed = pd.read_csv("../../data/ec958_IS.reannotated.sorted.bed", sep="\t", header=None)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># # Synonym lookup from ISfinder (synonym -&gt; canonical name)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># _, synonym_to_name = isd.build_synonym_dicts(isd.load_is_table())</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># def clean(name, use_synonym):</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     name = name.split("_")[0]</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     if use_synonym:</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#         name = synonym_to_name.get(name, name)</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#     return name</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># def precision_recall(use_synonym):</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#     # Predicted: one copy per locus; Truth: one copy per BED line</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#     loci = report.drop_duplicates("locus_id")</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#     pred = Counter(clean(n, use_synonym) for t in loci["target"] for n in t.split(","))</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#     truth = Counter(clean(n, use_synonym) for n in bed[3])</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#     rows = []</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#     for name in sorted(set(pred) | set(truth)):</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#         p, t = pred[name], truth[name]</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#         rows.append({"name": name, "pred": p, "truth": t,</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#                      "TP": min(p, t), "FP": max(0, p - t), "FN": max(0, t - p)})</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#     df = pd.DataFrame(rows)</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#     tp, fp, fn = df["TP"].sum(), df["FP"].sum(), df["FN"].sum()</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#     precision = tp / (tp + fp)</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#     recall = tp / (tp + fn)</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#     f1 = 2 * precision * recall / (precision + recall)</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(f"synonym={use_synonym}: TP={tp} FP={fp} FN={fn} "</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">#           f"Precision={precision:.3f} Recall={recall:.3f} F1={f1:.3f}")</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">#     return df</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co"># # Presence only: each IS name counts once, copy number ignored</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co"># def presence_recall(use_synonym):</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">#     loci = report.drop_duplicates("locus_id")</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co">#     pred = {clean(n, use_synonym) for t in loci["target"] for n in t.split(",")}</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">#     truth = {clean(n, use_synonym) for n in bed[3]}</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co">#     tp, fp, fn = len(pred &amp; truth), len(pred - truth), len(truth - pred)</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co">#     precision = tp / (tp + fp)</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="co">#     recall = tp / (tp + fn)</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">#     f1 = 2 * precision * recall / (precision + recall)</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(f"synonym={use_synonym}: TP={tp} FP={fp} FN={fn} "</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#           f"Precision={precision:.3f} Recall={recall:.3f} F1={f1:.3f}")</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#     print("  FP (predicted only):", sorted(pred - truth))</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">#     print("  FN (missed):        ", sorted(truth - pred))</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co"># # Precision and recall by name and repetition</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="co"># print("Precision and recall by name and repetition")</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="co"># by_name = precision_recall(use_synonym=False)</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="co"># by_synonym = precision_recall(use_synonym=True)</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="co"># # Names that don't match</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co"># print(by_synonym[(by_synonym.FP &gt; 0) | (by_synonym.FN &gt; 0)])</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="co"># print("\nPrecision and recall only by name")</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="co"># presence_recall(use_synonym=False)</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="co"># presence_recall(use_synonym=True)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
