@@ -1,0 +1,196 @@
+---
+title: "Week 12 - Update"
+author: "Victoria Sjalim"
+date: "2026-10-13"
+format: html
+execute: 
+  freeze: auto
+---
+
+# Precision recall for GFA
+```{python}
+import pandas as pd
+from collections import Counter
+import IS_dict as isd
+
+_, synonym_to_name = isd.build_synonym_dicts(isd.load_is_table())
+
+
+def precision_recall(report_file, bed_file):
+    # Predicted: one copy per locus; Truth: one copy per BED line
+    loci = pd.read_csv(report_file, sep="\t").drop_duplicates("locus_id")
+    pred_names = [n for t in loci["target"] for n in t.split(",")]
+    truth_names = pd.read_csv(bed_file, sep="\t", header=None)[3]
+
+    def clean(name):
+        name = name.split("_")[0]                  # ISEc12_1 / ISEc12_IS21_unknown -> ISEc12
+        return synonym_to_name.get(name, name)     # synonym -> canonical name
+
+    pred = Counter(clean(n) for n in pred_names)
+    truth = Counter(clean(n) for n in truth_names)
+
+    rows = []
+    for count_copies in (True, False):
+        p, t = (pred, truth) if count_copies else (Counter(set(pred)), Counter(set(truth)))
+        names = set(p) | set(t)
+        tp = sum(min(p[n], t[n]) for n in names)
+        fp = sum(max(0, p[n] - t[n]) for n in names)
+        fn = sum(max(0, t[n] - p[n]) for n in names)
+        precision = tp / (tp + fp)
+        recall = tp / (tp + fn)
+        rows.append({
+            "Report": report_file.split("/")[-1].removesuffix("_report.tsv"),
+            "Copies": "counted" if count_copies else "ignored",
+            "TP": tp, "FP": fp, "FN": fn,
+            "Precision": round(precision, 3),
+            "Recall": round(recall, 3),
+            "F1": round(2 * precision * recall / (precision + recall), 3),
+        })
+    return pd.DataFrame(rows)
+```
+
+```{python}
+bed = "../../data/ec958_IS.reannotated.sorted.bed"
+
+pd.concat([
+    precision_recall("../result/gfa_grill_me/gfa_grill_me_report.tsv", bed),
+    precision_recall("../result/new_pipeline_block_gfa/new_pipeline_block_gfa_report.tsv", bed),
+], ignore_index=True)
+```
+
+## The mismatch
+```{python}
+def mismatch_table(report_file, bed_file, count_copies=True):
+    loci = pd.read_csv(report_file, sep="\t").drop_duplicates("locus_id")
+    pred_names = [n for t in loci["target"] for n in t.split(",")]
+    truth_names = pd.read_csv(bed_file, sep="\t", header=None)[3]
+
+    def clean(name):
+        name = name.split("_")[0]
+        return synonym_to_name.get(name, name)
+
+    pred = Counter(clean(n) for n in pred_names)
+    truth = Counter(clean(n) for n in truth_names)
+    if not count_copies:
+        pred, truth = Counter(set(pred)), Counter(set(truth))
+
+    rows = []
+    for n in sorted(set(pred) | set(truth)):
+        p, t = pred[n], truth[n]
+        rows.append({"name": n, "pred": p, "truth": t,
+                     "TP": min(p, t), "FP": max(0, p - t), "FN": max(0, t - p)})
+    df = pd.DataFrame(rows)
+    return df[(df.FP > 0) | (df.FN > 0)]
+
+bed = "../../data/ec958_IS.reannotated.sorted.bed"
+mismatch_table("../result/new_pipeline_block_gfa/new_pipeline_block_gfa_report.tsv", bed)   
+```
+
+# Further IS investigation
+
+- IS1A: IS not stitching -> didn't stitch together because name mismatches although they are synonyms
+- ISEc52: Half stitch/half not: The location might be to far away to stitch
+- ISEc49: it does match at least 83% identity, therefore, it was reported -> needs debugging for eris
+- ISSen1 & ISSen10: supposed to be IS629, re-labelling of the truth file
+
+# Re-checking the truth file
+
+```{python}
+import mappy
+import pandas as pd
+
+GENOME = "../../data/EC958_chromosome.fasta"
+IS_DB = "../../data/IS_n.mmi"
+
+MIN_COVERAGE = 0.30   # same as eris --min-coverage; used only for the "in_bed" column
+MAX_GAP = 5000        # max bp between two pieces of the same interrupted IS
+WINDOW, STEP = 50000, 25000
+
+db = mappy.Aligner(IS_DB)
+
+
+def overlaps(a, b):
+    return a["start"] < b["end"] and b["start"] < a["end"]
+
+
+def remove_overlaps(hits):
+    """Where hits overlap on the genome (window edges, competing IS), keep the best one."""
+    kept = []
+    for h in sorted(hits, key=lambda h: -h["matches"]):
+        if not any(overlaps(h, k) for k in kept):
+            kept.append(h)
+    return kept
+
+
+def align_all(chrom_name, seq):
+    """Align in overlapping windows; mask found hits with N and re-align,
+    so pieces hidden behind a better hit of the same IS are also found."""
+    hits, masked = [], seq
+    while True:
+        new = []
+        for off in range(0, len(masked), STEP):
+            for h in db.map(masked[off:off + WINDOW]):
+                if h.is_primary:
+                    new.append({
+                        "chrom": chrom_name, "start": off + h.q_st, "end": off + h.q_en,
+                        "target": h.ctg, "IS": h.ctg.split("_")[0], "strand": h.strand,
+                        "is_start": h.r_st, "is_end": h.r_en, "is_len": h.ctg_len,
+                        "matches": h.mlen, "aln_len": h.blen,
+                    })
+        new = [h for h in remove_overlaps(new) if not any(overlaps(h, k) for k in hits)]
+        if not new:
+            return sorted(hits, key=lambda h: h["start"])
+        hits += new
+        for h in new:
+            masked = masked[:h["start"]] + "N" * (h["end"] - h["start"]) + masked[h["end"]:]
+
+
+def stitch(hits):
+    """Join pieces of the same IS (same name, same strand, continuing IS coordinates)."""
+    copies = []
+    for h in hits:
+        h = dict(h, pieces=1)
+        prev = next((c for c in reversed(copies) if c["target"] == h["target"]), None)
+        if prev and prev["strand"] == h["strand"] and h["start"] - prev["end"] <= MAX_GAP:
+            # + strand: IS continues forward; - strand: the later genome piece is earlier in the IS
+            continues = (abs(h["is_start"] - prev["is_end"]) <= 50 if h["strand"] == 1
+                         else abs(prev["is_start"] - h["is_end"]) <= 50)
+            if continues:
+                prev.update(end=h["end"],
+                            is_start=min(prev["is_start"], h["is_start"]),
+                            is_end=max(prev["is_end"], h["is_end"]),
+                            matches=prev["matches"] + h["matches"],
+                            aln_len=prev["aln_len"] + h["aln_len"],
+                            pieces=prev["pieces"] + 1)
+                continue
+        copies.append(h)
+    return copies
+
+
+rows = []
+for chrom_name, seq, _ in mappy.fastx_read(GENOME):
+    rows += stitch(align_all(chrom_name, seq))
+
+all_is = pd.DataFrame(rows)
+all_is["identity"] = (all_is["matches"] / all_is["aln_len"]).round(3)
+all_is["coverage"] = ((all_is["is_end"] - all_is["is_start"]) / all_is["is_len"]).round(2)
+all_is["strand"] = all_is["strand"].map({1: "+", -1: "-"})
+all_is["in_bed"] = all_is["coverage"] >= MIN_COVERAGE
+
+all_is = all_is[["chrom", "start", "end", "IS", "strand", "identity", "coverage", "pieces", "in_bed"]]
+all_is.index = range(1, len(all_is) + 1)
+
+# print(all_is.to_string())
+``````
+
+```{python}
+# Copies per IS (repetitions), kept vs dropped
+all_is.groupby("IS")["in_bed"].agg(kept="sum", total="count").sort_values("total", ascending=False)
+
+# Save as a BED file (only if you want one; change the path first)
+# kept = all_is[all_is["in_bed"]].copy()
+# kept["name"] = kept["IS"] + "_" + (kept.groupby("IS").cumcount() + 1).astype(str)
+# kept["score"] = (kept["identity"] * 1000).astype(int)
+# kept[["chrom", "start", "end", "name", "score", "strand", "identity", "coverage", "pieces"]] \
+#     .to_csv("../data/new_ec958_IS.realigned.bed", sep="\t", header=False, index=False)
+```
