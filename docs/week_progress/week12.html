@@ -184,6 +184,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../week_progress/week12.html">
  <span class="dropdown-text">Week 12</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week13.html">
+ <span class="dropdown-text">Week 13</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -267,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="precision-recall-for-gfa" class="level1">
 <h1>Precision recall for GFA</h1>
-<div id="413e7662" class="cell" data-execution_count="1">
+<div id="3f157a44" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> IS_dict <span class="im">as</span> isd</span>
@@ -307,7 +311,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        })</span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="9305cc55" class="cell" data-execution_count="2">
+<div id="9d1f03b9" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bed <span class="op">=</span> <span class="st">"../../data/ec958_IS.reannotated.sorted.bed"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pd.concat([</span>
@@ -385,7 +389,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="the-mismatch" class="level2">
 <h2 class="anchored" data-anchor-id="the-mismatch">The mismatch</h2>
-<div id="bdb8f14a" class="cell" data-execution_count="3">
+<div id="6e669cb4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mismatch_table(report_file, bed_file, count_copies<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    loci <span class="op">=</span> pd.read_csv(report_file, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).drop_duplicates(<span class="st">"locus_id"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    pred_names <span class="op">=</span> [n <span class="cf">for</span> t <span class="kw">in</span> loci[<span class="st">"target"</span>] <span class="cf">for</span> n <span class="kw">in</span> t.split(<span class="st">","</span>)]</span>
@@ -536,7 +540,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="re-checking-the-truth-file" class="level1">
 <h1>Re-checking the truth file</h1>
-<div id="80556299" class="cell" data-execution_count="4">
+<div id="03b14e58" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> mappy</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -621,18 +625,94 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>all_is <span class="op">=</span> all_is[[<span class="st">"chrom"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>, <span class="st">"IS"</span>, <span class="st">"strand"</span>, <span class="st">"identity"</span>, <span class="st">"coverage"</span>, <span class="st">"pieces"</span>, <span class="st">"in_bed"</span>]]</span>
 <span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>all_is.index <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">len</span>(all_is) <span class="op">+</span> <span class="dv">1</span>)</span>
 <span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="co"># print(all_is.to_string())</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(all_is.to_string())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         chrom    start      end        IS strand  identity  coverage  pieces  in_bed
+1   HG941718.1   233727   236259    ISEc23      +     1.000      1.00       1    True
+2   HG941718.1   814902   815025   MITEEc1      -     0.967      1.00       1    True
+3   HG941718.1  1365630  1366324    ISCfr4      +     0.914      0.55       1    True
+4   HG941718.1  1371326  1371811    ISSen3      -     0.927      0.25       1   False
+5   HG941718.1  1372287  1373517    ISEc24      -     1.000      1.00       1    True
+6   HG941718.1  1417476  1417638       IS4      -     0.975      0.11       1   False
+7   HG941718.1  1417638  1418621       IS4      -     0.981      0.69       1    True
+8   HG941718.1  1479959  1482540    ISEc12      +     1.000      1.00       1    True
+9   HG941718.1  1647528  1648819     ISEc1      +     0.966      1.00       1    True
+10  HG941718.1  1997445  1997536     IS621      +     0.912      0.06       1   False
+11  HG941718.1  1997567  1998999    IS1397      -     0.994      1.00       1    True
+12  HG941718.1  2103782  2104446     IS609      -     0.958      0.38       1    True
+13  HG941718.1  2135365  2136797    IS1397      -     0.996      1.00       1    True
+14  HG941718.1  2142423  2143132    IS200C      -     0.992      1.00       1    True
+15  HG941718.1  2238863  2239037       IS2      +     0.829      0.13       1   False
+16  HG941718.1  2239105  2239532     IS682      +     0.834      0.18       1   False
+17  HG941718.1  2244066  2245788    ISEc38      -     0.952      1.00       1    True
+18  HG941718.1  2248880  2250339    ISEc20      +     0.999      1.00       1    True
+19  HG941718.1  2252235  2252365      IS21      +     0.931      0.06       1   False
+20  HG941718.1  2252365  2254232  IS100kyp      -     0.950      1.00       1    True
+21  HG941718.1  2254407  2254575      IS21      +     0.923      0.08       1   False
+22  HG941718.1  2265833  2268365    ISEc23      +     0.998      1.00       1    True
+23  HG941718.1  2271109  2273690    ISEc12      +     1.000      1.00       1    True
+24  HG941718.1  2279176  2279335    ISEc47      -     0.987      0.06       1   False
+25  HG941718.1  2284842  2285551    IS200C      -     0.997      1.00       1    True
+26  HG941718.1  2384714  2385482      IS1R      -     0.997      1.00       1    True
+27  HG941718.1  3111847  3114428    ISEc12      +     1.000      1.00       1    True
+28  HG941718.1  3237314  3237436   MITEEc1      -     0.984      1.00       1    True
+29  HG941718.1  3288119  3288887      IS1A      +     0.996      1.00       1    True
+30  HG941718.1  3290039  3290146   ISKpn37      -     0.972      0.09       1   False
+31  HG941718.1  3290146  3290914      IS1A      -     0.996      1.00       1    True
+32  HG941718.1  3293136  3294446    IS1203      -     0.960      1.00       1    True
+33  HG941718.1  3294446  3294511    ISSfl4      -     1.000      0.04       1   False
+34  HG941718.1  3295103  3295881    ISKox3      -     0.933      0.59       1    True
+35  HG941718.1  3312816  3313143     IS600      +     0.997      0.26       1   False
+36  HG941718.1  3313143  3314364     IS30D      +     0.998      1.00       1    True
+37  HG941718.1  3314367  3315303     ISSd1      +     0.997      0.74       1    True
+38  HG941718.1  3315934  3316099     ISEc8      +     0.994      0.07       1   False
+39  HG941718.1  3316099  3317706   ISEch14      +     0.803      0.96       1    True
+40  HG941718.1  3318218  3318561    ISEc45      +     0.948      0.24       1   False
+41  HG941718.1  3320731  3320925    ISEc83      +     0.964      0.07       1   False
+42  HG941718.1  3323689  3325020       IS2      -     0.956      1.00       1    True
+43  HG941718.1  3334553  3336544     IS682      +     0.972      0.78       1    True
+44  HG941718.1  3336575  3338118    ISEc22      +     0.942      0.63       1    True
+45  HG941718.1  3360099  3360319   ISKpn42      +     0.859      0.19       1   False
+46  HG941718.1  3360526  3362935    ISEc10      +     0.988      1.00       1    True
+47  HG941718.1  3558365  3559615    ISEc52      +     1.000      1.00       1    True
+48  HG941718.1  3820313  3821771     IS609      -     0.979      0.83       1    True
+49  HG941718.1  4140078  4140846      IS1F      -     0.993      1.00       1    True
+50  HG941718.1  4156066  4159646     IS629      -     0.965      1.00       2    True
+51  HG941718.1  4159663  4160356    ISEc43      +     0.978      0.27       1   False
+52  HG941718.1  4160374  4161488    ISEc49      -     0.832      0.41       1    True
+53  HG941718.1  4161813  4163725    ISEc49      -     0.780      0.68       1    True
+54  HG941718.1  4171128  4173827    ISCro1      +     0.981      1.00       1    True
+55  HG941718.1  4175107  4177238      IS21      -     0.997      1.00       1    True
+56  HG941718.1  4915283  4915620    ISEc49      +     0.816      0.12       1   False
+57  HG941718.1  4915869  4916118     ISEc8      +     0.992      0.10       1   False
+58  HG941718.1  4916123  4916576    ISEc13      +     0.976      0.29       1   False
+59  HG941718.1  4922924  4923251    ISLad1      +     0.921      0.26       1   False
+60  HG941718.1  4924643  4924985     IS682      -     0.895      0.14       1   False
+61  HG941718.1  4925088  4927620    ISEc23      +     1.000      1.00       1    True
+62  HG941718.1  4937432  4940287     ISEc9      +     1.000      1.00       2    True
+63  HG941718.1  4938941  4940135       IS5      -     0.996      1.00       1    True
+64  HG941718.1  4942385  4943650     ISSd1      -     0.991      1.00       1    True
+65  HG941718.1  4943650  4944441    ISEc52      +     0.981      0.63       1    True
+66  HG941718.1  4953115  4953883      IS1F      +     0.993      1.00       1    True
+67  HG941718.1  4953985  4954156     IS629      -     0.971      0.13       1   False
+68  HG941718.1  4956000  4958289     ISEc8      -     0.932      1.00       1    True
+69  HG941718.1  4971828  4974409    ISEc12      +     1.000      1.00       1    True
+70  HG941718.1  4976678  4977037    ISSen1      +     0.906      0.27       1   False
+71  HG941718.1  4977048  4977293    ISSen1      +     0.858      0.19       1   False
+72  HG941718.1  5007344  5008594    ISEc52      -     1.000      1.00       1    True
+73  HG941718.1  5014813  5016698    ISEc53      -     1.000      1.00       1    True</code></pre>
 </div>
-<div id="fb33af6b" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copies per IS (repetitions), kept vs dropped</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>all_is.groupby(<span class="st">"IS"</span>)[<span class="st">"in_bed"</span>].agg(kept<span class="op">=</span><span class="st">"sum"</span>, total<span class="op">=</span><span class="st">"count"</span>).sort_values(<span class="st">"total"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Save as a BED file (only if you want one; change the path first)</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># kept = all_is[all_is["in_bed"]].copy()</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># kept["name"] = kept["IS"] + "_" + (kept.groupby("IS").cumcount() + 1).astype(str)</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># kept["score"] = (kept["identity"] * 1000).astype(int)</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># kept[["chrom", "start", "end", "name", "score", "strand", "identity", "coverage", "pieces"]] \</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     .to_csv("../data/new_ec958_IS.realigned.bed", sep="\t", header=False, index=False)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="2e2540ef" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copies per IS (repetitions), kept vs dropped</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>all_is.groupby(<span class="st">"IS"</span>)[<span class="st">"in_bed"</span>].agg(kept<span class="op">=</span><span class="st">"sum"</span>, total<span class="op">=</span><span class="st">"count"</span>).sort_values(<span class="st">"total"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Save as a BED file (only if you want one; change the path first)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># kept = all_is[all_is["in_bed"]].copy()</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># kept["name"] = kept["IS"] + "_" + (kept.groupby("IS").cumcount() + 1).astype(str)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># kept["score"] = (kept["identity"] * 1000).astype(int)</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># kept[["chrom", "start", "end", "name", "score", "strand", "identity", "coverage", "pieces"]] \</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     .to_csv("../data/new_ec958_IS.realigned.bed", sep="\t", header=False, index=False)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
@@ -892,9 +972,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>What we are concern about?</p>
+<ul>
+<li>52 HG941718.1 4160374 4161488 ISEc49 - 0.832 0.41 1<br>
+</li>
+<li>53 HG941718.1 4161813 4163725 ISEc49 - 0.780 0.68 1
+<ul>
+<li>Why we have ISEc49 guess by Eris?</li>
+</ul></li>
+<li>70 HG941718.1 4976678 4977037 ISSen1 + 0.906 0.27 1<br>
+</li>
+<li>71 HG941718.1 4977048 4977293 ISSen1 + 0.858 0.19 1
+<ul>
+<li>ISSen1 has high identity but low coverage which make the presence of the IS was questionable in the truth file.</li>
+</ul></li>
+</ul>
 </section>
 <section id="re-run-eris-to-check-about-the-isec49" class="level1">
 <h1>Re-run eris to check about the ISEc49</h1>
+<p>Already changing the min identity become 0.8</p>
+<pre class="{bash}"><code>uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_merge_id -m collapse --merge-synonyms</code></pre>
 
 
 </section>

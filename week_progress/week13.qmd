@@ -1,0 +1,99 @@
+---
+title: "Week 13 - Update"
+author: "Victoria Sjalim"
+date: "2026-10-20"
+format: html
+execute: 
+  freeze: auto
+---
+
+# What change?
+
+- Added the flag --merge-synonyms to ensure consistent naming across all IS
+- Change the `min_identity` in `from_mappy` to 0.80 (to reduce false positive)
+
+# Merge synonyms
+
+- We have multiple IS merge together, however, there is still few IS that doesn't merge 
+
+```{python}
+import pandas as pd
+
+df = pd.read_csv("../../progress/result/new_merge_id/new_merge_id_report.tsv", sep="\t")
+
+# see if the synonyms merging was working
+print(df[(df["target"].str.startswith("IS1A", na=False)) & (df["context"] == "INSIDE")])
+```
+
+There are:
+
+- 3 locus and 5 copies in total for IS1F (supposed to be only 2 copies)
+- 4 locus and 8 copies in total for IS1A (supposed to be 3)
+
+**This because after we stitched the IS together, the pipeline didn't removed the rest of the nodes which make a duplicate copies**
+
+## Calculating the precision and recall
+
+Two comparisons against the truth BED:
+
+- **name only**: does eris find the IS at all? (copies ignored, each name counts once)
+- **with copy number**: eris copies = sum of `copy_number` over its loci (e.g. IS1A = 3 + 3 + 1 + 2 = 9);
+  truth copies = how many times the IS is repeated in the BED (IS1A_1, IS1A_2, IS1A_3 = 3)
+
+Each is done without and with synonyms. With synonyms, names that ISfinder lists as synonyms/isoforms
+(e.g. IS30 / IS30D) count as the same IS, so a different name for the same element is not counted as a miss.
+
+```{python}
+from eris.synonyms import SynonymResolver, fetch_isfinder_table
+
+synonyms = SynonymResolver(fetch_isfinder_table())
+loci = pd.read_csv("../result/new_merge_id/new_merge_id_report.tsv", sep="\t").drop_duplicates("locus_id")
+truth = pd.read_csv("../../data/ec958_IS.reannotated.sorted.bed", sep="\t", header=None)[3]
+truth = truth[truth.str.split("_").str[0] != "ISSen10"]  # ISSen10 excluded from the truth set
+
+def is_name(name, use_synonyms):
+    # IS1A_IS1_unknown_stitched / IS1A_2 -> IS1A; with synonyms, every synonym gets the same name
+    return (synonyms.canonical(name) if use_synonyms else name).split("_")[0]
+
+def copies_per_is(use_synonyms):
+    eris = loci.groupby(loci["target"].map(lambda n: is_name(n, use_synonyms)))["copy_number"].sum()
+    real = truth.map(lambda n: is_name(n, use_synonyms)).value_counts()
+    return pd.concat([real.rename("truth"), eris.rename("eris")], axis=1).fillna(0).astype(int)
+
+# IS where eris and the truth disagree (with synonyms)
+counts = copies_per_is(use_synonyms=True)
+counts[counts["truth"] != counts["eris"]]
+```
+
+```{python}
+rows, errors = [], {}
+for use_synonyms in (False, True):
+    counts = copies_per_is(use_synonyms)
+    for mode in ("name only", "with copy number"):
+        c = counts.clip(upper=1) if mode == "name only" else counts
+        tp = c.min(axis=1).sum()
+        fp = (c["eris"] - c["truth"]).clip(lower=0).sum()
+        fn = (c["truth"] - c["eris"]).clip(lower=0).sum()
+        precision, recall = tp / (tp + fp), tp / (tp + fn)
+        rows.append({"Synonyms": use_synonyms, "Comparison": mode, "TP": tp, "FP": fp, "FN": fn,
+                     "Precision": round(precision, 3), "Recall": round(recall, 3),
+                     "F1": round(2 * precision * recall / (precision + recall), 3)})
+
+        # Which IS are wrong: "FP 6" = eris has 6 too many, "FN 1" = eris misses 1
+        diff = c["eris"] - c["truth"]
+        errors[(f"synonyms={use_synonyms}", mode)] = diff[diff != 0].map(
+            lambda d: f"FP {d}" if d > 0 else f"FN {-d}")
+
+display(pd.DataFrame(rows))
+pd.DataFrame(errors).fillna("").sort_index()
+```
+
+# The min identity
+I tested several threshold:
+
+- 0.75 (initial default): ISEc49 still there
+- 0.8: ISEc49 still there
+- 0.85: ISEc49 was gone, but it also removed ISEch14 (found in truth)
+
+# Precision recall with the flanks 
+

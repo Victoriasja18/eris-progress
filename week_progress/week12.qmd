@@ -180,7 +180,7 @@ all_is["in_bed"] = all_is["coverage"] >= MIN_COVERAGE
 all_is = all_is[["chrom", "start", "end", "IS", "strand", "identity", "coverage", "pieces", "in_bed"]]
 all_is.index = range(1, len(all_is) + 1)
 
-# print(all_is.to_string())
+print(all_is.to_string())
 ```
 
 ```{python}
@@ -195,5 +195,20 @@ all_is.groupby("IS")["in_bed"].agg(kept="sum", total="count").sort_values("total
 #     .to_csv("../data/new_ec958_IS.realigned.bed", sep="\t", header=False, index=False)
 ```
 
+What we are concern about?
+
+- 52  HG941718.1  4160374  4161488    ISEc49      -     0.832      0.41       1    
+- 53  HG941718.1  4161813  4163725    ISEc49      -     0.780      0.68       1    
+    - Why we have ISEc49 guess by Eris?
+- 70  HG941718.1  4976678  4977037    ISSen1      +     0.906      0.27       1   
+- 71  HG941718.1  4977048  4977293    ISSen1      +     0.858      0.19       1   
+    - ISSen1 has high identity but low coverage which make the presence of the IS was questionable in the truth file.
+
 # Re-run eris to check about the ISEc49
+
+Already changing the min identity become 0.8
+
+```{bash}
+uv run eris -i ../data/contigs_shovill_simulated.gfa -d ../data/IS_n.mmi -o ../progress/result/new_merge_id -m collapse --merge-synonyms
+```
 
