@@ -228,6 +228,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#what-change" id="toc-what-change" class="nav-link active" data-scroll-target="#what-change">What change?</a></li>
   <li><a href="#merge-synonyms" id="toc-merge-synonyms" class="nav-link" data-scroll-target="#merge-synonyms">Merge synonyms</a>
   <ul class="collapse">
+  <li><a href="#stitched-is" id="toc-stitched-is" class="nav-link" data-scroll-target="#stitched-is">Stitched IS</a></li>
+  <li><a href="#names-that-changed-after-merging" id="toc-names-that-changed-after-merging" class="nav-link" data-scroll-target="#names-that-changed-after-merging">Names that changed after merging</a></li>
+  <li><a href="#same-name-but-not-stitched-after-merging" id="toc-same-name-but-not-stitched-after-merging" class="nav-link" data-scroll-target="#same-name-but-not-stitched-after-merging">Same name but not stitched (after merging)</a></li>
+  <li><a href="#other-problem-found" id="toc-other-problem-found" class="nav-link" data-scroll-target="#other-problem-found">Other Problem found</a></li>
   <li><a href="#calculating-the-precision-and-recall" id="toc-calculating-the-precision-and-recall" class="nav-link" data-scroll-target="#calculating-the-precision-and-recall">Calculating the precision and recall</a></li>
   </ul></li>
   <li><a href="#the-min-identity" id="toc-the-min-identity" class="nav-link" data-scroll-target="#the-min-identity">The min identity</a></li>
@@ -280,14 +284,305 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Merge synonyms</h1>
 <ul>
 <li>We have multiple IS merge together, however, there is still few IS that doesn’t merge</li>
+<li>Create a new python script named <code>synonyms.py</code></li>
 </ul>
-<div id="4bd54191" class="cell" data-execution_count="1">
+<div id="cd5539c8" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"../../progress/result/new_merge_id/new_merge_id_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df_bfr <span class="op">=</span> pd.read_csv(<span class="st">"../../progress/result/no_merge_id/no_merge_id_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># see if the synonyms merging was working</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[(df[<span class="st">"target"</span>].<span class="bu">str</span>.startswith(<span class="st">"IS1A"</span>, na<span class="op">=</span><span class="va">False</span>)) <span class="op">&amp;</span> (df[<span class="st">"context"</span>] <span class="op">==</span> <span class="st">"INSIDE"</span>)])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"../../progress/result/new_merge_id/new_merge_id_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Comparison between before and after merging synonyms:</p>
+<p>Both runs use the same code and settings (<code>-m collapse</code>, min identity 0.80); the only difference is <code>--merge-synonyms</code>:</p>
+<ul>
+<li><strong>Before</strong>: <code>no_merge_id</code> (no synonym merging)</li>
+<li><strong>After</strong>: <code>new_merge_id</code> (<code>--merge-synonyms</code>)</li>
+</ul>
+<table class="table-striped caption-top table">
+<caption>Overview</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">Before</th>
+<th style="text-align: center;">After</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IS names</td>
+<td style="text-align: center;">36</td>
+<td style="text-align: center;">32</td>
+</tr>
+<tr class="even">
+<td>Loci</td>
+<td style="text-align: center;">45</td>
+<td style="text-align: center;">45</td>
+</tr>
+<tr class="odd">
+<td>Copies (sum of <code>copy_number</code>)</td>
+<td style="text-align: center;">67</td>
+<td style="text-align: center;">67</td>
+</tr>
+<tr class="even">
+<td>Stitched loci</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">6</td>
+</tr>
+<tr class="odd">
+<td>IS names found in more than 1 locus</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">9</td>
+</tr>
+</tbody>
+</table>
+<section id="stitched-is" class="level3">
+<h3 class="anchored" data-anchor-id="stitched-is">Stitched IS</h3>
+<table class="table-striped caption-top table">
+<caption>The 5 IS stitched before are stitched along exactly the same paths after; merging adds IS1A</caption>
+<colgroup>
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 16%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>IS</th>
+<th style="text-align: center;">Before</th>
+<th style="text-align: center;">After</th>
+<th style="text-align: center;">Copy number</th>
+<th>Contigs in the path</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IS1397</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">2</td>
+<td>1241248, 1234872, 1208211, 1015060, 1244160, 1245026</td>
+</tr>
+<tr class="even">
+<td>IS1F</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">2</td>
+<td>1158833, 1202947, 1244706</td>
+</tr>
+<tr class="odd">
+<td>ISEc23</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">3</td>
+<td>1116087, 1244816, 1176191, 1245048</td>
+</tr>
+<tr class="even">
+<td>ISEc52</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">3</td>
+<td>1243586, 1245082, 238677</td>
+</tr>
+<tr class="odd">
+<td>ISEc8</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">2</td>
+<td>1236644, 1235120, 1125059, 1240608</td>
+</tr>
+<tr class="even">
+<td><strong>IS1A</strong></td>
+<td style="text-align: center;">✗</td>
+<td style="text-align: center;"><strong>✓</strong></td>
+<td style="text-align: center;">3</td>
+<td>1171599, 1245138, 1208153, 1245038</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>IS1A only stitches after merging because, before, its pieces had different names: IS1A (1171599), IS1R (1208153), IS1G (1245138) and IS1B (1245136). Stitching only joins pieces with the same name.</li>
+</ul>
+</section>
+<section id="names-that-changed-after-merging" class="level3">
+<h3 class="anchored" data-anchor-id="names-that-changed-after-merging">Names that changed after merging</h3>
+<table class="table-striped caption-top table">
+<caption>Merging renames IS to the first name found, which is not always the truth name (ISSd1 and IS21 are the names in the truth file)</caption>
+<colgroup>
+<col style="width: 38%">
+<col style="width: 9%">
+<col style="width: 25%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Before</th>
+<th>After</th>
+<th style="text-align: center;">Loci before → after</th>
+<th style="text-align: center;">Copies before → after</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IS1A, IS1B, IS1G, IS1R</td>
+<td>IS1A</td>
+<td style="text-align: center;">4 → 4</td>
+<td style="text-align: center;">9 → 9</td>
+</tr>
+<tr class="even">
+<td>IS1203, IS629</td>
+<td>IS3411</td>
+<td style="text-align: center;">2 → 2</td>
+<td style="text-align: center;">2 → 2</td>
+</tr>
+<tr class="odd">
+<td>ISSd1</td>
+<td>IS600</td>
+<td style="text-align: center;">1 → 1</td>
+<td style="text-align: center;">2 → 2</td>
+</tr>
+<tr class="even">
+<td>IS21</td>
+<td>IS640</td>
+<td style="text-align: center;">1 → 1</td>
+<td style="text-align: center;">1 → 1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Merging only renames: the number of loci and copies stays the same for every IS.</li>
+</ul>
+</section>
+<section id="same-name-but-not-stitched-after-merging" class="level3">
+<h3 class="anchored" data-anchor-id="same-name-but-not-stitched-after-merging">Same name but not stitched (after merging)</h3>
+<table class="table-striped caption-top table">
+<caption>9 IS names are found in more than one locus: 4 are real separate copies, 5 have 9 leftover pieces that were not stitched</caption>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 25%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>IS</th>
+<th style="text-align: center;">Loci</th>
+<th style="text-align: center;">Stitched</th>
+<th style="text-align: center;">Not stitched</th>
+<th>Coverage of unstitched loci</th>
+<th style="text-align: center;">Copies</th>
+<th style="text-align: center;">Truth</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IS1A</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">3</td>
+<td>37%, 58%, 58%</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">3</td>
+<td>leftover pieces (duplicates)</td>
+</tr>
+<tr class="even">
+<td>IS1F</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td>42%, 44%</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">2</td>
+<td>leftover pieces; the 44% on 1244320 is likely the real 2nd copy</td>
+</tr>
+<tr class="odd">
+<td>ISEc23</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td>52%, 45%</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">3</td>
+<td>leftover pieces (duplicates)</td>
+</tr>
+<tr class="even">
+<td>ISEc52</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td>52%</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">3</td>
+<td>leftover piece (duplicate)</td>
+</tr>
+<tr class="odd">
+<td>ISEc8</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td>45%</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">1</td>
+<td>leftover piece (duplicate)</td>
+</tr>
+<tr class="even">
+<td>IS200C</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2</td>
+<td>70%, 70%</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td>real separate copies</td>
+</tr>
+<tr class="odd">
+<td>IS3411</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2</td>
+<td>80%, 40%</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td>real separate copies</td>
+</tr>
+<tr class="even">
+<td>IS609</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2</td>
+<td>31%, 68%</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td>real separate copies</td>
+</tr>
+<tr class="odd">
+<td>MITEEc1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2</td>
+<td>100%, 100%</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td>real separate copies</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Every leftover piece is partial, and sits on a contig inside the stitched path or one contig away from it.</li>
+<li>Before merging, 7 IS names were found in more than one locus, with 6 leftover pieces (IS1F 2, ISEc23 2, ISEc52 1, ISEc8 1). IS1A and IS3411 were not in that list because their loci had different names (IS1A/IS1B/IS1G/IS1R and IS1203/IS629).</li>
+</ul>
+</section>
+<section id="other-problem-found" class="level2">
+<h2 class="anchored" data-anchor-id="other-problem-found">Other Problem found</h2>
+<div id="d24d53e7" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># see if the synonyms merging was working</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[(df[<span class="st">"target"</span>].<span class="bu">str</span>.startswith(<span class="st">"IS1A"</span>, na<span class="op">=</span><span class="va">False</span>)) <span class="op">&amp;</span> (df[<span class="st">"context"</span>] <span class="op">==</span> <span class="st">"INSIDE"</span>)])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 locus_id                     target              gene_id  \
 45   locus_split_a13a8928  IS1A_IS1_unknown_stitched        1171599_2_173   
@@ -326,35 +621,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>4 locus and 8 copies in total for IS1A (supposed to be 3)</li>
 </ul>
 <p><strong>This because after we stitched the IS together, the pipeline didn’t removed the rest of the nodes which make a duplicate copies</strong></p>
+</section>
 <section id="calculating-the-precision-and-recall" class="level2">
 <h2 class="anchored" data-anchor-id="calculating-the-precision-and-recall">Calculating the precision and recall</h2>
 <p>Two comparisons against the truth BED:</p>
 <ul>
-<li><strong>name only</strong>: does eris find the IS at all? (copies ignored, each name counts once)</li>
-<li><strong>with copy number</strong>: eris copies = sum of <code>copy_number</code> over its loci (e.g.&nbsp;IS1A = 3 + 3 + 1 + 2 = 9); truth copies = how many times the IS is repeated in the BED (IS1A_1, IS1A_2, IS1A_3 = 3)</li>
+<li>name only</li>
+<li>with copy number</li>
 </ul>
 <p>Each is done without and with synonyms. With synonyms, names that ISfinder lists as synonyms/isoforms (e.g.&nbsp;IS30 / IS30D) count as the same IS, so a different name for the same element is not counted as a miss.</p>
-<div id="acba2440" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.synonyms <span class="im">import</span> SynonymResolver, fetch_isfinder_table</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>synonyms <span class="op">=</span> SynonymResolver(fetch_isfinder_table())</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>loci <span class="op">=</span> pd.read_csv(<span class="st">"../result/new_merge_id/new_merge_id_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).drop_duplicates(<span class="st">"locus_id"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>truth <span class="op">=</span> pd.read_csv(<span class="st">"../../data/ec958_IS.reannotated.sorted.bed"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, header<span class="op">=</span><span class="va">None</span>)[<span class="dv">3</span>]</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>truth <span class="op">=</span> truth[truth.<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>] <span class="op">!=</span> <span class="st">"ISSen10"</span>]  <span class="co"># ISSen10 excluded from the truth set</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_name(name, use_synonyms):</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># IS1A_IS1_unknown_stitched / IS1A_2 -&gt; IS1A; with synonyms, every synonym gets the same name</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (synonyms.canonical(name) <span class="cf">if</span> use_synonyms <span class="cf">else</span> name).split(<span class="st">"_"</span>)[<span class="dv">0</span>]</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> copies_per_is(use_synonyms):</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    eris <span class="op">=</span> loci.groupby(loci[<span class="st">"target"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> n: is_name(n, use_synonyms)))[<span class="st">"copy_number"</span>].<span class="bu">sum</span>()</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    real <span class="op">=</span> truth.<span class="bu">map</span>(<span class="kw">lambda</span> n: is_name(n, use_synonyms)).value_counts()</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.concat([real.rename(<span class="st">"truth"</span>), eris.rename(<span class="st">"eris"</span>)], axis<span class="op">=</span><span class="dv">1</span>).fillna(<span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># IS where eris and the truth disagree (with synonyms)</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> copies_per_is(use_synonyms<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>counts[counts[<span class="st">"truth"</span>] <span class="op">!=</span> counts[<span class="st">"eris"</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div id="2fc6c364" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.synonyms <span class="im">import</span> SynonymResolver, fetch_isfinder_table</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>synonyms <span class="op">=</span> SynonymResolver(fetch_isfinder_table())</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>loci <span class="op">=</span> pd.read_csv(<span class="st">"../result/new_merge_id/new_merge_id_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).drop_duplicates(<span class="st">"locus_id"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>truth <span class="op">=</span> pd.read_csv(<span class="st">"../../data/ec958_IS.reannotated.sorted.bed"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, header<span class="op">=</span><span class="va">None</span>)[<span class="dv">3</span>]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>truth <span class="op">=</span> truth[truth.<span class="bu">str</span>.split(<span class="st">"_"</span>).<span class="bu">str</span>[<span class="dv">0</span>] <span class="op">!=</span> <span class="st">"ISSen10"</span>]  <span class="co"># ISSen10 excluded from the truth set</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_name(name, use_synonyms):</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># IS1A_IS1_unknown_stitched / IS1A_2 -&gt; IS1A; with synonyms, every synonym gets the same name</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (synonyms.canonical(name) <span class="cf">if</span> use_synonyms <span class="cf">else</span> name).split(<span class="st">"_"</span>)[<span class="dv">0</span>]</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> copies_per_is(use_synonyms):</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    eris <span class="op">=</span> loci.groupby(loci[<span class="st">"target"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> n: is_name(n, use_synonyms)))[<span class="st">"copy_number"</span>].<span class="bu">sum</span>()</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    real <span class="op">=</span> truth.<span class="bu">map</span>(<span class="kw">lambda</span> n: is_name(n, use_synonyms)).value_counts()</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.concat([real.rename(<span class="st">"truth"</span>), eris.rename(<span class="st">"eris"</span>)], axis<span class="op">=</span><span class="dv">1</span>).fillna(<span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># IS where eris and the truth disagree (with synonyms)</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> copies_per_is(use_synonyms<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>counts[counts[<span class="st">"truth"</span>] <span class="op">!=</span> counts[<span class="st">"eris"</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -408,27 +704,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="0ce8eee8" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rows, errors <span class="op">=</span> [], {}</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> use_synonyms <span class="kw">in</span> (<span class="va">False</span>, <span class="va">True</span>):</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> copies_per_is(use_synonyms)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> mode <span class="kw">in</span> (<span class="st">"name only"</span>, <span class="st">"with copy number"</span>):</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        c <span class="op">=</span> counts.clip(upper<span class="op">=</span><span class="dv">1</span>) <span class="cf">if</span> mode <span class="op">==</span> <span class="st">"name only"</span> <span class="cf">else</span> counts</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        tp <span class="op">=</span> c.<span class="bu">min</span>(axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">sum</span>()</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        fp <span class="op">=</span> (c[<span class="st">"eris"</span>] <span class="op">-</span> c[<span class="st">"truth"</span>]).clip(lower<span class="op">=</span><span class="dv">0</span>).<span class="bu">sum</span>()</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        fn <span class="op">=</span> (c[<span class="st">"truth"</span>] <span class="op">-</span> c[<span class="st">"eris"</span>]).clip(lower<span class="op">=</span><span class="dv">0</span>).<span class="bu">sum</span>()</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        precision, recall <span class="op">=</span> tp <span class="op">/</span> (tp <span class="op">+</span> fp), tp <span class="op">/</span> (tp <span class="op">+</span> fn)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">"Synonyms"</span>: use_synonyms, <span class="st">"Comparison"</span>: mode, <span class="st">"TP"</span>: tp, <span class="st">"FP"</span>: fp, <span class="st">"FN"</span>: fn,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Precision"</span>: <span class="bu">round</span>(precision, <span class="dv">3</span>), <span class="st">"Recall"</span>: <span class="bu">round</span>(recall, <span class="dv">3</span>),</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"F1"</span>: <span class="bu">round</span>(<span class="dv">2</span> <span class="op">*</span> precision <span class="op">*</span> recall <span class="op">/</span> (precision <span class="op">+</span> recall), <span class="dv">3</span>)})</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Which IS are wrong: "FP 6" = eris has 6 too many, "FN 1" = eris misses 1</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        diff <span class="op">=</span> c[<span class="st">"eris"</span>] <span class="op">-</span> c[<span class="st">"truth"</span>]</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        errors[(<span class="ss">f"synonyms=</span><span class="sc">{</span>use_synonyms<span class="sc">}</span><span class="ss">"</span>, mode)] <span class="op">=</span> diff[diff <span class="op">!=</span> <span class="dv">0</span>].<span class="bu">map</span>(</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="kw">lambda</span> d: <span class="ss">f"FP </span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">"</span> <span class="cf">if</span> d <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="ss">f"FN </span><span class="sc">{</span><span class="op">-</span>d<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>display(pd.DataFrame(rows))</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(errors).fillna(<span class="st">""</span>).sort_index()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="293b72c1" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rows, errors <span class="op">=</span> [], {}</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> use_synonyms <span class="kw">in</span> (<span class="va">False</span>, <span class="va">True</span>):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> copies_per_is(use_synonyms)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> mode <span class="kw">in</span> (<span class="st">"name only"</span>, <span class="st">"with copy number"</span>):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        c <span class="op">=</span> counts.clip(upper<span class="op">=</span><span class="dv">1</span>) <span class="cf">if</span> mode <span class="op">==</span> <span class="st">"name only"</span> <span class="cf">else</span> counts</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        tp <span class="op">=</span> c.<span class="bu">min</span>(axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">sum</span>()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        fp <span class="op">=</span> (c[<span class="st">"eris"</span>] <span class="op">-</span> c[<span class="st">"truth"</span>]).clip(lower<span class="op">=</span><span class="dv">0</span>).<span class="bu">sum</span>()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        fn <span class="op">=</span> (c[<span class="st">"truth"</span>] <span class="op">-</span> c[<span class="st">"eris"</span>]).clip(lower<span class="op">=</span><span class="dv">0</span>).<span class="bu">sum</span>()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        precision, recall <span class="op">=</span> tp <span class="op">/</span> (tp <span class="op">+</span> fp), tp <span class="op">/</span> (tp <span class="op">+</span> fn)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        rows.append({<span class="st">"Synonyms"</span>: use_synonyms, <span class="st">"Comparison"</span>: mode, <span class="st">"TP"</span>: tp, <span class="st">"FP"</span>: fp, <span class="st">"FN"</span>: fn,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Precision"</span>: <span class="bu">round</span>(precision, <span class="dv">3</span>), <span class="st">"Recall"</span>: <span class="bu">round</span>(recall, <span class="dv">3</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"F1"</span>: <span class="bu">round</span>(<span class="dv">2</span> <span class="op">*</span> precision <span class="op">*</span> recall <span class="op">/</span> (precision <span class="op">+</span> recall), <span class="dv">3</span>)})</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Which IS are wrong: "FP 6" = eris has 6 too many, "FN 1" = eris misses 1</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        diff <span class="op">=</span> c[<span class="st">"eris"</span>] <span class="op">-</span> c[<span class="st">"truth"</span>]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        errors[(<span class="ss">f"synonyms=</span><span class="sc">{</span>use_synonyms<span class="sc">}</span><span class="ss">"</span>, mode)] <span class="op">=</span> diff[diff <span class="op">!=</span> <span class="dv">0</span>].<span class="bu">map</span>(</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>            <span class="kw">lambda</span> d: <span class="ss">f"FP </span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">"</span> <span class="cf">if</span> d <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="ss">f"FN </span><span class="sc">{</span><span class="op">-</span>d<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>display(pd.DataFrame(rows))</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(errors).fillna(<span class="st">""</span>).sort_index()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 
@@ -497,7 +793,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </div>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 

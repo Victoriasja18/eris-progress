@@ -15,12 +15,82 @@ execute:
 # Merge synonyms
 
 - We have multiple IS merge together, however, there is still few IS that doesn't merge 
+- Create a new python script named `synonyms.py`
 
 ```{python}
 import pandas as pd
 
-df = pd.read_csv("../../progress/result/new_merge_id/new_merge_id_report.tsv", sep="\t")
+df_bfr = pd.read_csv("../../progress/result/no_merge_id/no_merge_id_report.tsv", sep="\t")
 
+df = pd.read_csv("../../progress/result/new_merge_id/new_merge_id_report.tsv", sep="\t")
+```
+
+Comparison between before and after merging synonyms:
+
+Both runs use the same code and settings (`-m collapse`, min identity 0.80); the only difference is `--merge-synonyms`:
+
+- **Before**: `no_merge_id` (no synonym merging)
+- **After**: `new_merge_id` (`--merge-synonyms`)
+
+|                                   | Before | After |
+|-----------------------------------|:------:|:-----:|
+| IS names                          | 36     | 32    |
+| Loci                              | 45     | 45    |
+| Copies (sum of `copy_number`)     | 67     | 67    |
+| Stitched loci                     | 5      | 6     |
+| IS names found in more than 1 locus | 7    | 9     |
+
+: Overview {.striped}
+
+### Stitched IS
+
+| IS     | Before | After | Copy number | Contigs in the path                         |
+|--------|:------:|:-----:|:-----------:|---------------------------------------------|
+| IS1397 | ✓      | ✓     | 2           | 1241248, 1234872, 1208211, 1015060, 1244160, 1245026 |
+| IS1F   | ✓      | ✓     | 2           | 1158833, 1202947, 1244706                   |
+| ISEc23 | ✓      | ✓     | 3           | 1116087, 1244816, 1176191, 1245048          |
+| ISEc52 | ✓      | ✓     | 3           | 1243586, 1245082, 238677                    |
+| ISEc8  | ✓      | ✓     | 2           | 1236644, 1235120, 1125059, 1240608          |
+| **IS1A** | ✗    | **✓** | 3           | 1171599, 1245138, 1208153, 1245038          |
+
+: The 5 IS stitched before are stitched along exactly the same paths after; merging adds IS1A {.striped}
+
+- IS1A only stitches after merging because, before, its pieces had different names: IS1A (1171599), IS1R (1208153), IS1G (1245138) and IS1B (1245136). Stitching only joins pieces with the same name.
+
+### Names that changed after merging
+
+| Before                         | After  | Loci before → after | Copies before → after |
+|--------------------------------|--------|:-------------------:|:---------------------:|
+| IS1A, IS1B, IS1G, IS1R         | IS1A   | 4 → 4               | 9 → 9                 |
+| IS1203, IS629                  | IS3411 | 2 → 2               | 2 → 2                 |
+| ISSd1                          | IS600  | 1 → 1               | 2 → 2                 |
+| IS21                           | IS640  | 1 → 1               | 1 → 1                 |
+
+: Merging renames IS to the first name found, which is not always the truth name (ISSd1 and IS21 are the names in the truth file) {.striped}
+
+- Merging only renames: the number of loci and copies stays the same for every IS.
+
+### Same name but not stitched (after merging)
+
+| IS      | Loci | Stitched | Not stitched | Coverage of unstitched loci | Copies | Truth | Why                         |
+|---------|:----:|:--------:|:------------:|-----------------------------|:------:|:-----:|-----------------------------|
+| IS1A    | 4    | 1        | 3            | 37%, 58%, 58%               | 9      | 3     | leftover pieces (duplicates) |
+| IS1F    | 3    | 1        | 2            | 42%, 44%                    | 5      | 2     | leftover pieces; the 44% on 1244320 is likely the real 2nd copy |
+| ISEc23  | 3    | 1        | 2            | 52%, 45%                    | 9      | 3     | leftover pieces (duplicates) |
+| ISEc52  | 2    | 1        | 1            | 52%                         | 5      | 3     | leftover piece (duplicate)   |
+| ISEc8   | 2    | 1        | 1            | 45%                         | 3      | 1     | leftover piece (duplicate)   |
+| IS200C  | 2    | 0        | 2            | 70%, 70%                    | 2      | 2     | real separate copies         |
+| IS3411  | 2    | 0        | 2            | 80%, 40%                    | 2      | 2     | real separate copies         |
+| IS609   | 2    | 0        | 2            | 31%, 68%                    | 2      | 2     | real separate copies         |
+| MITEEc1 | 2    | 0        | 2            | 100%, 100%                  | 2      | 2     | real separate copies         |
+
+: 9 IS names are found in more than one locus: 4 are real separate copies, 5 have 9 leftover pieces that were not stitched {.striped}
+
+- Every leftover piece is partial, and sits on a contig inside the stitched path or one contig away from it.
+- Before merging, 7 IS names were found in more than one locus, with 6 leftover pieces (IS1F 2, ISEc23 2, ISEc52 1, ISEc8 1). IS1A and IS3411 were not in that list because their loci had different names (IS1A/IS1B/IS1G/IS1R and IS1203/IS629).
+
+## Other Problem found
+```{python}
 # see if the synonyms merging was working
 print(df[(df["target"].str.startswith("IS1A", na=False)) & (df["context"] == "INSIDE")])
 ```
@@ -36,12 +106,10 @@ There are:
 
 Two comparisons against the truth BED:
 
-- **name only**: does eris find the IS at all? (copies ignored, each name counts once)
-- **with copy number**: eris copies = sum of `copy_number` over its loci (e.g. IS1A = 3 + 3 + 1 + 2 = 9);
-  truth copies = how many times the IS is repeated in the BED (IS1A_1, IS1A_2, IS1A_3 = 3)
+- name only
+- with copy number
 
-Each is done without and with synonyms. With synonyms, names that ISfinder lists as synonyms/isoforms
-(e.g. IS30 / IS30D) count as the same IS, so a different name for the same element is not counted as a miss.
+Each is done without and with synonyms. With synonyms, names that ISfinder lists as synonyms/isoforms (e.g. IS30 / IS30D) count as the same IS, so a different name for the same element is not counted as a miss.
 
 ```{python}
 from eris.synonyms import SynonymResolver, fetch_isfinder_table
