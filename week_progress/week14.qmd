@@ -139,7 +139,7 @@ for is_name in ["ISEc8", "ISEc23", "IS629"]:
     display(path)
 ```
 
-This is for the fastq:
+**This is for the fastq:**
 ```{python}
 # Length and depth of every contig in the stitched path of ISEc8 and ISEc23.
 # eris copy number = round(max depth on the path / median depth of all contigs)
@@ -150,7 +150,7 @@ genome = GenomeAssembly.from_file(str(mt.GFA_FASTQ))
 median_depth = pd.Series(genome.contig_depths).median()
 print(f"Median depth of all contigs: {median_depth:.1f}")
 
-for is_name in ["ISEc8", "ISEc23", "IS629"]:
+for is_name in ["ISEc8", "ISEc23", "IS629", "IS15DI"]:  # IS15DI is on the plasmid, so only here
     # match synonyms too (IS629 is reported as IS3411 here); stitched locus first
     loci = read_fastq[read_fastq["target"].map(lambda t: mt.is_group(mt.is_name(t))) == mt.is_group(is_name)]
     locus = loci.sort_values("target", key=lambda t: ~t.str.endswith("_stitched")).iloc[0]
@@ -164,3 +164,5 @@ for is_name in ["ISEc8", "ISEc23", "IS629"]:
     print(f"\n{is_name}: eris copy number = {locus['copy_number']:.0f}")
     display(path)
 ```
+
+

@@ -242,7 +242,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#summary-of-is-to-investigate" id="toc-summary-of-is-to-investigate" class="nav-link" data-scroll-target="#summary-of-is-to-investigate">Summary of IS to investigate</a>
   <ul class="collapse">
   <li><a href="#isec8-is629" id="toc-isec8-is629" class="nav-link" data-scroll-target="#isec8-is629">ISec8 &amp; IS629</a></li>
-  <li><a href="#issfl10" id="toc-issfl10" class="nav-link" data-scroll-target="#issfl10">ISSfl10</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -294,7 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="validation-for-simulated-gfa">Validation for Simulated GFA</h3>
 <pre class="{bash}"><code># uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/dimas_fa -m collapse --merge-synonyms</code></pre>
 <p>Validation after merging with min identity = 0.75</p>
-<div id="ad9cd2c2" class="cell" data-execution_count="1">
+<div id="2349e3db" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -431,7 +430,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="validation-for-complete-genome-gfa-realfastq" class="level3">
 <h3 class="anchored" data-anchor-id="validation-for-complete-genome-gfa-realfastq">Validation for Complete genome GFA (realfastq)</h3>
-<div id="204e5c21" class="cell" data-execution_count="2">
+<div id="e6abe829" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The simulated GFA was assembled from the chromosome only</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gt_comp <span class="op">=</span> mt.read_truth(mt.GT_COMPLETE, exclude<span class="op">=</span>[<span class="st">"ISSen10"</span>])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gfa_comp <span class="op">=</span> mt.read_report(<span class="st">"../result/realfastq/realfastq_report.tsv"</span>)</span>
@@ -616,7 +615,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="validation-for-complete-genome" class="level3">
 <h3 class="anchored" data-anchor-id="validation-for-complete-genome">Validation for Complete genome</h3>
-<div id="a2aba5ca" class="cell" data-execution_count="3">
+<div id="a80676f5" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The simulated GFA was assembled from the chromosome only</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fa <span class="op">=</span> mt.read_report(<span class="st">"../result/dimas_fa/dimas_fa_report.tsv"</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -746,7 +745,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The problem might arise from this code:</li>
 </ul>
 <p><code>if self.topology_engine is not None and getattr(self.topology_engine, 'mode', 'variant') == 'collapse':     contig_depth = self.genome.contig_depths.get(contig, 1.0)     metric_val = float(max(1, round(contig_depth / self.topology_engine.median_depth)))</code></p>
-<div id="af53d2fe" class="cell" data-execution_count="4">
+<div id="e76de481" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>read_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/dimas_fix_sim/dimas_fix_sim_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(read_gfa[read_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.endswith(<span class="st">"_stitched"</span>)][[<span class="st">"target"</span>, <span class="st">"copy_number"</span>]])</span>
@@ -778,7 +777,7 @@ Index: []</code></pre>
 </div>
 </div>
 <p>There are no stitched IS that has 1 copy.</p>
-<div id="d05b7f60" class="cell" data-execution_count="5">
+<div id="bac08291" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length and depth of every contig in the stitched path of ISEc8 and ISEc23.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># eris copy number = round(max depth on the path / median depth of all contigs)</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.io <span class="im">import</span> GenomeAssembly</span>
@@ -997,8 +996,8 @@ IS629: eris copy number = 2</code></pre>
 </div>
 </div>
 </div>
-<p>This is for the fastq:</p>
-<div id="6db353a8" class="cell" data-execution_count="6">
+<p><strong>This is for the fastq:</strong></p>
+<div id="a8557567" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length and depth of every contig in the stitched path of ISEc8 and ISEc23.</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># eris copy number = round(max depth on the path / median depth of all contigs)</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.io <span class="im">import</span> GenomeAssembly</span>
@@ -1008,7 +1007,7 @@ IS629: eris copy number = 2</code></pre>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>median_depth <span class="op">=</span> pd.Series(genome.contig_depths).median()</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Median depth of all contigs: </span><span class="sc">{</span>median_depth<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> is_name <span class="kw">in</span> [<span class="st">"ISEc8"</span>, <span class="st">"ISEc23"</span>, <span class="st">"IS629"</span>]:</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> is_name <span class="kw">in</span> [<span class="st">"ISEc8"</span>, <span class="st">"ISEc23"</span>, <span class="st">"IS629"</span>, <span class="st">"IS15DI"</span>]:  <span class="co"># IS15DI is on the plasmid, so only here</span></span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># match synonyms too (IS629 is reported as IS3411 here); stitched locus first</span></span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    loci <span class="op">=</span> read_fastq[read_fastq[<span class="st">"target"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> t: mt.is_group(mt.is_name(t))) <span class="op">==</span> mt.is_group(is_name)]</span>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    locus <span class="op">=</span> loci.sort_values(<span class="st">"target"</span>, key<span class="op">=</span><span class="kw">lambda</span> t: <span class="op">~</span>t.<span class="bu">str</span>.endswith(<span class="st">"_stitched"</span>)).iloc[<span class="dv">0</span>]</span>
@@ -1289,11 +1288,128 @@ IS629: eris copy number = 3</code></pre>
 
 </div>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+IS15DI: eris copy number = 14</code></pre>
 </div>
-</section>
-<section id="issfl10" class="level2">
-<h2 class="anchored" data-anchor-id="issfl10">ISSfl10</h2>
-<p>ISSfl10 is a bit unique due to the nodes were used in multiple IS such as</p>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Contig</th>
+<th data-quarto-table-cell-role="th">Length</th>
+<th data-quarto-table-cell-role="th">Depth</th>
+<th data-quarto-table-cell-role="th">Depth / median</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>4565</td>
+<td>72</td>
+<td>150.0</td>
+<td>3.09</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2421022</td>
+<td>114</td>
+<td>544.1</td>
+<td>11.21</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2408206</td>
+<td>297</td>
+<td>641.2</td>
+<td>13.21</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2421250</td>
+<td>551</td>
+<td>657.0</td>
+<td>13.53</td>
+<td>← max</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>12233</td>
+<td>72</td>
+<td>169.0</td>
+<td>3.48</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>2421282</td>
+<td>10148</td>
+<td>75.9</td>
+<td>1.56</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>2421022</td>
+<td>114</td>
+<td>544.1</td>
+<td>11.21</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>2408206</td>
+<td>297</td>
+<td>641.2</td>
+<td>13.21</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>2421250</td>
+<td>551</td>
+<td>657.0</td>
+<td>13.53</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>74865</td>
+<td>72</td>
+<td>172.0</td>
+<td>3.54</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>105537</td>
+<td>72</td>
+<td>101.0</td>
+<td>2.08</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">11</th>
+<td>2419936</td>
+<td>11220</td>
+<td>74.3</td>
+<td>1.53</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
 
 
 </section>
