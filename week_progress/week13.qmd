@@ -163,5 +163,7 @@ I tested several threshold:
 - 0.8: ISEc49 still there
 - 0.85: ISEc49 was gone, but it also removed ISEch14 (found in truth)
 
+**MAKE THE ISEc49 as a discussion point, not exclude them entirely** 
+
 # Precision recall with the flanks 
 

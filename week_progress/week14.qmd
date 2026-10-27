@@ -1,0 +1,91 @@
+---
+title: "Week 14 - Update"
+author: "Victoria Sjalim"
+date: "2026-10-26"
+format: html
+execute: 
+  freeze: auto
+---
+
+# What is fix?
+
+## Dimas fix the bug that related to duplication
+
+I pulled the github together from Dimas's and mine into the github copies. 
+`https://github.com/Victoriasja18/eris`
+
+## Precision Recall 
+
+All the validations, including GFA (only with names) and FA (with location) can be found in `matrix.py` script.
+
+### Validation for Simulated GFA
+```{bash}
+# uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/dimas_fa -m collapse --merge-synonyms
+```
+
+Validation after merging with min identity = 0.75
+```{python}
+import matrix as mt
+import pandas as pd
+
+# The simulated GFA was assembled from the chromosome only
+gt = mt.read_truth(mt.GT_CHROMOSOME, exclude=["ISSen10"])
+gfa = mt.read_report("../result/dimas_fix_sim/dimas_fix_sim_report.tsv")
+
+summaries = []
+for count_copies in (True, False):
+    summary, detail = mt.precision_recall_gfa(gt, gfa, count_copies=count_copies)
+    summaries.append(summary)
+
+display(pd.DataFrame(summaries))
+
+# IS where eris and the truth disagree (copies counted)
+_, detail = mt.precision_recall_gfa(gt, gfa, count_copies=True)
+detail[(detail["FP"] > 0) | (detail["FN"] > 0)]
+
+```
+
+Table comparison:
+
+- Before: `new_merge_id` (my stitching fix, before merging adimascf's fix)
+- After: `dimas_fix_sim` (after merging adimascf's fix)
+
+| Run    | Copies         | TP | FP | FN | Precision | Recall | F1    |
+|--------|----------------|----|----|----|-----------|--------|-------|
+| Before | Counted Copies | 47 | 20 | 1  | 0.701     | 0.979  | 0.817 |
+| After  | Counted Copies | 47 | 6  | 1  | 0.887     | 0.979  | 0.931 |
+| Before | Only by name   | 31 | 1  | 1  | 0.969     | 0.969  | 0.969 |
+| After  | Only by name   | 31 | 2  | 1  | 0.939     | 0.969  | 0.954 |
+
+### Validation for Complete genome GFA (realfastq)
+
+```{python}
+# The simulated GFA was assembled from the chromosome only
+gt_comp = mt.read_truth(mt.GT_COMPLETE, exclude=["ISSen10"])
+gfa_comp = mt.read_report("../result/realfastq/realfastq_report.tsv")
+
+summaries = []
+for count_copies in (True, False):
+    summary, detail = mt.precision_recall_gfa(gt_comp, gfa_comp, count_copies=count_copies)
+    summaries.append(summary)
+
+display(pd.DataFrame(summaries))
+
+# IS where eris and the truth disagree (copies counted)
+_, detail = mt.precision_recall_gfa(gt_comp, gfa_comp, count_copies=True)
+detail[(detail["FP"] > 0) | (detail["FN"] > 0)]
+
+```
+
+### Validation for Complete genome 
+
+```{python}
+# The simulated GFA was assembled from the chromosome only
+fa = mt.read_report("../result/dimas_fa/dimas_fa_report.tsv")
+
+# IS where eris and the truth disagree (copies counted)
+summary, detail = mt.precision_recall(gt_comp, fa, buffer=0)
+display(pd.DataFrame([summary]))
+detail[detail["result"] != "TP"][["contig", "start", "end", "name", "result", "fp_reason"]]
+
+```

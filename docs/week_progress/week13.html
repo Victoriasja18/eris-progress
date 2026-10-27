@@ -188,6 +188,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../week_progress/week13.html">
  <span class="dropdown-text">Week 13</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week14.html">
+ <span class="dropdown-text">Week 14</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -286,7 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>We have multiple IS merge together, however, there is still few IS that doesn’t merge</li>
 <li>Create a new python script named <code>synonyms.py</code></li>
 </ul>
-<div id="cd5539c8" class="cell" data-execution_count="1">
+<div id="633c7d79" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df_bfr <span class="op">=</span> pd.read_csv(<span class="st">"../../progress/result/no_merge_id/no_merge_id_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
@@ -580,7 +584,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="other-problem-found" class="level2">
 <h2 class="anchored" data-anchor-id="other-problem-found">Other Problem found</h2>
-<div id="d24d53e7" class="cell" data-execution_count="2">
+<div id="f4897c56" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># see if the synonyms merging was working</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[(df[<span class="st">"target"</span>].<span class="bu">str</span>.startswith(<span class="st">"IS1A"</span>, na<span class="op">=</span><span class="va">False</span>)) <span class="op">&amp;</span> (df[<span class="st">"context"</span>] <span class="op">==</span> <span class="st">"INSIDE"</span>)])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -630,7 +634,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>with copy number</li>
 </ul>
 <p>Each is done without and with synonyms. With synonyms, names that ISfinder lists as synonyms/isoforms (e.g.&nbsp;IS30 / IS30D) count as the same IS, so a different name for the same element is not counted as a miss.</p>
-<div id="2fc6c364" class="cell" data-execution_count="3">
+<div id="69db885f" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.synonyms <span class="im">import</span> SynonymResolver, fetch_isfinder_table</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>synonyms <span class="op">=</span> SynonymResolver(fetch_isfinder_table())</span>
@@ -704,7 +708,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="293b72c1" class="cell" data-execution_count="4">
+<div id="2baf46ee" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rows, errors <span class="op">=</span> [], {}</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> use_synonyms <span class="kw">in</span> (<span class="va">False</span>, <span class="va">True</span>):</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> copies_per_is(use_synonyms)</span>
@@ -955,6 +959,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>0.8: ISEc49 still there</li>
 <li>0.85: ISEc49 was gone, but it also removed ISEch14 (found in truth)</li>
 </ul>
+<p><strong>MAKE THE ISEc49 as a discussion point, not exclude them entirely</strong></p>
 </section>
 <section id="precision-recall-with-the-flanks" class="level1">
 <h1>Precision recall with the flanks</h1>
