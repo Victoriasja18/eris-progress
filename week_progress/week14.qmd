@@ -30,7 +30,7 @@ import pandas as pd
 
 # The simulated GFA was assembled from the chromosome only
 gt = mt.read_truth(mt.GT_CHROMOSOME, exclude=["ISSen10"])
-gfa = mt.read_report("../result/dimas_fix_sim/dimas_fix_sim_report.tsv")
+gfa = mt.read_report("../result/dimas_gfa/dimas_gfa_report.tsv")
 
 summaries = []
 for count_copies in (True, False):
@@ -47,15 +47,15 @@ detail[(detail["FP"] > 0) | (detail["FN"] > 0)]
 
 Table comparison:
 
-- Before: `new_merge_id` 
-- After: `dimas_fix_sim` 
+<!-- - Before: `new_merge_id` 
+- After: `dimas_fix_sim`  -->
 
-| Run    | Copies         | TP | FP | FN | Precision | Recall | F1    |
+<!-- | Run    | Copies         | TP | FP | FN | Precision | Recall | F1    |
 |--------|----------------|----|----|----|-----------|--------|-------|
 | Before | Counted Copies | 47 | 20 | 1  | 0.701     | 0.979  | 0.817 |
 | After  | Counted Copies | 47 | 6  | 1  | 0.887     | 0.979  | 0.931 |
 | Before | Only by name   | 31 | 1  | 1  | 0.969     | 0.969  | 0.969 |
-| After  | Only by name   | 31 | 2  | 1  | 0.939     | 0.969  | 0.954 |
+| After  | Only by name   | 31 | 2  | 1  | 0.939     | 0.969  | 0.954 | -->
 
 ### Validation for Complete genome GFA (realfastq)
 
@@ -164,6 +164,3 @@ for is_name in ["ISEc8", "ISEc23", "IS629"]:
     print(f"\n{is_name}: eris copy number = {locus['copy_number']:.0f}")
     display(path)
 ```
-
-## ISSfl10
-ISSfl10 is a bit unique due to the nodes were used in multiple IS such as 

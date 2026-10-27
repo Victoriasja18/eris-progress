@@ -294,13 +294,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="validation-for-simulated-gfa">Validation for Simulated GFA</h3>
 <pre class="{bash}"><code># uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/dimas_fa -m collapse --merge-synonyms</code></pre>
 <p>Validation after merging with min identity = 0.75</p>
-<div id="4294f76e" class="cell" data-execution_count="1">
+<div id="ad9cd2c2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The simulated GFA was assembled from the chromosome only</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gt <span class="op">=</span> mt.read_truth(mt.GT_CHROMOSOME, exclude<span class="op">=</span>[<span class="st">"ISSen10"</span>])</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>gfa <span class="op">=</span> mt.read_report(<span class="st">"../result/dimas_fix_sim/dimas_fix_sim_report.tsv"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>gfa <span class="op">=</span> mt.read_report(<span class="st">"../result/dimas_gfa/dimas_gfa_report.tsv"</span>)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>summaries <span class="op">=</span> []</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> count_copies <span class="kw">in</span> (<span class="va">True</span>, <span class="va">False</span>):</span>
@@ -334,21 +334,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th data-quarto-table-cell-role="th">0</th>
 <td>Counted Copies</td>
 <td>47</td>
-<td>6</td>
+<td>4</td>
 <td>1</td>
-<td>0.887</td>
+<td>0.922</td>
 <td>0.979</td>
-<td>0.931</td>
+<td>0.949</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>Only by name</td>
 <td>31</td>
-<td>2</td>
 <td>1</td>
-<td>0.939</td>
+<td>1</td>
 <td>0.969</td>
-<td>0.954</td>
+<td>0.969</td>
+<td>0.969</td>
 </tr>
 </tbody>
 </table>
@@ -413,16 +413,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>1</td>
 <td>ISSen1</td>
 </tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">31</th>
-<td>ISSfl10</td>
-<td>0</td>
-<td>2</td>
-<td>0</td>
-<td>2</td>
-<td>0</td>
-<td>ISSfl10</td>
-</tr>
 </tbody>
 </table>
 
@@ -430,70 +420,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Table comparison:</p>
-<ul>
-<li>Before: <code>new_merge_id</code></li>
-<li>After: <code>dimas_fix_sim</code></li>
-</ul>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Run</th>
-<th>Copies</th>
-<th>TP</th>
-<th>FP</th>
-<th>FN</th>
-<th>Precision</th>
-<th>Recall</th>
-<th>F1</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Before</td>
-<td>Counted Copies</td>
-<td>47</td>
-<td>20</td>
-<td>1</td>
-<td>0.701</td>
-<td>0.979</td>
-<td>0.817</td>
-</tr>
-<tr class="even">
-<td>After</td>
-<td>Counted Copies</td>
-<td>47</td>
-<td>6</td>
-<td>1</td>
-<td>0.887</td>
-<td>0.979</td>
-<td>0.931</td>
-</tr>
-<tr class="odd">
-<td>Before</td>
-<td>Only by name</td>
-<td>31</td>
-<td>1</td>
-<td>1</td>
-<td>0.969</td>
-<td>0.969</td>
-<td>0.969</td>
-</tr>
-<tr class="even">
-<td>After</td>
-<td>Only by name</td>
-<td>31</td>
-<td>2</td>
-<td>1</td>
-<td>0.939</td>
-<td>0.969</td>
-<td>0.954</td>
-</tr>
-</tbody>
-</table>
+<!-- - Before: `new_merge_id` 
+- After: `dimas_fix_sim`  -->
+<!-- | Run    | Copies         | TP | FP | FN | Precision | Recall | F1    |
+|--------|----------------|----|----|----|-----------|--------|-------|
+| Before | Counted Copies | 47 | 20 | 1  | 0.701     | 0.979  | 0.817 |
+| After  | Counted Copies | 47 | 6  | 1  | 0.887     | 0.979  | 0.931 |
+| Before | Only by name   | 31 | 1  | 1  | 0.969     | 0.969  | 0.969 |
+| After  | Only by name   | 31 | 2  | 1  | 0.939     | 0.969  | 0.954 | -->
 </section>
 <section id="validation-for-complete-genome-gfa-realfastq" class="level3">
 <h3 class="anchored" data-anchor-id="validation-for-complete-genome-gfa-realfastq">Validation for Complete genome GFA (realfastq)</h3>
-<div id="bd37a50a" class="cell" data-execution_count="2">
+<div id="204e5c21" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The simulated GFA was assembled from the chromosome only</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gt_comp <span class="op">=</span> mt.read_truth(mt.GT_COMPLETE, exclude<span class="op">=</span>[<span class="st">"ISSen10"</span>])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gfa_comp <span class="op">=</span> mt.read_report(<span class="st">"../result/realfastq/realfastq_report.tsv"</span>)</span>
@@ -530,21 +468,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th data-quarto-table-cell-role="th">0</th>
 <td>Counted Copies</td>
 <td>57</td>
-<td>15</td>
+<td>13</td>
 <td>3</td>
-<td>0.792</td>
+<td>0.814</td>
 <td>0.950</td>
-<td>0.864</td>
+<td>0.877</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>Only by name</td>
 <td>33</td>
-<td>2</td>
 <td>1</td>
-<td>0.943</td>
+<td>1</td>
 <td>0.971</td>
-<td>0.957</td>
+<td>0.971</td>
+<td>0.971</td>
 </tr>
 </tbody>
 </table>
@@ -660,17 +598,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>ISSen1</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">32</th>
-<td>ISSfl10</td>
-<td>0</td>
-<td>2</td>
-<td>0</td>
-<td>2</td>
-<td>0</td>
-<td>ISSfl10</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">35</th>
+<th data-quarto-table-cell-role="th">34</th>
 <td>Tn610</td>
 <td>1</td>
 <td>2</td>
@@ -688,7 +616,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="validation-for-complete-genome" class="level3">
 <h3 class="anchored" data-anchor-id="validation-for-complete-genome">Validation for Complete genome</h3>
-<div id="a0811083" class="cell" data-execution_count="3">
+<div id="a2aba5ca" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The simulated GFA was assembled from the chromosome only</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fa <span class="op">=</span> mt.read_report(<span class="st">"../result/dimas_fa/dimas_fa_report.tsv"</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -818,7 +746,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The problem might arise from this code:</li>
 </ul>
 <p><code>if self.topology_engine is not None and getattr(self.topology_engine, 'mode', 'variant') == 'collapse':     contig_depth = self.genome.contig_depths.get(contig, 1.0)     metric_val = float(max(1, round(contig_depth / self.topology_engine.median_depth)))</code></p>
-<div id="c52ece5d" class="cell" data-execution_count="4">
+<div id="af53d2fe" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>read_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/dimas_fix_sim/dimas_fix_sim_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(read_gfa[read_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.endswith(<span class="st">"_stitched"</span>)][[<span class="st">"target"</span>, <span class="st">"copy_number"</span>]])</span>
@@ -850,7 +778,7 @@ Index: []</code></pre>
 </div>
 </div>
 <p>There are no stitched IS that has 1 copy.</p>
-<div id="d78c9066" class="cell" data-execution_count="5">
+<div id="d05b7f60" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length and depth of every contig in the stitched path of ISEc8 and ISEc23.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># eris copy number = round(max depth on the path / median depth of all contigs)</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.io <span class="im">import</span> GenomeAssembly</span>
@@ -1070,7 +998,7 @@ IS629: eris copy number = 2</code></pre>
 </div>
 </div>
 <p>This is for the fastq:</p>
-<div id="e91deb62" class="cell" data-execution_count="6">
+<div id="6db353a8" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length and depth of every contig in the stitched path of ISEc8 and ISEc23.</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># eris copy number = round(max depth on the path / median depth of all contigs)</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.io <span class="im">import</span> GenomeAssembly</span>
@@ -1245,10 +1173,18 @@ ISEc23: eris copy number = 4</code></pre>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>2420362</td>
-<td>10263</td>
-<td>77.7</td>
-<td>1.60</td>
+<td>225901</td>
+<td>73</td>
+<td>43.0</td>
+<td>0.89</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2420376</td>
+<td>9951</td>
+<td>47.2</td>
+<td>0.97</td>
 <td></td>
 </tr>
 </tbody>
