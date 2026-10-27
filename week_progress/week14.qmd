@@ -47,8 +47,8 @@ detail[(detail["FP"] > 0) | (detail["FN"] > 0)]
 
 Table comparison:
 
-- Before: `new_merge_id` (my stitching fix, before merging adimascf's fix)
-- After: `dimas_fix_sim` (after merging adimascf's fix)
+- Before: `new_merge_id` 
+- After: `dimas_fix_sim` 
 
 | Run    | Copies         | TP | FP | FN | Precision | Recall | F1    |
 |--------|----------------|----|----|----|-----------|--------|-------|
@@ -89,3 +89,81 @@ display(pd.DataFrame([summary]))
 detail[detail["result"] != "TP"][["contig", "start", "end", "name", "result", "fp_reason"]]
 
 ```
+
+
+# Summary of IS to investigate
+
+## ISec8 & IS629
+- Expected to be only 1 copy, but found 2 copies in the complete genome assembly. 
+- The problem might arise from this code:
+
+`if self.topology_engine is not None and getattr(self.topology_engine, 'mode', 'variant') == 'collapse':
+    contig_depth = self.genome.contig_depths.get(contig, 1.0)
+    metric_val = float(max(1, round(contig_depth / self.topology_engine.median_depth)))`
+
+```{python}
+read_gfa = pd.read_csv("../result/dimas_fix_sim/dimas_fix_sim_report.tsv", sep="\t")
+
+print(read_gfa[read_gfa["target"].str.endswith("_stitched")][["target", "copy_number"]])
+
+print("Any IS that was stitched with copy number == 1:")
+print(read_gfa[
+    read_gfa["target"].str.endswith("stitched") &
+    (read_gfa["copy_number"] == 1)
+][["target", "copy_number"]])
+```
+
+There are no stitched IS that has 1 copy.
+
+```{python}
+# Length and depth of every contig in the stitched path of ISEc8 and ISEc23.
+# eris copy number = round(max depth on the path / median depth of all contigs)
+from eris.io import GenomeAssembly
+
+genome = GenomeAssembly.from_file(str(mt.GFA))
+median_depth = pd.Series(genome.contig_depths).median()
+print(f"Median depth of all contigs: {median_depth:.1f}")
+
+for is_name in ["ISEc8", "ISEc23", "IS629"]:
+    # match synonyms too (IS629 is reported as IS3411 here); stitched locus first
+    loci = read_gfa[read_gfa["target"].map(lambda t: mt.is_group(mt.is_name(t))) == mt.is_group(is_name)]
+    locus = loci.sort_values("target", key=lambda t: ~t.str.endswith("_stitched")).iloc[0]
+    path = pd.DataFrame({"Contig": locus["locus_contig"].split("|")})
+    path["Length"] = path["Contig"].map(lambda c: len(genome[c]))
+    path["Depth"] = path["Contig"].map(genome.contig_depths).round(1)
+    path["Depth / median"] = (path["Depth"] / median_depth).round(2)
+    path[""] = ""
+    path.loc[path["Depth"].idxmax(), ""] = "← max"
+
+    print(f"\n{is_name}: eris copy number = {locus['copy_number']:.0f}")
+    display(path)
+```
+
+This is for the fastq:
+```{python}
+# Length and depth of every contig in the stitched path of ISEc8 and ISEc23.
+# eris copy number = round(max depth on the path / median depth of all contigs)
+from eris.io import GenomeAssembly
+
+read_fastq = pd.read_csv("../result/realfastq/realfastq_report.tsv", sep="\t")
+genome = GenomeAssembly.from_file(str(mt.GFA_FASTQ))
+median_depth = pd.Series(genome.contig_depths).median()
+print(f"Median depth of all contigs: {median_depth:.1f}")
+
+for is_name in ["ISEc8", "ISEc23", "IS629"]:
+    # match synonyms too (IS629 is reported as IS3411 here); stitched locus first
+    loci = read_fastq[read_fastq["target"].map(lambda t: mt.is_group(mt.is_name(t))) == mt.is_group(is_name)]
+    locus = loci.sort_values("target", key=lambda t: ~t.str.endswith("_stitched")).iloc[0]
+    path = pd.DataFrame({"Contig": locus["locus_contig"].split("|")})
+    path["Length"] = path["Contig"].map(lambda c: len(genome[c]))
+    path["Depth"] = path["Contig"].map(genome.contig_depths).round(1)
+    path["Depth / median"] = (path["Depth"] / median_depth).round(2)
+    path[""] = ""
+    path.loc[path["Depth"].idxmax(), ""] = "← max"
+
+    print(f"\n{is_name}: eris copy number = {locus['copy_number']:.0f}")
+    display(path)
+```
+
+## ISSfl10
+ISSfl10 is a bit unique due to the nodes were used in multiple IS such as 

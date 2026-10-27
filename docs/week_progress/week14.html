@@ -239,6 +239,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#validation-for-complete-genome" id="toc-validation-for-complete-genome" class="nav-link" data-scroll-target="#validation-for-complete-genome">Validation for Complete genome</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#summary-of-is-to-investigate" id="toc-summary-of-is-to-investigate" class="nav-link" data-scroll-target="#summary-of-is-to-investigate">Summary of IS to investigate</a>
+  <ul class="collapse">
+  <li><a href="#isec8-is629" id="toc-isec8-is629" class="nav-link" data-scroll-target="#isec8-is629">ISec8 &amp; IS629</a></li>
+  <li><a href="#issfl10" id="toc-issfl10" class="nav-link" data-scroll-target="#issfl10">ISSfl10</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -289,7 +294,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="validation-for-simulated-gfa">Validation for Simulated GFA</h3>
 <pre class="{bash}"><code># uv run eris -i ../data/EC958_complete_genome.fasta -d ../data/IS_n.mmi -o ../progress/result/dimas_fa -m collapse --merge-synonyms</code></pre>
 <p>Validation after merging with min identity = 0.75</p>
-<div id="7f50175b" class="cell" data-execution_count="1">
+<div id="4294f76e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -426,8 +431,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Table comparison:</p>
 <ul>
-<li>Before: <code>new_merge_id</code> (my stitching fix, before merging adimascf’s fix)</li>
-<li>After: <code>dimas_fix_sim</code> (after merging adimascf’s fix)</li>
+<li>Before: <code>new_merge_id</code></li>
+<li>After: <code>dimas_fix_sim</code></li>
 </ul>
 <table class="caption-top table">
 <thead>
@@ -488,7 +493,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="validation-for-complete-genome-gfa-realfastq" class="level3">
 <h3 class="anchored" data-anchor-id="validation-for-complete-genome-gfa-realfastq">Validation for Complete genome GFA (realfastq)</h3>
-<div id="54a45ff5" class="cell" data-execution_count="2">
+<div id="bd37a50a" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The simulated GFA was assembled from the chromosome only</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>gt_comp <span class="op">=</span> mt.read_truth(mt.GT_COMPLETE, exclude<span class="op">=</span>[<span class="st">"ISSen10"</span>])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gfa_comp <span class="op">=</span> mt.read_report(<span class="st">"../result/realfastq/realfastq_report.tsv"</span>)</span>
@@ -683,7 +688,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="validation-for-complete-genome" class="level3">
 <h3 class="anchored" data-anchor-id="validation-for-complete-genome">Validation for Complete genome</h3>
-<div id="becc9a63" class="cell" data-execution_count="3">
+<div id="a0811083" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The simulated GFA was assembled from the chromosome only</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fa <span class="op">=</span> mt.read_report(<span class="st">"../result/dimas_fa/dimas_fa_report.tsv"</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -801,9 +806,560 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+</section>
+<section id="summary-of-is-to-investigate" class="level1">
+<h1>Summary of IS to investigate</h1>
+<section id="isec8-is629" class="level2">
+<h2 class="anchored" data-anchor-id="isec8-is629">ISec8 &amp; IS629</h2>
+<ul>
+<li>Expected to be only 1 copy, but found 2 copies in the complete genome assembly.</li>
+<li>The problem might arise from this code:</li>
+</ul>
+<p><code>if self.topology_engine is not None and getattr(self.topology_engine, 'mode', 'variant') == 'collapse':     contig_depth = self.genome.contig_depths.get(contig, 1.0)     metric_val = float(max(1, round(contig_depth / self.topology_engine.median_depth)))</code></p>
+<div id="c52ece5d" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>read_gfa <span class="op">=</span> pd.read_csv(<span class="st">"../result/dimas_fix_sim/dimas_fix_sim_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(read_gfa[read_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.endswith(<span class="st">"_stitched"</span>)][[<span class="st">"target"</span>, <span class="st">"copy_number"</span>]])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Any IS that was stitched with copy number == 1:"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(read_gfa[</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    read_gfa[<span class="st">"target"</span>].<span class="bu">str</span>.endswith(<span class="st">"stitched"</span>) <span class="op">&amp;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    (read_gfa[<span class="st">"copy_number"</span>] <span class="op">==</span> <span class="dv">1</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>][[<span class="st">"target"</span>, <span class="st">"copy_number"</span>]])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           target  copy_number
+0    ISEc23_IS66_unknown_stitched          3.0
+1    ISEc23_IS66_unknown_stitched          3.0
+2    ISEc23_IS66_unknown_stitched          3.0
+3    ISEc23_IS66_unknown_stitched          3.0
+4    ISEc23_IS66_unknown_stitched          3.0
+..                            ...          ...
+132        IS600_IS3_IS3_stitched          2.0
+133        IS600_IS3_IS3_stitched          2.0
+134        IS600_IS3_IS3_stitched          2.0
+135        IS600_IS3_IS3_stitched          2.0
+136        IS600_IS3_IS3_stitched          2.0
+
+[137 rows x 2 columns]
+Any IS that was stitched with copy number == 1:
+Empty DataFrame
+Columns: [target, copy_number]
+Index: []</code></pre>
+</div>
+</div>
+<p>There are no stitched IS that has 1 copy.</p>
+<div id="d78c9066" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length and depth of every contig in the stitched path of ISEc8 and ISEc23.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># eris copy number = round(max depth on the path / median depth of all contigs)</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.io <span class="im">import</span> GenomeAssembly</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>genome <span class="op">=</span> GenomeAssembly.from_file(<span class="bu">str</span>(mt.GFA))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>median_depth <span class="op">=</span> pd.Series(genome.contig_depths).median()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Median depth of all contigs: </span><span class="sc">{</span>median_depth<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> is_name <span class="kw">in</span> [<span class="st">"ISEc8"</span>, <span class="st">"ISEc23"</span>, <span class="st">"IS629"</span>]:</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># match synonyms too (IS629 is reported as IS3411 here); stitched locus first</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    loci <span class="op">=</span> read_gfa[read_gfa[<span class="st">"target"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> t: mt.is_group(mt.is_name(t))) <span class="op">==</span> mt.is_group(is_name)]</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    locus <span class="op">=</span> loci.sort_values(<span class="st">"target"</span>, key<span class="op">=</span><span class="kw">lambda</span> t: <span class="op">~</span>t.<span class="bu">str</span>.endswith(<span class="st">"_stitched"</span>)).iloc[<span class="dv">0</span>]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> pd.DataFrame({<span class="st">"Contig"</span>: locus[<span class="st">"locus_contig"</span>].split(<span class="st">"|"</span>)})</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    path[<span class="st">"Length"</span>] <span class="op">=</span> path[<span class="st">"Contig"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> c: <span class="bu">len</span>(genome[c]))</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    path[<span class="st">"Depth"</span>] <span class="op">=</span> path[<span class="st">"Contig"</span>].<span class="bu">map</span>(genome.contig_depths).<span class="bu">round</span>(<span class="dv">1</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    path[<span class="st">"Depth / median"</span>] <span class="op">=</span> (path[<span class="st">"Depth"</span>] <span class="op">/</span> median_depth).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    path[<span class="st">""</span>] <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    path.loc[path[<span class="st">"Depth"</span>].idxmax(), <span class="st">""</span>] <span class="op">=</span> <span class="st">"← max"</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="sc">{</span>is_name<span class="sc">}</span><span class="ss">: eris copy number = </span><span class="sc">{</span>locus[<span class="st">'copy_number'</span>]<span class="sc">:.0f}</span><span class="ss">"</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    display(path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Median depth of all contigs: 34.0
+
+ISEc8: eris copy number = 2</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Contig</th>
+<th data-quarto-table-cell-role="th">Length</th>
+<th data-quarto-table-cell-role="th">Depth</th>
+<th data-quarto-table-cell-role="th">Depth / median</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1135873</td>
+<td>159</td>
+<td>65.1</td>
+<td>1.91</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1236644</td>
+<td>965</td>
+<td>33.4</td>
+<td>0.98</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>1235120</td>
+<td>364</td>
+<td>70.3</td>
+<td>2.07</td>
+<td>← max</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>1234604</td>
+<td>223</td>
+<td>32.9</td>
+<td>0.97</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>1240608</td>
+<td>193</td>
+<td>69.1</td>
+<td>2.03</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>1244320</td>
+<td>3395</td>
+<td>32.5</td>
+<td>0.96</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ISEc23: eris copy number = 3</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Contig</th>
+<th data-quarto-table-cell-role="th">Length</th>
+<th data-quarto-table-cell-role="th">Depth</th>
+<th data-quarto-table-cell-role="th">Depth / median</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>33177</td>
+<td>112</td>
+<td>75.0</td>
+<td>2.21</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1244700</td>
+<td>1326</td>
+<td>98.8</td>
+<td>2.91</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>1159225</td>
+<td>223</td>
+<td>74.1</td>
+<td>2.18</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>1244816</td>
+<td>1135</td>
+<td>101.4</td>
+<td>2.98</td>
+<td>← max</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>1176191</td>
+<td>182</td>
+<td>65.5</td>
+<td>1.93</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>1245048</td>
+<td>15025</td>
+<td>34.3</td>
+<td>1.01</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+IS629: eris copy number = 2</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Contig</th>
+<th data-quarto-table-cell-role="th">Length</th>
+<th data-quarto-table-cell-role="th">Depth</th>
+<th data-quarto-table-cell-role="th">Depth / median</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1243600</td>
+<td>18930</td>
+<td>33.8</td>
+<td>0.99</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1002621</td>
+<td>134</td>
+<td>73.9</td>
+<td>2.17</td>
+<td>← max</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>1244936</td>
+<td>3377</td>
+<td>33.9</td>
+<td>1.00</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>This is for the fastq:</p>
+<div id="e91deb62" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length and depth of every contig in the stitched path of ISEc8 and ISEc23.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># eris copy number = round(max depth on the path / median depth of all contigs)</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> eris.io <span class="im">import</span> GenomeAssembly</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>read_fastq <span class="op">=</span> pd.read_csv(<span class="st">"../result/realfastq/realfastq_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>genome <span class="op">=</span> GenomeAssembly.from_file(<span class="bu">str</span>(mt.GFA_FASTQ))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>median_depth <span class="op">=</span> pd.Series(genome.contig_depths).median()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Median depth of all contigs: </span><span class="sc">{</span>median_depth<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> is_name <span class="kw">in</span> [<span class="st">"ISEc8"</span>, <span class="st">"ISEc23"</span>, <span class="st">"IS629"</span>]:</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># match synonyms too (IS629 is reported as IS3411 here); stitched locus first</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    loci <span class="op">=</span> read_fastq[read_fastq[<span class="st">"target"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> t: mt.is_group(mt.is_name(t))) <span class="op">==</span> mt.is_group(is_name)]</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    locus <span class="op">=</span> loci.sort_values(<span class="st">"target"</span>, key<span class="op">=</span><span class="kw">lambda</span> t: <span class="op">~</span>t.<span class="bu">str</span>.endswith(<span class="st">"_stitched"</span>)).iloc[<span class="dv">0</span>]</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> pd.DataFrame({<span class="st">"Contig"</span>: locus[<span class="st">"locus_contig"</span>].split(<span class="st">"|"</span>)})</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    path[<span class="st">"Length"</span>] <span class="op">=</span> path[<span class="st">"Contig"</span>].<span class="bu">map</span>(<span class="kw">lambda</span> c: <span class="bu">len</span>(genome[c]))</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    path[<span class="st">"Depth"</span>] <span class="op">=</span> path[<span class="st">"Contig"</span>].<span class="bu">map</span>(genome.contig_depths).<span class="bu">round</span>(<span class="dv">1</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    path[<span class="st">"Depth / median"</span>] <span class="op">=</span> (path[<span class="st">"Depth"</span>] <span class="op">/</span> median_depth).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    path[<span class="st">""</span>] <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    path.loc[path[<span class="st">"Depth"</span>].idxmax(), <span class="st">""</span>] <span class="op">=</span> <span class="st">"← max"</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="sc">{</span>is_name<span class="sc">}</span><span class="ss">: eris copy number = </span><span class="sc">{</span>locus[<span class="st">'copy_number'</span>]<span class="sc">:.0f}</span><span class="ss">"</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    display(path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Median depth of all contigs: 48.6
+
+ISEc8: eris copy number = 2</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Contig</th>
+<th data-quarto-table-cell-role="th">Length</th>
+<th data-quarto-table-cell-role="th">Depth</th>
+<th data-quarto-table-cell-role="th">Depth / median</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2315248</td>
+<td>159</td>
+<td>80.5</td>
+<td>1.66</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2411647</td>
+<td>885</td>
+<td>39.3</td>
+<td>0.81</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2420536</td>
+<td>364</td>
+<td>83.0</td>
+<td>1.71</td>
+<td>← max</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2369682</td>
+<td>143</td>
+<td>35.2</td>
+<td>0.72</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2404214</td>
+<td>193</td>
+<td>81.9</td>
+<td>1.69</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>2420374</td>
+<td>143</td>
+<td>39.1</td>
+<td>0.81</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>630745</td>
+<td>81</td>
+<td>43.7</td>
+<td>0.90</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>2394944</td>
+<td>683</td>
+<td>52.8</td>
+<td>1.09</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>1610728</td>
+<td>92</td>
+<td>58.6</td>
+<td>1.21</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>2416727</td>
+<td>9226</td>
+<td>45.9</td>
+<td>0.95</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ISEc23: eris copy number = 4</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Contig</th>
+<th data-quarto-table-cell-role="th">Length</th>
+<th data-quarto-table-cell-role="th">Depth</th>
+<th data-quarto-table-cell-role="th">Depth / median</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>99131</td>
+<td>72</td>
+<td>189.0</td>
+<td>3.89</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2420614</td>
+<td>2462</td>
+<td>198.1</td>
+<td>4.08</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2420442</td>
+<td>142</td>
+<td>204.1</td>
+<td>4.20</td>
+<td>← max</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2420362</td>
+<td>10263</td>
+<td>77.7</td>
+<td>1.60</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+IS629: eris copy number = 3</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Contig</th>
+<th data-quarto-table-cell-role="th">Length</th>
+<th data-quarto-table-cell-role="th">Depth</th>
+<th data-quarto-table-cell-role="th">Depth / median</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2419478</td>
+<td>18754</td>
+<td>43.2</td>
+<td>0.89</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2264833</td>
+<td>134</td>
+<td>78.4</td>
+<td>1.61</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2380052</td>
+<td>388</td>
+<td>50.4</td>
+<td>1.04</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2393385</td>
+<td>90</td>
+<td>119.5</td>
+<td>2.46</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2402724</td>
+<td>2781</td>
+<td>49.9</td>
+<td>1.03</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>2400660</td>
+<td>96</td>
+<td>99.2</td>
+<td>2.04</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>2417357</td>
+<td>172</td>
+<td>57.6</td>
+<td>1.19</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>2238418</td>
+<td>102</td>
+<td>133.5</td>
+<td>2.75</td>
+<td>← max</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>2420468</td>
+<td>244</td>
+<td>46.3</td>
+<td>0.95</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="issfl10" class="level2">
+<h2 class="anchored" data-anchor-id="issfl10">ISSfl10</h2>
+<p>ISSfl10 is a bit unique due to the nodes were used in multiple IS such as</p>
+
+
 </section>
 </section>
 
