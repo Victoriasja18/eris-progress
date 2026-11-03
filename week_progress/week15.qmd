@@ -23,8 +23,7 @@ Scores from [eris-validation](https://github.com/Victoriasja18/eris-validation):
 Truth: `ec958_IS_cds_relations.tsv` (117 relations; 94 on the chromosome for the simulated GFA).
 eris: Dimas's main (`e4c6dbd`), collapse mode, `--hops 3`, `min_coverage 0.30`.
 
-```{bash}
-#| eval: false
+```bash
 cd ../../eris-validation
 uv run snakemake --cores 4
 ```
