@@ -19,6 +19,7 @@ import csv
 from collections import defaultdict
 from functools import cache
 from pathlib import Path
+import subprocess
 
 import numpy as np
 import pandas as pd
@@ -91,6 +92,37 @@ def read_report(report):
     })
     pred["group"] = pred["name"].map(is_group)
     return pred.reset_index(drop=True)
+
+# Convert fasta genome to shovill
+def fasta_to_gfa(genome: str, outdir: str = "shovill_out",
+                 coverage: int = 50, read_len: int = 150,
+                 cpus: int = 8, ram: int = 16) -> Path:
+    """Simulate paired-end reads from a genome FASTA and assemble them with shovill (SPAdes) to get a GFA."""
+    reads = Path(outdir) / "reads"
+    reads.mkdir(parents=True, exist_ok=True)
+    prefix = reads / "sim_R"
+
+    # 1. Simulate Illumina paired-end reads
+    subprocess.run([
+        "art_illumina", "-ss", "HS25", "-i", genome, "-p",
+        "-l", str(read_len), "-f", str(coverage),
+        "-m", "500", "-s", "10", "-na", "-o", str(prefix),
+    ], check=True)
+
+    # 2. Assemble with shovill; only the spades assembler writes contigs.gfa
+    asm = Path(outdir) / "assembly"
+    subprocess.run([
+        "shovill",
+        "--R1", f"{prefix}1.fq", "--R2", f"{prefix}2.fq",
+        "--outdir", str(asm), "--assembler", "spades",
+        "--cpus", str(cpus), "--ram", str(ram), "--force",
+    ], check=True)
+
+    gfa = asm / "contigs.gfa"
+    if not gfa.exists():
+        raise FileNotFoundError(f"shovill finished but {gfa} was not produced")
+    return gfa
+
 
 
 # ---- Precision / recall ----------------------------------------------------------------------------------------------
@@ -172,3 +204,4 @@ def precision_recall_gfa(truth, pred, count_copies=True):
     detail = counts.rename_axis("IS").reset_index().sort_values("IS", ignore_index=True)
 
     return summary, detail
+
