@@ -1,0 +1,111 @@
+---
+title: "Week 15 - Update"
+author: "Victoria Sjalim"
+date: "2026-11-26"
+format: html
+execute: 
+  freeze: auto
+---
+
+# Overview 
+
+- Have a good grill me sessions for CDS-IS external validations with Claude
+- Merge pull with Dimas's pipeline (notes for Dimas please keep me updated with your changes)
+- Made new github repo for eris validations
+`https://github.com/Victoriasja18/eris-validation`
+
+How to navigate these repo:
+
+
+# IS–CDS relation validation
+
+Scores from [eris-validation](https://github.com/Victoriasja18/eris-validation): for each IS, did eris report the right CDS **upstream** and **downstream**, at the right **distance**, with the right **effect** (disrupted)?
+Truth: `ec958_IS_cds_relations.tsv` (117 relations; 94 on the chromosome for the simulated GFA).
+eris: Dimas's main (`e4c6dbd`), collapse mode, `--hops 3`, `min_coverage 0.30`.
+
+```{bash}
+#| eval: false
+cd ../../eris-validation
+uv run snakemake --cores 4
+```
+
+```{python}
+import pandas as pd
+
+RESULTS = "../result/eris_validation"
+ASSEMBLIES = {"complete": "Complete genome (FASTA)", "simulated": "Simulated GFA", "real": "Real-reads GFA"}
+
+metrics = pd.read_csv(f"{RESULTS}/metrics.tsv", sep="\t")
+details = pd.read_csv(f"{RESULTS}/details.tsv", sep="\t")
+for table in (metrics, details):
+    table["assembly"] = table["assembly_type"].map(ASSEMBLIES)
+```
+
+## Precision, recall and F1
+
+Side: recall is over the truth relations; precision is over eris's nearest flank on each side (per graph branch).
+A flank on the wrong side counts as a miss on its true side and a false call on the side reported.
+Distance: per band (overlapping, near 0–150 bp, far), over relations found on their side.
+Effect: disrupted only; eris `TRUNCATED` counts as disrupted.
+
+Recall = TP / (TP + FN) over the truth relations. Precision = TP_calls / (TP_calls + FP) over eris's calls; for side and
+effect these are eris's nearest flanks, so TP_calls can be lower than TP (one collapsed IS locus can find several truth
+relations, e.g. the flanks of several copies, but has only one nearest flank per side per branch).
+
+```{python}
+(metrics.drop(columns=["genome", "assembly_type"])
+        .set_index(["assembly", "dimension", "class"])
+        .style.format("{:.2f}", subset=["precision", "recall", "f1"], na_rep="–"))
+```
+
+```{python}
+other = {("side", "both", "pooled_recall"): "Pooled recall (either side)",
+         ("side", "both", "wrong_side"): "Found only on the wrong side",
+         ("side", "both", "miss_gene"): "Misses: wrong/absent gene",
+         ("side", "both", "miss_budget"): "Misses: hops budget (found with --hops 20)",
+         ("side", "both", "unplaceable"): "Flank genes not placeable on the reference",
+         ("distance", "all", "agreement"): "Distance band agreement",
+         ("distance", "all", "median_abs_error"): "Median distance error (bp)",
+         ("distance", "all", "within_10bp"): "Distance within 10 bp"}
+value = details.set_index(["dimension", "class", "metric", "assembly"])["value"]
+summary = pd.DataFrame({name: [value[(*k, name)] for k in other] for name in ASSEMBLIES.values()},
+                       index=list(other.values()))
+counts = [name for name in summary.index if not name.startswith(("Pooled", "Distance", "Median"))]
+summary.style.format("{:.2f}").format("{:.0f}", subset=pd.IndexSlice[counts, :])
+```
+
+## Confusion matrices
+
+Rows are the truth, columns are eris. `no_truth` = a flank eris reported that is in no truth relation.
+
+```{python}
+from IPython.display import display, Markdown
+
+for kind in ("side", "distance", "effect"):
+    display(Markdown(f"### {kind.capitalize()}"))
+    for a, name in ASSEMBLIES.items():
+        display(Markdown(f"**{name}**"))
+        display(pd.read_csv(f"{RESULTS}/EC958/{a}/{kind}_confusion.tsv", sep="\t", index_col=0))
+```
+
+## Which CDS were predicted wrong
+
+Every truth relation eris missed (`FN`, `FN_wrong_side`), every false first flank (`FP`, `FP_wrong_side`,
+`FP_unplaceable`), and found relations whose distance band or effect is wrong.
+Full tables: `progress/result/eris_validation/EC958/<assembly>/relations.tsv`; the quick summary is `progress/result/eris_validation/metrics.tsv`.
+
+```{python}
+relations = pd.concat([pd.read_csv(f"{RESULTS}/EC958/{a}/relations.tsv", sep="\t").assign(assembly=name)
+                       for a, name in ASSEMBLIES.items()], ignore_index=True)
+wrong = relations[(relations["status"] != "TP") | (relations["distance_band_ok"] == False)
+                  | (relations["effect_ok"] == False)]
+pd.crosstab(wrong["status"], wrong["assembly"])[list(ASSEMBLIES.values())]
+```
+
+```{python}
+columns = ["assembly", "status", "side", "is_id", "locus_tag", "gene", "product", "truth_distance", "truth_effect",
+           "eris_target", "eris_gene", "eris_side", "eris_distance", "eris_effect", "distance_band_ok", "effect_ok",
+           "miss_cause"]
+pd.set_option("display.max_rows", None, "display.max_colwidth", None)
+wrong[columns].sort_values(["assembly", "status", "is_id"]).reset_index(drop=True).fillna("")
+```

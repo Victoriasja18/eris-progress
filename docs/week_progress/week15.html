@@ -1,0 +1,8329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Victoria Sjalim">
+<meta name="dcterms.date" content="2026-11-26">
+
+<title>Week 15 - Update – Eris Progress</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-209258432f336cc574c0f847bd0a7210.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Eris Progress</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-weekly-updates" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Weekly Updates</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-weekly-updates">    
+        <li>
+    <a class="dropdown-item" href="../week_progress/week1.html">
+ <span class="dropdown-text">Week 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week2.html">
+ <span class="dropdown-text">Week 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week3.html">
+ <span class="dropdown-text">Week 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week4.html">
+ <span class="dropdown-text">Week 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week5.html">
+ <span class="dropdown-text">Week 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week6.html">
+ <span class="dropdown-text">Week 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week7.html">
+ <span class="dropdown-text">Week 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week9.html">
+ <span class="dropdown-text">Week 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week10.html">
+ <span class="dropdown-text">Week 10</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week11.html">
+ <span class="dropdown-text">Week 11</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week12.html">
+ <span class="dropdown-text">Week 12</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week13.html">
+ <span class="dropdown-text">Week 13</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week14.html">
+ <span class="dropdown-text">Week 14</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week15.html">
+ <span class="dropdown-text">Week 15</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-eris-meeting" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Eris Meeting</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-eris-meeting">    
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting.html">
+ <span class="dropdown-text">28th July</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting2.html">
+ <span class="dropdown-text">25 Aug</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting3.html">
+ <span class="dropdown-text">1 Oct</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#iscds-relation-validation" id="toc-iscds-relation-validation" class="nav-link" data-scroll-target="#iscds-relation-validation">IS–CDS relation validation</a>
+  <ul class="collapse">
+  <li><a href="#precision-recall-and-f1" id="toc-precision-recall-and-f1" class="nav-link" data-scroll-target="#precision-recall-and-f1">Precision, recall and F1</a></li>
+  <li><a href="#confusion-matrices" id="toc-confusion-matrices" class="nav-link" data-scroll-target="#confusion-matrices">Confusion matrices</a></li>
+  <li><a href="#which-cds-were-predicted-wrong" id="toc-which-cds-were-predicted-wrong" class="nav-link" data-scroll-target="#which-cds-were-predicted-wrong">Which CDS were predicted wrong</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Week 15 - Update</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Victoria Sjalim </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 26, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<ul>
+<li>Have a good grill me sessions for CDS-IS external validations with Claude</li>
+<li>Merge pull with Dimas’s pipeline (notes for Dimas please keep me updated with your changes)</li>
+<li>Made new github repo for eris validations <code>https://github.com/Victoriasja18/eris-validation</code></li>
+</ul>
+<p>How to navigate these repo:</p>
+</section>
+<section id="iscds-relation-validation" class="level1">
+<h1>IS–CDS relation validation</h1>
+<p>Scores from <a href="https://github.com/Victoriasja18/eris-validation">eris-validation</a>: for each IS, did eris report the right CDS <strong>upstream</strong> and <strong>downstream</strong>, at the right <strong>distance</strong>, with the right <strong>effect</strong> (disrupted)? Truth: <code>ec958_IS_cds_relations.tsv</code> (117 relations; 94 on the chromosome for the simulated GFA). eris: Dimas’s main (<code>e4c6dbd</code>), collapse mode, <code>--hops 3</code>, <code>min_coverage 0.30</code>.</p>
+<pre class="{bash}"><code>#| eval: false
+cd ../../eris-validation
+uv run snakemake --cores 4</code></pre>
+<div id="f264e1cb" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>RESULTS <span class="op">=</span> <span class="st">"../result/eris_validation"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ASSEMBLIES <span class="op">=</span> {<span class="st">"complete"</span>: <span class="st">"Complete genome (FASTA)"</span>, <span class="st">"simulated"</span>: <span class="st">"Simulated GFA"</span>, <span class="st">"real"</span>: <span class="st">"Real-reads GFA"</span>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>metrics <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/metrics.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>details <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/details.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> table <span class="kw">in</span> (metrics, details):</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    table[<span class="st">"assembly"</span>] <span class="op">=</span> table[<span class="st">"assembly_type"</span>].<span class="bu">map</span>(ASSEMBLIES)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="precision-recall-and-f1" class="level2">
+<h2 class="anchored" data-anchor-id="precision-recall-and-f1">Precision, recall and F1</h2>
+<p>Side: recall is over the truth relations; precision is over eris’s nearest flank on each side (per graph branch). A flank on the wrong side counts as a miss on its true side and a false call on the side reported. Distance: per band (overlapping, near 0–150 bp, far), over relations found on their side. Effect: disrupted only; eris <code>TRUNCATED</code> counts as disrupted.</p>
+<p>Recall = TP / (TP + FN) over the truth relations. Precision = TP_calls / (TP_calls + FP) over eris’s calls; for side and effect these are eris’s nearest flanks, so TP_calls can be lower than TP (one collapsed IS locus can find several truth relations, e.g.&nbsp;the flanks of several copies, but has only one nearest flank per side per branch).</p>
+<div id="67b9e047" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(metrics.drop(columns<span class="op">=</span>[<span class="st">"genome"</span>, <span class="st">"assembly_type"</span>])</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        .set_index([<span class="st">"assembly"</span>, <span class="st">"dimension"</span>, <span class="st">"class"</span>])</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        .style.<span class="bu">format</span>(<span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>, subset<span class="op">=</span>[<span class="st">"precision"</span>, <span class="st">"recall"</span>, <span class="st">"f1"</span>], na_rep<span class="op">=</span><span class="st">"–"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<style type="text/css">
+</style>
+
+<table id="T_0128c" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_0128c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">TP</th>
+<th id="T_0128c_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">FN</th>
+<th id="T_0128c_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">TP_calls</th>
+<th id="T_0128c_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">FP</th>
+<th id="T_0128c_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">precision</th>
+<th id="T_0128c_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">recall</th>
+<th id="T_0128c_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">f1</th>
+</tr>
+<tr class="even">
+<th class="index_name level0" data-quarto-table-cell-role="th">assembly</th>
+<th class="index_name level1" data-quarto-table-cell-role="th">dimension</th>
+<th class="index_name level2" data-quarto-table-cell-role="th">class</th>
+<th class="blank col0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank col1" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank col2" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank col3" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank col4" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank col5" data-quarto-table-cell-role="th">&nbsp;</th>
+<th class="blank col6" data-quarto-table-cell-role="th">&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th rowspan="7" id="T_0128c_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
+<th rowspan="3" id="T_0128c_level1_row0" class="row_heading level1 row0" data-quarto-table-cell-role="th">side</th>
+<th id="T_0128c_level2_row0" class="row_heading level2 row0" data-quarto-table-cell-role="th">upstream</th>
+<td id="T_0128c_row0_col0" class="data row0 col0">47</td>
+<td id="T_0128c_row0_col1" class="data row0 col1">12</td>
+<td id="T_0128c_row0_col2" class="data row0 col2">42</td>
+<td id="T_0128c_row0_col3" class="data row0 col3">16</td>
+<td id="T_0128c_row0_col4" class="data row0 col4">0.72</td>
+<td id="T_0128c_row0_col5" class="data row0 col5">0.80</td>
+<td id="T_0128c_row0_col6" class="data row0 col6">0.76</td>
+</tr>
+<tr class="even">
+<th id="T_0128c_level2_row1" class="row_heading level2 row1" data-quarto-table-cell-role="th">downstream</th>
+<td id="T_0128c_row1_col0" class="data row1 col0">38</td>
+<td id="T_0128c_row1_col1" class="data row1 col1">20</td>
+<td id="T_0128c_row1_col2" class="data row1 col2">26</td>
+<td id="T_0128c_row1_col3" class="data row1 col3">32</td>
+<td id="T_0128c_row1_col4" class="data row1 col4">0.45</td>
+<td id="T_0128c_row1_col5" class="data row1 col5">0.66</td>
+<td id="T_0128c_row1_col6" class="data row1 col6">0.53</td>
+</tr>
+<tr class="odd">
+<th id="T_0128c_level2_row2" class="row_heading level2 row2" data-quarto-table-cell-role="th">both</th>
+<td id="T_0128c_row2_col0" class="data row2 col0">85</td>
+<td id="T_0128c_row2_col1" class="data row2 col1">32</td>
+<td id="T_0128c_row2_col2" class="data row2 col2">68</td>
+<td id="T_0128c_row2_col3" class="data row2 col3">48</td>
+<td id="T_0128c_row2_col4" class="data row2 col4">0.59</td>
+<td id="T_0128c_row2_col5" class="data row2 col5">0.73</td>
+<td id="T_0128c_row2_col6" class="data row2 col6">0.65</td>
+</tr>
+<tr class="even">
+<th rowspan="3" id="T_0128c_level1_row3" class="row_heading level1 row3" data-quarto-table-cell-role="th">distance</th>
+<th id="T_0128c_level2_row3" class="row_heading level2 row3" data-quarto-table-cell-role="th">overlapping</th>
+<td id="T_0128c_row3_col0" class="data row3 col0">8</td>
+<td id="T_0128c_row3_col1" class="data row3 col1">5</td>
+<td id="T_0128c_row3_col2" class="data row3 col2">8</td>
+<td id="T_0128c_row3_col3" class="data row3 col3">16</td>
+<td id="T_0128c_row3_col4" class="data row3 col4">0.33</td>
+<td id="T_0128c_row3_col5" class="data row3 col5">0.61</td>
+<td id="T_0128c_row3_col6" class="data row3 col6">0.43</td>
+</tr>
+<tr class="odd">
+<th id="T_0128c_level2_row4" class="row_heading level2 row4" data-quarto-table-cell-role="th">near</th>
+<td id="T_0128c_row4_col0" class="data row4 col0">30</td>
+<td id="T_0128c_row4_col1" class="data row4 col1">19</td>
+<td id="T_0128c_row4_col2" class="data row4 col2">30</td>
+<td id="T_0128c_row4_col3" class="data row4 col3">6</td>
+<td id="T_0128c_row4_col4" class="data row4 col4">0.83</td>
+<td id="T_0128c_row4_col5" class="data row4 col5">0.61</td>
+<td id="T_0128c_row4_col6" class="data row4 col6">0.71</td>
+</tr>
+<tr class="even">
+<th id="T_0128c_level2_row5" class="row_heading level2 row5" data-quarto-table-cell-role="th">far</th>
+<td id="T_0128c_row5_col0" class="data row5 col0">22</td>
+<td id="T_0128c_row5_col1" class="data row5 col1">1</td>
+<td id="T_0128c_row5_col2" class="data row5 col2">22</td>
+<td id="T_0128c_row5_col3" class="data row5 col3">3</td>
+<td id="T_0128c_row5_col4" class="data row5 col4">0.88</td>
+<td id="T_0128c_row5_col5" class="data row5 col5">0.96</td>
+<td id="T_0128c_row5_col6" class="data row5 col6">0.92</td>
+</tr>
+<tr class="odd">
+<th id="T_0128c_level1_row6" class="row_heading level1 row6" data-quarto-table-cell-role="th">effect</th>
+<th id="T_0128c_level2_row6" class="row_heading level2 row6" data-quarto-table-cell-role="th">disrupted</th>
+<td id="T_0128c_row6_col0" class="data row6 col0">8</td>
+<td id="T_0128c_row6_col1" class="data row6 col1">11</td>
+<td id="T_0128c_row6_col2" class="data row6 col2">8</td>
+<td id="T_0128c_row6_col3" class="data row6 col3">37</td>
+<td id="T_0128c_row6_col4" class="data row6 col4">0.18</td>
+<td id="T_0128c_row6_col5" class="data row6 col5">0.42</td>
+<td id="T_0128c_row6_col6" class="data row6 col6">0.25</td>
+</tr>
+<tr class="even">
+<th rowspan="7" id="T_0128c_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">Simulated GFA</th>
+<th rowspan="3" id="T_0128c_level1_row7" class="row_heading level1 row7" data-quarto-table-cell-role="th">side</th>
+<th id="T_0128c_level2_row7" class="row_heading level2 row7" data-quarto-table-cell-role="th">upstream</th>
+<td id="T_0128c_row7_col0" class="data row7 col0">31</td>
+<td id="T_0128c_row7_col1" class="data row7 col1">16</td>
+<td id="T_0128c_row7_col2" class="data row7 col2">22</td>
+<td id="T_0128c_row7_col3" class="data row7 col3">20</td>
+<td id="T_0128c_row7_col4" class="data row7 col4">0.52</td>
+<td id="T_0128c_row7_col5" class="data row7 col5">0.66</td>
+<td id="T_0128c_row7_col6" class="data row7 col6">0.58</td>
+</tr>
+<tr class="odd">
+<th id="T_0128c_level2_row8" class="row_heading level2 row8" data-quarto-table-cell-role="th">downstream</th>
+<td id="T_0128c_row8_col0" class="data row8 col0">26</td>
+<td id="T_0128c_row8_col1" class="data row8 col1">21</td>
+<td id="T_0128c_row8_col2" class="data row8 col2">14</td>
+<td id="T_0128c_row8_col3" class="data row8 col3">21</td>
+<td id="T_0128c_row8_col4" class="data row8 col4">0.40</td>
+<td id="T_0128c_row8_col5" class="data row8 col5">0.55</td>
+<td id="T_0128c_row8_col6" class="data row8 col6">0.46</td>
+</tr>
+<tr class="even">
+<th id="T_0128c_level2_row9" class="row_heading level2 row9" data-quarto-table-cell-role="th">both</th>
+<td id="T_0128c_row9_col0" class="data row9 col0">57</td>
+<td id="T_0128c_row9_col1" class="data row9 col1">37</td>
+<td id="T_0128c_row9_col2" class="data row9 col2">36</td>
+<td id="T_0128c_row9_col3" class="data row9 col3">41</td>
+<td id="T_0128c_row9_col4" class="data row9 col4">0.47</td>
+<td id="T_0128c_row9_col5" class="data row9 col5">0.61</td>
+<td id="T_0128c_row9_col6" class="data row9 col6">0.53</td>
+</tr>
+<tr class="odd">
+<th rowspan="3" id="T_0128c_level1_row10" class="row_heading level1 row10" data-quarto-table-cell-role="th">distance</th>
+<th id="T_0128c_level2_row10" class="row_heading level2 row10" data-quarto-table-cell-role="th">overlapping</th>
+<td id="T_0128c_row10_col0" class="data row10 col0">0</td>
+<td id="T_0128c_row10_col1" class="data row10 col1">10</td>
+<td id="T_0128c_row10_col2" class="data row10 col2">0</td>
+<td id="T_0128c_row10_col3" class="data row10 col3">5</td>
+<td id="T_0128c_row10_col4" class="data row10 col4">0.00</td>
+<td id="T_0128c_row10_col5" class="data row10 col5">0.00</td>
+<td id="T_0128c_row10_col6" class="data row10 col6">0.00</td>
+</tr>
+<tr class="even">
+<th id="T_0128c_level2_row11" class="row_heading level2 row11" data-quarto-table-cell-role="th">near</th>
+<td id="T_0128c_row11_col0" class="data row11 col0">21</td>
+<td id="T_0128c_row11_col1" class="data row11 col1">10</td>
+<td id="T_0128c_row11_col2" class="data row11 col2">21</td>
+<td id="T_0128c_row11_col3" class="data row11 col3">10</td>
+<td id="T_0128c_row11_col4" class="data row11 col4">0.68</td>
+<td id="T_0128c_row11_col5" class="data row11 col5">0.68</td>
+<td id="T_0128c_row11_col6" class="data row11 col6">0.68</td>
+</tr>
+<tr class="odd">
+<th id="T_0128c_level2_row12" class="row_heading level2 row12" data-quarto-table-cell-role="th">far</th>
+<td id="T_0128c_row12_col0" class="data row12 col0">15</td>
+<td id="T_0128c_row12_col1" class="data row12 col1">1</td>
+<td id="T_0128c_row12_col2" class="data row12 col2">15</td>
+<td id="T_0128c_row12_col3" class="data row12 col3">6</td>
+<td id="T_0128c_row12_col4" class="data row12 col4">0.71</td>
+<td id="T_0128c_row12_col5" class="data row12 col5">0.94</td>
+<td id="T_0128c_row12_col6" class="data row12 col6">0.81</td>
+</tr>
+<tr class="even">
+<th id="T_0128c_level1_row13" class="row_heading level1 row13" data-quarto-table-cell-role="th">effect</th>
+<th id="T_0128c_level2_row13" class="row_heading level2 row13" data-quarto-table-cell-role="th">disrupted</th>
+<td id="T_0128c_row13_col0" class="data row13 col0">1</td>
+<td id="T_0128c_row13_col1" class="data row13 col1">16</td>
+<td id="T_0128c_row13_col2" class="data row13 col2">1</td>
+<td id="T_0128c_row13_col3" class="data row13 col3">19</td>
+<td id="T_0128c_row13_col4" class="data row13 col4">0.05</td>
+<td id="T_0128c_row13_col5" class="data row13 col5">0.06</td>
+<td id="T_0128c_row13_col6" class="data row13 col6">0.05</td>
+</tr>
+<tr class="odd">
+<th rowspan="7" id="T_0128c_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">Real-reads GFA</th>
+<th rowspan="3" id="T_0128c_level1_row14" class="row_heading level1 row14" data-quarto-table-cell-role="th">side</th>
+<th id="T_0128c_level2_row14" class="row_heading level2 row14" data-quarto-table-cell-role="th">upstream</th>
+<td id="T_0128c_row14_col0" class="data row14 col0">35</td>
+<td id="T_0128c_row14_col1" class="data row14 col1">24</td>
+<td id="T_0128c_row14_col2" class="data row14 col2">24</td>
+<td id="T_0128c_row14_col3" class="data row14 col3">22</td>
+<td id="T_0128c_row14_col4" class="data row14 col4">0.52</td>
+<td id="T_0128c_row14_col5" class="data row14 col5">0.59</td>
+<td id="T_0128c_row14_col6" class="data row14 col6">0.56</td>
+</tr>
+<tr class="even">
+<th id="T_0128c_level2_row15" class="row_heading level2 row15" data-quarto-table-cell-role="th">downstream</th>
+<td id="T_0128c_row15_col0" class="data row15 col0">25</td>
+<td id="T_0128c_row15_col1" class="data row15 col1">33</td>
+<td id="T_0128c_row15_col2" class="data row15 col2">17</td>
+<td id="T_0128c_row15_col3" class="data row15 col3">20</td>
+<td id="T_0128c_row15_col4" class="data row15 col4">0.46</td>
+<td id="T_0128c_row15_col5" class="data row15 col5">0.43</td>
+<td id="T_0128c_row15_col6" class="data row15 col6">0.45</td>
+</tr>
+<tr class="odd">
+<th id="T_0128c_level2_row16" class="row_heading level2 row16" data-quarto-table-cell-role="th">both</th>
+<td id="T_0128c_row16_col0" class="data row16 col0">60</td>
+<td id="T_0128c_row16_col1" class="data row16 col1">57</td>
+<td id="T_0128c_row16_col2" class="data row16 col2">41</td>
+<td id="T_0128c_row16_col3" class="data row16 col3">42</td>
+<td id="T_0128c_row16_col4" class="data row16 col4">0.49</td>
+<td id="T_0128c_row16_col5" class="data row16 col5">0.51</td>
+<td id="T_0128c_row16_col6" class="data row16 col6">0.50</td>
+</tr>
+<tr class="even">
+<th rowspan="3" id="T_0128c_level1_row17" class="row_heading level1 row17" data-quarto-table-cell-role="th">distance</th>
+<th id="T_0128c_level2_row17" class="row_heading level2 row17" data-quarto-table-cell-role="th">overlapping</th>
+<td id="T_0128c_row17_col0" class="data row17 col0">1</td>
+<td id="T_0128c_row17_col1" class="data row17 col1">10</td>
+<td id="T_0128c_row17_col2" class="data row17 col2">1</td>
+<td id="T_0128c_row17_col3" class="data row17 col3">9</td>
+<td id="T_0128c_row17_col4" class="data row17 col4">0.10</td>
+<td id="T_0128c_row17_col5" class="data row17 col5">0.09</td>
+<td id="T_0128c_row17_col6" class="data row17 col6">0.10</td>
+</tr>
+<tr class="odd">
+<th id="T_0128c_level2_row18" class="row_heading level2 row18" data-quarto-table-cell-role="th">near</th>
+<td id="T_0128c_row18_col0" class="data row18 col0">23</td>
+<td id="T_0128c_row18_col1" class="data row18 col1">12</td>
+<td id="T_0128c_row18_col2" class="data row18 col2">23</td>
+<td id="T_0128c_row18_col3" class="data row18 col3">9</td>
+<td id="T_0128c_row18_col4" class="data row18 col4">0.72</td>
+<td id="T_0128c_row18_col5" class="data row18 col5">0.66</td>
+<td id="T_0128c_row18_col6" class="data row18 col6">0.69</td>
+</tr>
+<tr class="even">
+<th id="T_0128c_level2_row19" class="row_heading level2 row19" data-quarto-table-cell-role="th">far</th>
+<td id="T_0128c_row19_col0" class="data row19 col0">13</td>
+<td id="T_0128c_row19_col1" class="data row19 col1">1</td>
+<td id="T_0128c_row19_col2" class="data row19 col2">13</td>
+<td id="T_0128c_row19_col3" class="data row19 col3">5</td>
+<td id="T_0128c_row19_col4" class="data row19 col4">0.72</td>
+<td id="T_0128c_row19_col5" class="data row19 col5">0.93</td>
+<td id="T_0128c_row19_col6" class="data row19 col6">0.81</td>
+</tr>
+<tr class="odd">
+<th id="T_0128c_level1_row20" class="row_heading level1 row20" data-quarto-table-cell-role="th">effect</th>
+<th id="T_0128c_level2_row20" class="row_heading level2 row20" data-quarto-table-cell-role="th">disrupted</th>
+<td id="T_0128c_row20_col0" class="data row20 col0">2</td>
+<td id="T_0128c_row20_col1" class="data row20 col1">17</td>
+<td id="T_0128c_row20_col2" class="data row20 col2">1</td>
+<td id="T_0128c_row20_col3" class="data row20 col3">25</td>
+<td id="T_0128c_row20_col4" class="data row20 col4">0.04</td>
+<td id="T_0128c_row20_col5" class="data row20 col5">0.10</td>
+<td id="T_0128c_row20_col6" class="data row20 col6">0.06</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="cf0c4934" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>other <span class="op">=</span> {(<span class="st">"side"</span>, <span class="st">"both"</span>, <span class="st">"pooled_recall"</span>): <span class="st">"Pooled recall (either side)"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"side"</span>, <span class="st">"both"</span>, <span class="st">"wrong_side"</span>): <span class="st">"Found only on the wrong side"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"side"</span>, <span class="st">"both"</span>, <span class="st">"miss_gene"</span>): <span class="st">"Misses: wrong/absent gene"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"side"</span>, <span class="st">"both"</span>, <span class="st">"miss_budget"</span>): <span class="st">"Misses: hops budget (found with --hops 20)"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"side"</span>, <span class="st">"both"</span>, <span class="st">"unplaceable"</span>): <span class="st">"Flank genes not placeable on the reference"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"distance"</span>, <span class="st">"all"</span>, <span class="st">"agreement"</span>): <span class="st">"Distance band agreement"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"distance"</span>, <span class="st">"all"</span>, <span class="st">"median_abs_error"</span>): <span class="st">"Median distance error (bp)"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"distance"</span>, <span class="st">"all"</span>, <span class="st">"within_10bp"</span>): <span class="st">"Distance within 10 bp"</span>}</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> details.set_index([<span class="st">"dimension"</span>, <span class="st">"class"</span>, <span class="st">"metric"</span>, <span class="st">"assembly"</span>])[<span class="st">"value"</span>]</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame({name: [value[(<span class="op">*</span>k, name)] <span class="cf">for</span> k <span class="kw">in</span> other] <span class="cf">for</span> name <span class="kw">in</span> ASSEMBLIES.values()},</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                       index<span class="op">=</span><span class="bu">list</span>(other.values()))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> [name <span class="cf">for</span> name <span class="kw">in</span> summary.index <span class="cf">if</span> <span class="kw">not</span> name.startswith((<span class="st">"Pooled"</span>, <span class="st">"Distance"</span>, <span class="st">"Median"</span>))]</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>summary.style.<span class="bu">format</span>(<span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>).<span class="bu">format</span>(<span class="st">"</span><span class="sc">{:.0f}</span><span class="st">"</span>, subset<span class="op">=</span>pd.IndexSlice[counts, :])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<style type="text/css">
+</style>
+
+<table id="T_51eb2" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_51eb2_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
+<th id="T_51eb2_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Simulated GFA</th>
+<th id="T_51eb2_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Real-reads GFA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_51eb2_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Pooled recall (either side)</th>
+<td id="T_51eb2_row0_col0" class="data row0 col0">0.74</td>
+<td id="T_51eb2_row0_col1" class="data row0 col1">0.63</td>
+<td id="T_51eb2_row0_col2" class="data row0 col2">0.52</td>
+</tr>
+<tr class="even">
+<th id="T_51eb2_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">Found only on the wrong side</th>
+<td id="T_51eb2_row1_col0" class="data row1 col0">2</td>
+<td id="T_51eb2_row1_col1" class="data row1 col1">2</td>
+<td id="T_51eb2_row1_col2" class="data row1 col2">1</td>
+</tr>
+<tr class="odd">
+<th id="T_51eb2_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">Misses: wrong/absent gene</th>
+<td id="T_51eb2_row2_col0" class="data row2 col0">30</td>
+<td id="T_51eb2_row2_col1" class="data row2 col1">35</td>
+<td id="T_51eb2_row2_col2" class="data row2 col2">57</td>
+</tr>
+<tr class="even">
+<th id="T_51eb2_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">Misses: hops budget (found with --hops 20)</th>
+<td id="T_51eb2_row3_col0" class="data row3 col0">2</td>
+<td id="T_51eb2_row3_col1" class="data row3 col1">2</td>
+<td id="T_51eb2_row3_col2" class="data row3 col2">0</td>
+</tr>
+<tr class="odd">
+<th id="T_51eb2_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">Flank genes not placeable on the reference</th>
+<td id="T_51eb2_row4_col0" class="data row4 col0">0</td>
+<td id="T_51eb2_row4_col1" class="data row4 col1">4</td>
+<td id="T_51eb2_row4_col2" class="data row4 col2">7</td>
+</tr>
+<tr class="even">
+<th id="T_51eb2_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">Distance band agreement</th>
+<td id="T_51eb2_row5_col0" class="data row5 col0">0.71</td>
+<td id="T_51eb2_row5_col1" class="data row5 col1">0.63</td>
+<td id="T_51eb2_row5_col2" class="data row5 col2">0.62</td>
+</tr>
+<tr class="odd">
+<th id="T_51eb2_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">Median distance error (bp)</th>
+<td id="T_51eb2_row6_col0" class="data row6 col0">0.00</td>
+<td id="T_51eb2_row6_col1" class="data row6 col1">0.00</td>
+<td id="T_51eb2_row6_col2" class="data row6 col2">0.00</td>
+</tr>
+<tr class="even">
+<th id="T_51eb2_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">Distance within 10 bp</th>
+<td id="T_51eb2_row7_col0" class="data row7 col0">0.68</td>
+<td id="T_51eb2_row7_col1" class="data row7 col1">0.68</td>
+<td id="T_51eb2_row7_col2" class="data row7 col2">0.72</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="confusion-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="confusion-matrices">Confusion matrices</h2>
+<p>Rows are the truth, columns are eris. <code>no_truth</code> = a flank eris reported that is in no truth relation.</p>
+<div id="3c62510c" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, Markdown</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> kind <span class="kw">in</span> (<span class="st">"side"</span>, <span class="st">"distance"</span>, <span class="st">"effect"</span>):</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    display(Markdown(<span class="ss">f"### </span><span class="sc">{</span>kind<span class="sc">.</span>capitalize()<span class="sc">}</span><span class="ss">"</span>))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items():</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        display(Markdown(<span class="ss">f"**</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">**"</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        display(pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>kind<span class="sc">}</span><span class="ss">_confusion.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, index_col<span class="op">=</span><span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="side" class="level3 cell-output cell-output-display cell-output-markdown">
+<h3 class="anchored" data-anchor-id="side">Side</h3>
+</section>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Complete genome (FASTA)</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">upstream</th>
+<th data-quarto-table-cell-role="th">downstream</th>
+<th data-quarto-table-cell-role="th">not_reported</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">upstream</th>
+<td>47</td>
+<td>1</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">downstream</th>
+<td>1</td>
+<td>38</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">no_truth</th>
+<td>15</td>
+<td>31</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Simulated GFA</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">upstream</th>
+<th data-quarto-table-cell-role="th">downstream</th>
+<th data-quarto-table-cell-role="th">not_reported</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">upstream</th>
+<td>31</td>
+<td>0</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">downstream</th>
+<td>2</td>
+<td>26</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">no_truth</th>
+<td>18</td>
+<td>21</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Real-reads GFA</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">upstream</th>
+<th data-quarto-table-cell-role="th">downstream</th>
+<th data-quarto-table-cell-role="th">not_reported</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">upstream</th>
+<td>35</td>
+<td>0</td>
+<td>24</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">downstream</th>
+<td>1</td>
+<td>25</td>
+<td>32</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">no_truth</th>
+<td>21</td>
+<td>20</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<section id="distance" class="level3 cell-output cell-output-display cell-output-markdown">
+<h3 class="anchored" data-anchor-id="distance">Distance</h3>
+</section>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Complete genome (FASTA)</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">overlapping</th>
+<th data-quarto-table-cell-role="th">near</th>
+<th data-quarto-table-cell-role="th">far</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">overlapping</th>
+<td>8</td>
+<td>5</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">near</th>
+<td>16</td>
+<td>30</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">far</th>
+<td>0</td>
+<td>1</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Simulated GFA</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">overlapping</th>
+<th data-quarto-table-cell-role="th">near</th>
+<th data-quarto-table-cell-role="th">far</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">overlapping</th>
+<td>0</td>
+<td>9</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">near</th>
+<td>5</td>
+<td>21</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">far</th>
+<td>0</td>
+<td>1</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Real-reads GFA</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">overlapping</th>
+<th data-quarto-table-cell-role="th">near</th>
+<th data-quarto-table-cell-role="th">far</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">overlapping</th>
+<td>1</td>
+<td>8</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">near</th>
+<td>9</td>
+<td>23</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">far</th>
+<td>0</td>
+<td>1</td>
+<td>13</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<section id="effect" class="level3 cell-output cell-output-display cell-output-markdown">
+<h3 class="anchored" data-anchor-id="effect">Effect</h3>
+</section>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Complete genome (FASTA)</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">DISRUPTED</th>
+<th data-quarto-table-cell-role="th">NONE</th>
+<th data-quarto-table-cell-role="th">not_found</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">disrupted</th>
+<td>8</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">none</th>
+<td>16</td>
+<td>54</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">unscored</th>
+<td>0</td>
+<td>2</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">no_truth</th>
+<td>19</td>
+<td>27</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Simulated GFA</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">DISRUPTED</th>
+<th data-quarto-table-cell-role="th">NONE</th>
+<th data-quarto-table-cell-role="th">not_found</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">disrupted</th>
+<td>1</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">none</th>
+<td>4</td>
+<td>42</td>
+<td>21</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">unscored</th>
+<td>0</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">no_truth</th>
+<td>15</td>
+<td>24</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><strong>Real-reads GFA</strong></p>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">DISRUPTED</th>
+<th data-quarto-table-cell-role="th">NONE</th>
+<th data-quarto-table-cell-role="th">not_found</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">disrupted</th>
+<td>2</td>
+<td>7</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">none</th>
+<td>8</td>
+<td>40</td>
+<td>38</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">unscored</th>
+<td>0</td>
+<td>3</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">no_truth</th>
+<td>17</td>
+<td>24</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="which-cds-were-predicted-wrong" class="level2">
+<h2 class="anchored" data-anchor-id="which-cds-were-predicted-wrong">Which CDS were predicted wrong</h2>
+<p>Every truth relation eris missed (<code>FN</code>, <code>FN_wrong_side</code>), every false first flank (<code>FP</code>, <code>FP_wrong_side</code>, <code>FP_unplaceable</code>), and found relations whose distance band or effect is wrong. Full tables: <code>progress/result/eris_validation/EC958/&lt;assembly&gt;/relations.tsv</code>; the quick summary is <code>progress/result/eris_validation/metrics.tsv</code>.</p>
+<div id="00301dd3" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>relations <span class="op">=</span> pd.concat([pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).assign(assembly<span class="op">=</span>name)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items()], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>wrong <span class="op">=</span> relations[(relations[<span class="st">"status"</span>] <span class="op">!=</span> <span class="st">"TP"</span>) <span class="op">|</span> (relations[<span class="st">"distance_band_ok"</span>] <span class="op">==</span> <span class="va">False</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                  <span class="op">|</span> (relations[<span class="st">"effect_ok"</span>] <span class="op">==</span> <span class="va">False</span>)]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>pd.crosstab(wrong[<span class="st">"status"</span>], wrong[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">assembly</th>
+<th data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
+<th data-quarto-table-cell-role="th">Simulated GFA</th>
+<th data-quarto-table-cell-role="th">Real-reads GFA</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">status</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">FN</th>
+<td>30</td>
+<td>35</td>
+<td>56</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">FN_wrong_side</th>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">FP</th>
+<td>46</td>
+<td>35</td>
+<td>34</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">FP_unplaceable</th>
+<td>0</td>
+<td>4</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">FP_wrong_side</th>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TP</th>
+<td>31</td>
+<td>22</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="7bba29f6" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>columns <span class="op">=</span> [<span class="st">"assembly"</span>, <span class="st">"status"</span>, <span class="st">"side"</span>, <span class="st">"is_id"</span>, <span class="st">"locus_tag"</span>, <span class="st">"gene"</span>, <span class="st">"product"</span>, <span class="st">"truth_distance"</span>, <span class="st">"truth_effect"</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>           <span class="st">"eris_target"</span>, <span class="st">"eris_gene"</span>, <span class="st">"eris_side"</span>, <span class="st">"eris_distance"</span>, <span class="st">"eris_effect"</span>, <span class="st">"distance_band_ok"</span>, <span class="st">"effect_ok"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"miss_cause"</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_rows"</span>, <span class="va">None</span>, <span class="st">"display.max_colwidth"</span>, <span class="va">None</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>wrong[columns].sort_values([<span class="st">"assembly"</span>, <span class="st">"status"</span>, <span class="st">"is_id"</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>).fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">assembly</th>
+<th data-quarto-table-cell-role="th">status</th>
+<th data-quarto-table-cell-role="th">side</th>
+<th data-quarto-table-cell-role="th">is_id</th>
+<th data-quarto-table-cell-role="th">locus_tag</th>
+<th data-quarto-table-cell-role="th">gene</th>
+<th data-quarto-table-cell-role="th">product</th>
+<th data-quarto-table-cell-role="th">truth_distance</th>
+<th data-quarto-table-cell-role="th">truth_effect</th>
+<th data-quarto-table-cell-role="th">eris_target</th>
+<th data-quarto-table-cell-role="th">eris_gene</th>
+<th data-quarto-table-cell-role="th">eris_side</th>
+<th data-quarto-table-cell-role="th">eris_distance</th>
+<th data-quarto-table-cell-role="th">eris_effect</th>
+<th data-quarto-table-cell-role="th">distance_band_ok</th>
+<th data-quarto-table-cell-role="th">effect_ok</th>
+<th data-quarto-table-cell-role="th">miss_cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS1203</td>
+<td>EC958_RS29355</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>36.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS1A</td>
+<td>EC958_RS30185</td>
+<td></td>
+<td>type II toxin-antitoxin system RelE/ParE family toxin</td>
+<td>-22.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1F_1</td>
+<td>EC958_RS30560</td>
+<td>ykgR</td>
+<td>small membrane protein YkgR</td>
+<td>299.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS1F_2</td>
+<td>EC958_RS30140</td>
+<td>ykiE</td>
+<td>protein YkiE</td>
+<td>31.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS2</td>
+<td>EC958_RS30340</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>367.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_1</td>
+<td>EC958_RS25840</td>
+<td></td>
+<td>IS1380-like element ISEcp1 family transposase</td>
+<td>191.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>budget</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_2</td>
+<td>EC958_RS25830</td>
+<td></td>
+<td>IS6-like element IS26 family transposase</td>
+<td>52.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>budget</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_2</td>
+<td>EC958_RS29475</td>
+<td></td>
+<td>DUF4158 domain-containing protein</td>
+<td>7.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_5</td>
+<td>EC958_RS29660</td>
+<td></td>
+<td>recombinase family protein</td>
+<td>-9.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_7</td>
+<td>EC958_RS26485</td>
+<td></td>
+<td>CatB-related O-acetyltransferase</td>
+<td>1.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS30</td>
+<td>EC958_RS16655</td>
+<td></td>
+<td>IS3-like element IS600 family transposase</td>
+<td>-1.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">11</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS5</td>
+<td>EC958_RS24665</td>
+<td></td>
+<td>IS1380-like element ISEcp1 family transposase</td>
+<td>59.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">12</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS5</td>
+<td>EC958_RS24675</td>
+<td></td>
+<td>class C beta-lactamase CMY-23</td>
+<td>268.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">13</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS600</td>
+<td>EC958_RS28175</td>
+<td></td>
+<td>BCCT family transporter</td>
+<td>110.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">14</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS600</td>
+<td>EC958_RS24690</td>
+<td></td>
+<td>IS3-like element ISEc52 family transposase</td>
+<td>2.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">15</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS6100</td>
+<td>EC958_RS29565</td>
+<td></td>
+<td>EAL domain-containing protein</td>
+<td>56.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">16</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc22</td>
+<td>EC958_RS29550</td>
+<td></td>
+<td>putative zinc ribbon protein</td>
+<td>1.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">17</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc23_1</td>
+<td>EC958_RS01090</td>
+<td></td>
+<td>YiiX/YebB-like N1pC/P60 family cysteine hydrolase</td>
+<td>1.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">18</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc23_2</td>
+<td>EC958_RS11750</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>-4.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">19</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS29425</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>78.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">20</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS24680</td>
+<td></td>
+<td>IS3-like element IS600 family transposase</td>
+<td>64.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">21</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc52_4</td>
+<td>EC958_RS28255</td>
+<td></td>
+<td>GNAT family N-acetyltransferase</td>
+<td>23.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">22</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc53</td>
+<td>EC958_RS25065</td>
+<td>fimB</td>
+<td>type 1 fimbria switch DNA invertase FimB</td>
+<td>2.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">23</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc9</td>
+<td>EC958_RS24670</td>
+<td></td>
+<td>IS5-like element IS5 family transposase</td>
+<td>146.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">24</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16660</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>-26.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">25</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16650</td>
+<td></td>
+<td>IS30-like element IS30 family transposase</td>
+<td>5.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">26</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSen1</td>
+<td>EC958_RS24890</td>
+<td></td>
+<td>Alw26I/Eco31I/Esp3I family type II restriction adenine-specific DNA-methyltransferase</td>
+<td>398.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">27</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSen1</td>
+<td>EC958_RS29720</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>313.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">28</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20820</td>
+<td></td>
+<td>putative zinc ribbon protein</td>
+<td>-59.0</td>
+<td>uncertain</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">29</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20830</td>
+<td>ltrA</td>
+<td>group II intron reverse transcriptase/maturase</td>
+<td>90.0</td>
+<td>uncertain</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">30</th>
+<td>Complete genome (FASTA)</td>
+<td>FN_wrong_side</td>
+<td>downstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10865</td>
+<td>tnpA</td>
+<td>IS200/IS605 family transposase</td>
+<td>-357.0</td>
+<td>disrupted</td>
+<td>IS609_IS200/IS605_IS605</td>
+<td>HG941718.1_2104065_2104614</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">31</th>
+<td>Complete genome (FASTA)</td>
+<td>FN_wrong_side</td>
+<td>upstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10860</td>
+<td></td>
+<td>SOS response-associated peptidase family protein</td>
+<td>-2.0</td>
+<td>disrupted</td>
+<td>IS609_IS200/IS605_IS605</td>
+<td>HG941718.1_2103358_2103856</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">32</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc23_IS66_unknown</td>
+<td>HG941718.1_236362_236491</td>
+<td>downstream</td>
+<td>103.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">33</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISCfr4_IS30_unknown</td>
+<td>HG941718.1_1365822_1366380</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">34</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc24_IS3_IS51</td>
+<td>HG941718.1_1372163_1372250</td>
+<td>downstream</td>
+<td>37.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">35</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS4_IS4_IS4</td>
+<td>HG941718.1_1417331_1418537</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">36</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc1_ISAs1_unknown</td>
+<td>HG941718.1_1647073_1647193</td>
+<td>upstream</td>
+<td>335.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">37</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc38_ISL3_unknown</td>
+<td>HG941718.1_2243916_2244036</td>
+<td>downstream</td>
+<td>30.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">38</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc23_IS66_unknown</td>
+<td>HG941718.1_2268397_2268550</td>
+<td>downstream</td>
+<td>32.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">39</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1A_IS1_unknown</td>
+<td>HG941718.1_3290003_3290129</td>
+<td>downstream</td>
+<td>17.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">40</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1203_IS3_IS51</td>
+<td>HG941718.1_3294664_3294841</td>
+<td>upstream</td>
+<td>218.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">41</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1203_IS3_IS51</td>
+<td>HG941718.1_3292734_3292968</td>
+<td>downstream</td>
+<td>168.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">42</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISKox3_ISL3_unknown</td>
+<td>HG941718.1_3295934_3296003</td>
+<td>upstream</td>
+<td>53.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">43</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISKox3_ISL3_unknown</td>
+<td>HG941718.1_3294664_3294841</td>
+<td>downstream</td>
+<td>262.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">44</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS30_IS30_unknown</td>
+<td>HG941718.1_3315271_3315727</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">45</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEch14_IS3_IS150</td>
+<td>HG941718.1_3315775_3315871</td>
+<td>upstream</td>
+<td>228.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">46</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS2_IS3_IS2</td>
+<td>HG941718.1_3323385_3323490</td>
+<td>downstream</td>
+<td>199.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">47</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS682_IS66_unknown</td>
+<td>HG941718.1_3334275_3334437</td>
+<td>upstream</td>
+<td>116.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">48</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS682_IS66_unknown</td>
+<td>HG941718.1_3335445_3336546</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">49</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc22_IS66_unknown</td>
+<td>HG941718.1_3338301_3338685</td>
+<td>downstream</td>
+<td>183.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">50</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc10_IS21_unknown</td>
+<td>HG941718.1_3360335_3360431</td>
+<td>upstream</td>
+<td>95.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">51</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS609_IS200/IS605_IS605</td>
+<td>HG941718.1_3821587_3821788</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">52</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1F_IS1_unknown</td>
+<td>HG941718.1_4137114_4139496</td>
+<td>downstream</td>
+<td>582.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">53</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS629_IS3_IS51</td>
+<td>HG941718.1_4158786_4159068</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">54</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>HG941718.1_4161107_4161491</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">55</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>HG941718.1_4160352_4160985</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">56</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>HG941718.1_4163444_4164032</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">57</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>HG941718.1_4161806_4162394</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">58</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISCro1_IS66_unknown</td>
+<td>HG941718.1_4173943_4174135</td>
+<td>downstream</td>
+<td>116.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">59</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc23_IS66_unknown</td>
+<td>HG941718.1_4924931_4925120</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">60</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEcp1_IS1380_unknown</td>
+<td>HG941718.1_4940068_4940200</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">61</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISSd1_IS3_IS3</td>
+<td>HG941718.1_4944363_4944777</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">62</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISSd1_IS3_IS3</td>
+<td>HG941718.1_4941765_4942047</td>
+<td>downstream</td>
+<td>338.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">63</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1F_IS1_unknown</td>
+<td>HG941718.1_4953061_4953142</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">64</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc8_IS66_unknown</td>
+<td>HG941718.1_4955883_4955952</td>
+<td>downstream</td>
+<td>48.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">65</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc12_IS21_unknown</td>
+<td>HG941718.1_4974433_4974547</td>
+<td>downstream</td>
+<td>24.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">66</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc52_IS3_IS3</td>
+<td>HG941718.1_5007190_5007343</td>
+<td>downstream</td>
+<td>1.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">67</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc53_ISL3_unknown</td>
+<td>HG941718.1_5013957_5014353</td>
+<td>downstream</td>
+<td>460.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">68</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_38749_38980</td>
+<td>downstream</td>
+<td>1.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">69</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_86916_87237</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">70</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS6100_IS6_unknown</td>
+<td>HG941719.1_93461_93767</td>
+<td>upstream</td>
+<td>165.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">71</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS6100_IS6_unknown</td>
+<td>HG941719.1_94776_94878</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">72</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_103222_103417</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">73</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_114493_114610</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">74</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_112985_113705</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">75</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1A_IS1_unknown</td>
+<td>HG941719.1_119865_120048</td>
+<td>upstream</td>
+<td>319.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">76</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1A_IS1_unknown</td>
+<td>HG941719.1_121153_121318</td>
+<td>downstream</td>
+<td>18.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">77</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc23_IS66_unknown</td>
+<td>HG941719.1_131155_131233</td>
+<td>downstream</td>
+<td>25.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">78</th>
+<td>Complete genome (FASTA)</td>
+<td>FP_wrong_side</td>
+<td>upstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10865</td>
+<td>tnpA</td>
+<td>IS200/IS605 family transposase</td>
+<td>-357.0</td>
+<td>disrupted</td>
+<td>IS609_IS200/IS605_IS605</td>
+<td>HG941718.1_2104065_2104614</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">79</th>
+<td>Complete genome (FASTA)</td>
+<td>FP_wrong_side</td>
+<td>downstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10860</td>
+<td></td>
+<td>SOS response-associated peptidase family protein</td>
+<td>-2.0</td>
+<td>disrupted</td>
+<td>IS609_IS200/IS605_IS605</td>
+<td>HG941718.1_2103358_2103856</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">80</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS100kyp</td>
+<td>EC958_RS29265</td>
+<td></td>
+<td>IS21 family transposase</td>
+<td>0.0</td>
+<td>none</td>
+<td>IS100kyp_IS21_unknown</td>
+<td>HG941718.1_2252290_2252422</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">81</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS100kyp</td>
+<td>EC958_RS30525</td>
+<td></td>
+<td>IS21 family transposase</td>
+<td>2.0</td>
+<td>none</td>
+<td>IS100kyp_IS21_unknown</td>
+<td>HG941718.1_2254198_2254471</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">82</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS1A_1</td>
+<td>EC958_RS12310</td>
+<td></td>
+<td>fimbrial protein</td>
+<td>1.0</td>
+<td>disrupted</td>
+<td>IS1R_IS1_unknown</td>
+<td>HG941718.1_2384275_2384572</td>
+<td>downstream</td>
+<td>142.0</td>
+<td>NONE</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">83</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS1A_3</td>
+<td>EC958_RS29345</td>
+<td>papA</td>
+<td>P fimbria major subunit PapA</td>
+<td>-27.0</td>
+<td>none</td>
+<td>IS1A_IS1_unknown</td>
+<td>HG941718.1_3290887_3291157</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">84</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS1F_1</td>
+<td>EC958_RS30350</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>0.0</td>
+<td>none</td>
+<td>IS1F_IS1_unknown</td>
+<td>HG941718.1_4140819_4141131</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">85</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS200C_1</td>
+<td>EC958_RS11105</td>
+<td></td>
+<td>prophage tail fiber N-terminal domain-containing protein</td>
+<td>11.0</td>
+<td>none</td>
+<td>IS200C_IS200/IS605_IS200</td>
+<td>HG941718.1_2140033_2142442</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">86</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS21</td>
+<td>EC958_RS20955</td>
+<td></td>
+<td>Rpn family recombination-promoting nuclease/putative transposase</td>
+<td>0.0</td>
+<td>none</td>
+<td>IS21_IS21_unknown</td>
+<td>HG941718.1_4177223_4177778</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">87</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS26_1</td>
+<td>EC958_RS25825</td>
+<td>traC</td>
+<td>type IV secretion system protein TraC</td>
+<td>-17.0</td>
+<td>none</td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_33776_36305</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">88</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS26_4</td>
+<td>EC958_RS26035</td>
+<td></td>
+<td>histidine-type phosphatase</td>
+<td>-4.0</td>
+<td>none</td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_76117_76672</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">89</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS26_4</td>
+<td>EC958_RS26025</td>
+<td></td>
+<td>Tn3-like element Tn5403 family transposase</td>
+<td>0.0</td>
+<td>none</td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_73111_75355</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">90</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS26_7</td>
+<td>EC958_RS26180</td>
+<td></td>
+<td>Tn3-like element Tn3 family transposase</td>
+<td>4.0</td>
+<td>none</td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_100450_102466</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">91</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS26_8</td>
+<td>EC958_RS26195</td>
+<td></td>
+<td>fluoroquinolone-acetylating aminoglycoside 6'-N-acetyltransferase AAC(6')-Ib-cr5</td>
+<td>91.0</td>
+<td>none</td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_104809_105502</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">92</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS26_8</td>
+<td>EC958_RS26205</td>
+<td></td>
+<td>Tn3-like element TnAs1 family transposase</td>
+<td>2.0</td>
+<td>none</td>
+<td>IS26_IS6_unknown</td>
+<td>HG941719.1_106262_107792</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">93</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS682</td>
+<td>EC958_RS16810</td>
+<td>tnpC</td>
+<td>IS66 family transposase</td>
+<td>-2.0</td>
+<td>none</td>
+<td>IS682_IS66_unknown</td>
+<td>HG941718.1_3336689_3338081</td>
+<td>downstream</td>
+<td>145.0</td>
+<td>NONE</td>
+<td>False</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">94</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS682</td>
+<td>EC958_RS30005</td>
+<td></td>
+<td>transposase domain-containing protein</td>
+<td>56.0</td>
+<td>none</td>
+<td>IS682_IS66_unknown</td>
+<td>HG941718.1_3334009_3334210</td>
+<td>upstream</td>
+<td>343.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">95</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISCfr4</td>
+<td>EC958_RS06940</td>
+<td></td>
+<td>DUF2339 domain-containing protein</td>
+<td>74.0</td>
+<td>none</td>
+<td>ISCfr4_IS30_unknown</td>
+<td>HG941718.1_1366517_1369175</td>
+<td>downstream</td>
+<td>193.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">96</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc12_1</td>
+<td>EC958_RS07600</td>
+<td></td>
+<td>Ail/Lom family outer membrane beta-barrel protein</td>
+<td>57.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown</td>
+<td>HG941718.1_1482654_1482765</td>
+<td>downstream</td>
+<td>114.0</td>
+<td>NONE</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">97</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc12_1</td>
+<td>EC958_RS07585</td>
+<td></td>
+<td>Ail/Lom family outer membrane beta-barrel protein</td>
+<td>14.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown</td>
+<td>HG941718.1_1479579_1480038</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">98</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc12_2</td>
+<td>EC958_RS11780</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>22.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown</td>
+<td>HG941718.1_2273699_2274038</td>
+<td>downstream</td>
+<td>9.0</td>
+<td>NONE</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">99</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc12_3</td>
+<td>EC958_RS15730</td>
+<td></td>
+<td>ImcF-related family protein</td>
+<td>26.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown</td>
+<td>HG941718.1_3114393_3116196</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">100</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc12_3</td>
+<td>EC958_RS15715</td>
+<td></td>
+<td>ImcF-related family protein</td>
+<td>58.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown</td>
+<td>HG941718.1_3110277_3111900</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">101</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc12_4</td>
+<td>EC958_RS24845</td>
+<td></td>
+<td>DUF987 domain-containing protein</td>
+<td>19.0</td>
+<td>none</td>
+<td>ISEc12_IS21_unknown</td>
+<td>HG941718.1_4971626_4971881</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">102</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc20</td>
+<td>EC958_RS28710</td>
+<td></td>
+<td>helix-turn-helix transcriptional regulator</td>
+<td>164.0</td>
+<td>none</td>
+<td>ISEc20_IS110_unknown</td>
+<td>HG941718.1_2250431_2250710</td>
+<td>downstream</td>
+<td>92.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">103</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc22</td>
+<td>EC958_RS16805</td>
+<td>tnpC</td>
+<td>IS66 family transposase</td>
+<td>-15.0</td>
+<td>disrupted</td>
+<td>ISEc22_IS66_unknown</td>
+<td>HG941718.1_3335445_3336546</td>
+<td>upstream</td>
+<td>29.0</td>
+<td>NONE</td>
+<td>False</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">104</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc23_1</td>
+<td>EC958_RS01070</td>
+<td></td>
+<td>YaeF family permuted papain-like enzyme</td>
+<td>1.0</td>
+<td>none</td>
+<td>ISEc23_IS66_unknown</td>
+<td>HG941718.1_233363_233759</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">105</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc38</td>
+<td>EC958_RS27210</td>
+<td></td>
+<td>gamma-glutamyltransferase</td>
+<td>60.0</td>
+<td>disrupted</td>
+<td>ISEc38_ISL3_unknown</td>
+<td>HG941718.1_2243722_2243836</td>
+<td>downstream</td>
+<td>230.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">106</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc52_2</td>
+<td>EC958_RS17905</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>0.0</td>
+<td>none</td>
+<td>ISEc52_IS3_IS3</td>
+<td>HG941718.1_3559612_3560071</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">107</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc52_4</td>
+<td>EC958_RS25035</td>
+<td>yjhR</td>
+<td>helicase YjhR</td>
+<td>-10.0</td>
+<td>disrupted</td>
+<td>ISEc52_IS3_IS3</td>
+<td>HG941718.1_5008647_5009691</td>
+<td>upstream</td>
+<td>53.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">108</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc53</td>
+<td>EC958_RS25080</td>
+<td>fimB</td>
+<td>type 1 fimbria switch DNA invertase FimB</td>
+<td>-12.0</td>
+<td>none</td>
+<td>ISEc53_ISL3_unknown</td>
+<td>HG941718.1_5016746_5017106</td>
+<td>upstream</td>
+<td>48.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">109</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc9</td>
+<td>EC958_RS24660</td>
+<td></td>
+<td>BCCT family transporter</td>
+<td>-12.0</td>
+<td>none</td>
+<td>ISEcp1_IS1380_unknown</td>
+<td>HG941718.1_4935995_4937339</td>
+<td>upstream</td>
+<td>93.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">110</th>
+<td>Complete genome (FASTA)</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEch14</td>
+<td>EC958_RS27570</td>
+<td></td>
+<td>L-lactate permease</td>
+<td>2.0</td>
+<td>none</td>
+<td>ISEch14_IS3_IS150</td>
+<td>HG941718.1_3317684_3317888</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">111</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS100kyp</td>
+<td>EC958_RS30525</td>
+<td></td>
+<td>IS21 family transposase</td>
+<td>2.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">112</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1203</td>
+<td>EC958_RS16560</td>
+<td>papI</td>
+<td>major pilus subunit operon transcriptional regulator PapI</td>
+<td>521.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">113</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS1203</td>
+<td>EC958_RS29355</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>36.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">114</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1397_2</td>
+<td>EC958_RS11060</td>
+<td>msrQ</td>
+<td>protein-methionine-sulfoxide reductase heme-binding subunit MsrQ</td>
+<td>51.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">115</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1A</td>
+<td>EC958_RS26300</td>
+<td></td>
+<td>helicase UvrD</td>
+<td>238.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">116</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS1A</td>
+<td>EC958_RS30185</td>
+<td></td>
+<td>type II toxin-antitoxin system RelE/ParE family toxin</td>
+<td>-22.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">117</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1A_3</td>
+<td>EC958_RS16535</td>
+<td>papX</td>
+<td>HTH-type transcriptional regulator PapX</td>
+<td>256.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">118</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1F_1</td>
+<td>EC958_RS30560</td>
+<td>ykgR</td>
+<td>small membrane protein YkgR</td>
+<td>299.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">119</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS1F_1</td>
+<td>EC958_RS30350</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>0.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">120</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1F_2</td>
+<td>EC958_RS29430</td>
+<td></td>
+<td>IS3 family transposase</td>
+<td>144.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">121</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS1F_2</td>
+<td>EC958_RS30140</td>
+<td>ykiE</td>
+<td>protein YkiE</td>
+<td>31.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">122</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1R</td>
+<td>EC958_RS25980</td>
+<td></td>
+<td>thermonuclease family protein</td>
+<td>29.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">123</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS2</td>
+<td>EC958_RS30340</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>367.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">124</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS200C_1</td>
+<td>EC958_RS11865</td>
+<td>sbcB</td>
+<td>exodeoxyribonuclease I</td>
+<td>1.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">125</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS200C_1</td>
+<td>EC958_RS11880</td>
+<td>plaP</td>
+<td>putrescine/proton symporter PlaP</td>
+<td>75.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">126</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_1</td>
+<td>EC958_RS25840</td>
+<td></td>
+<td>IS1380-like element ISEcp1 family transposase</td>
+<td>191.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">127</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_2</td>
+<td>EC958_RS25830</td>
+<td></td>
+<td>IS6-like element IS26 family transposase</td>
+<td>52.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">128</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_2</td>
+<td>EC958_RS29475</td>
+<td></td>
+<td>DUF4158 domain-containing protein</td>
+<td>7.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">129</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_3</td>
+<td>EC958_RS29480</td>
+<td></td>
+<td>helix-turn-helix domain-containing protein</td>
+<td>-2.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">130</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_3</td>
+<td>EC958_RS25870</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>52.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">131</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_4</td>
+<td>EC958_RS26025</td>
+<td></td>
+<td>Tn3-like element Tn5403 family transposase</td>
+<td>0.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">132</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_5</td>
+<td>EC958_RS29660</td>
+<td></td>
+<td>recombinase family protein</td>
+<td>-9.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">133</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_5</td>
+<td>EC958_RS26080</td>
+<td></td>
+<td>Na(+)-translocating NADH-quinone reductase subunit C</td>
+<td>216.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">134</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_6</td>
+<td>EC958_RS26160</td>
+<td></td>
+<td>Mph(A) family macrolide 2'-phosphotransferase</td>
+<td>69.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">135</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_7</td>
+<td>EC958_RS26485</td>
+<td></td>
+<td>CatB-related O-acetyltransferase</td>
+<td>1.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">136</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_7</td>
+<td>EC958_RS26180</td>
+<td></td>
+<td>Tn3-like element Tn3 family transposase</td>
+<td>4.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">137</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_8</td>
+<td>EC958_RS26195</td>
+<td></td>
+<td>fluoroquinolone-acetylating aminoglycoside 6'-N-acetyltransferase AAC(6')-Ib-cr5</td>
+<td>91.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">138</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_8</td>
+<td>EC958_RS26205</td>
+<td></td>
+<td>Tn3-like element TnAs1 family transposase</td>
+<td>2.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">139</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS30</td>
+<td>EC958_RS16655</td>
+<td></td>
+<td>IS3-like element IS600 family transposase</td>
+<td>-1.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">140</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10860</td>
+<td></td>
+<td>SOS response-associated peptidase family protein</td>
+<td>-2.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">141</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS609_2</td>
+<td>EC958_RS19340</td>
+<td>yhgE</td>
+<td>DUF4153 domain-containing protein</td>
+<td>96.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">142</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS6100</td>
+<td>EC958_RS29565</td>
+<td></td>
+<td>EAL domain-containing protein</td>
+<td>56.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">143</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS629</td>
+<td>EC958_RS20830</td>
+<td>ltrA</td>
+<td>group II intron reverse transcriptase/maturase</td>
+<td>671.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">144</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS682</td>
+<td>EC958_RS30005</td>
+<td></td>
+<td>transposase domain-containing protein</td>
+<td>56.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">145</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc12_1</td>
+<td>EC958_RS07600</td>
+<td></td>
+<td>Ail/Lom family outer membrane beta-barrel protein</td>
+<td>57.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">146</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc12_1</td>
+<td>EC958_RS07585</td>
+<td></td>
+<td>Ail/Lom family outer membrane beta-barrel protein</td>
+<td>14.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">147</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc12_2</td>
+<td>EC958_RS11780</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>22.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">148</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc12_3</td>
+<td>EC958_RS15715</td>
+<td></td>
+<td>ImcF-related family protein</td>
+<td>58.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">149</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc12_4</td>
+<td>EC958_RS24865</td>
+<td></td>
+<td>type IV toxin-antitoxin system YeeU family antitoxin</td>
+<td>212.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">150</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc22</td>
+<td>EC958_RS29550</td>
+<td></td>
+<td>putative zinc ribbon protein</td>
+<td>1.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">151</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc22</td>
+<td>EC958_RS16805</td>
+<td>tnpC</td>
+<td>IS66 family transposase</td>
+<td>-15.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">152</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc23</td>
+<td>EC958_RS26340</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>180.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">153</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc23_2</td>
+<td>EC958_RS11750</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>-4.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">154</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc23_3</td>
+<td>EC958_RS24615</td>
+<td></td>
+<td>aldose 1-epimerase family protein</td>
+<td>240.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">155</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc23_3</td>
+<td>EC958_RS30575</td>
+<td></td>
+<td>transposase</td>
+<td>252.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">156</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS29425</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>78.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">157</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS24680</td>
+<td></td>
+<td>IS3-like element IS600 family transposase</td>
+<td>64.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">158</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc52_4</td>
+<td>EC958_RS28255</td>
+<td></td>
+<td>GNAT family N-acetyltransferase</td>
+<td>23.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">159</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc8</td>
+<td>EC958_RS24755</td>
+<td></td>
+<td>esterase-like activity of phytase family protein</td>
+<td>201.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">160</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc9</td>
+<td>EC958_RS24670</td>
+<td></td>
+<td>IS5-like element IS5 family transposase</td>
+<td>146.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">161</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16660</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>-26.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">162</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16650</td>
+<td></td>
+<td>IS30-like element IS30 family transposase</td>
+<td>5.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">163</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSen1</td>
+<td>EC958_RS24890</td>
+<td></td>
+<td>Alw26I/Eco31I/Esp3I family type II restriction adenine-specific DNA-methyltransferase</td>
+<td>398.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">164</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSen1</td>
+<td>EC958_RS29720</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>313.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">165</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20820</td>
+<td></td>
+<td>putative zinc ribbon protein</td>
+<td>-59.0</td>
+<td>uncertain</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">166</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20830</td>
+<td>ltrA</td>
+<td>group II intron reverse transcriptase/maturase</td>
+<td>90.0</td>
+<td>uncertain</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">167</th>
+<td>Real-reads GFA</td>
+<td>FN_wrong_side</td>
+<td>downstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10865</td>
+<td>tnpA</td>
+<td>IS200/IS605 family transposase</td>
+<td>-357.0</td>
+<td>disrupted</td>
+<td>IS609_IS200/IS605_IS605_stitched</td>
+<td>2419940_30822_31236</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">168</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc8_IS66_unknown_stitched</td>
+<td>2418702_581_809</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">169</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc8_IS66_unknown_stitched</td>
+<td>2416727_261_477</td>
+<td>downstream</td>
+<td>76.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">170</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1397_IS3_IS150_stitched</td>
+<td>2420094_44315_44435</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">171</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1397_IS3_IS150_stitched</td>
+<td>2420246_10_181</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">172</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS200C_IS200/IS605_IS200_stitched</td>
+<td>2370398_0_156</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">173</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc52_IS3_IS3_stitched</td>
+<td>2420822_0_72</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">174</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS629_IS3_IS51_stitched</td>
+<td>2419496_0_495</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">175</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS629_IS3_IS51_stitched</td>
+<td>2420468_0_114</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">176</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc9_IS1380_unknown_stitched</td>
+<td>2420676_4541_4760</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">177</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc9_IS1380_unknown_stitched</td>
+<td>2419854_0_87</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">178</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS600_IS3_IS3_stitched</td>
+<td>2419478_18523_18697</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">179</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1A_IS1_unknown_stitched</td>
+<td>2420366_55_256</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">180</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1F_IS1_unknown_stitched</td>
+<td>2416193_44_125</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">181</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1F_IS1_unknown_stitched</td>
+<td>2418756_2715_5097</td>
+<td>downstream</td>
+<td>674.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">182</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc1_ISAs1_unknown</td>
+<td>2418119_14441_14759</td>
+<td>upstream</td>
+<td>257.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">183</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISCfr4_IS30_unknown</td>
+<td>2418565_61183_61768</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">184</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc24_IS3_IS51</td>
+<td>2418565_67551_67638</td>
+<td>downstream</td>
+<td>37.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">185</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS4_IS4_IS4</td>
+<td>2418565_112719_113925</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">186</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS5_IS5_IS5</td>
+<td>2418768_1198_1330</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">187</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISKox3_ISL3_unknown</td>
+<td>2419478_1802_1871</td>
+<td>upstream</td>
+<td>53.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">188</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISKox3_ISL3_unknown</td>
+<td>2419478_532_709</td>
+<td>downstream</td>
+<td>262.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">189</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS100kyp_IS21_unknown</td>
+<td>2419762_8864_9107</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">190</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>2419876_6208_6751</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">191</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>2419876_7801_8389</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">192</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>2419876_8704_9088</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">193</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>2419876_9210_9843</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">194</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS6100_IS6_unknown</td>
+<td>2419936_6567_6873</td>
+<td>upstream</td>
+<td>165.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">195</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS6100_IS6_unknown</td>
+<td>2419936_7882_7984</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">196</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISCro1_IS66_unknown</td>
+<td>2419960_3799_3994</td>
+<td>downstream</td>
+<td>116.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">197</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc38_ISL3_unknown</td>
+<td>2420170_2258_2378</td>
+<td>downstream</td>
+<td>30.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">198</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS682_IS66_unknown</td>
+<td>2420294_2034_2238</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">199</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS682_IS66_unknown</td>
+<td>2420294_103_1204</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">200</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS2_IS3_IS2</td>
+<td>2420294_13159_13264</td>
+<td>downstream</td>
+<td>199.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">201</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEch14_IS3_IS150</td>
+<td>2418794_85_1237</td>
+<td>upstream</td>
+<td>1742.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">202</th>
+<td>Real-reads GFA</td>
+<td>FP_unplaceable</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc12_IS21_unknown_stitched</td>
+<td>161047_1_70</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">203</th>
+<td>Real-reads GFA</td>
+<td>FP_unplaceable</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc52_IS3_IS3_stitched</td>
+<td>2367790_0_129</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">204</th>
+<td>Real-reads GFA</td>
+<td>FP_unplaceable</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc22_IS66_unknown</td>
+<td>630745_1_79</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">205</th>
+<td>Real-reads GFA</td>
+<td>FP_unplaceable</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc22_IS66_unknown</td>
+<td>2416987_1002_1071</td>
+<td>downstream</td>
+<td>31.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">206</th>
+<td>Real-reads GFA</td>
+<td>FP_unplaceable</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS30D_IS30_unknown</td>
+<td>2418794_1258_1360</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">207</th>
+<td>Real-reads GFA</td>
+<td>FP_unplaceable</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS30D_IS30_unknown</td>
+<td>2315248_77_158</td>
+<td>downstream</td>
+<td>1571.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">208</th>
+<td>Real-reads GFA</td>
+<td>FP_unplaceable</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEch14_IS3_IS150</td>
+<td>2417307_36_138</td>
+<td>upstream</td>
+<td>1693.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">209</th>
+<td>Real-reads GFA</td>
+<td>FP_wrong_side</td>
+<td>upstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10865</td>
+<td>tnpA</td>
+<td>IS200/IS605 family transposase</td>
+<td>-357.0</td>
+<td>disrupted</td>
+<td>IS609_IS200/IS605_IS605_stitched</td>
+<td>2419940_30822_31236</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">210</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS100kyp</td>
+<td>EC958_RS29265</td>
+<td></td>
+<td>IS21 family transposase</td>
+<td>0.0</td>
+<td>none</td>
+<td>IS100kyp_IS21_unknown</td>
+<td>2419762_10857_10989</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">211</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS1A_1</td>
+<td>EC958_RS12310</td>
+<td></td>
+<td>fimbrial protein</td>
+<td>1.0</td>
+<td>disrupted</td>
+<td>IS1A_IS1_unknown_stitched</td>
+<td>2421038_57_510</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">212</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS1A_1</td>
+<td>EC958_RS12325</td>
+<td></td>
+<td>putative fimbrial-like adhesin protein</td>
+<td>-10.0</td>
+<td>disrupted</td>
+<td>IS1A_IS1_unknown_stitched</td>
+<td>2421112_281685_282312</td>
+<td>upstream</td>
+<td>164.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">213</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS1A_2</td>
+<td>EC958_RS30330</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>101.0</td>
+<td>none</td>
+<td>IS1A_IS1_unknown_stitched</td>
+<td>2387124_2_194</td>
+<td>upstream</td>
+<td>287.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">214</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS1A_3</td>
+<td>EC958_RS29345</td>
+<td>papA</td>
+<td>P fimbria major subunit PapA</td>
+<td>-27.0</td>
+<td>none</td>
+<td>IS1A_IS1_unknown_stitched</td>
+<td>2417355_2182_2452</td>
+<td>upstream</td>
+<td>159.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">215</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS200C_1</td>
+<td>EC958_RS11105</td>
+<td></td>
+<td>prophage tail fiber N-terminal domain-containing protein</td>
+<td>11.0</td>
+<td>none</td>
+<td>IS200C_IS200/IS605_IS200_stitched</td>
+<td>2420946_97_316</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">216</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS21</td>
+<td>EC958_RS20955</td>
+<td></td>
+<td>Rpn family recombination-promoting nuclease/putative transposase</td>
+<td>0.0</td>
+<td>none</td>
+<td>IS21_IS21_unknown</td>
+<td>2419960_7079_7634</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">217</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS26_1</td>
+<td>EC958_RS25825</td>
+<td>traC</td>
+<td>type IV secretion system protein TraC</td>
+<td>-17.0</td>
+<td>none</td>
+<td>IS26_IS6_unknown_stitched</td>
+<td>2420058_9831_12360</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">218</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS26_4</td>
+<td>EC958_RS26035</td>
+<td></td>
+<td>histidine-type phosphatase</td>
+<td>-4.0</td>
+<td>none</td>
+<td>IS26_IS6_unknown_stitched</td>
+<td>2421282_9542_10097</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">219</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS30</td>
+<td>EC958_RS16645</td>
+<td></td>
+<td>transposase</td>
+<td>-43.0</td>
+<td>disrupted</td>
+<td>IS30D_IS30_unknown</td>
+<td>2396236_2_239</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">220</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS600</td>
+<td>EC958_RS28175</td>
+<td></td>
+<td>BCCT family transporter</td>
+<td>110.0</td>
+<td>disrupted</td>
+<td>IS600_IS3_IS3_stitched</td>
+<td>2420354_214_891</td>
+<td>downstream</td>
+<td>104.0</td>
+<td>NONE</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">221</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS682</td>
+<td>EC958_RS16810</td>
+<td>tnpC</td>
+<td>IS66 family transposase</td>
+<td>-2.0</td>
+<td>none</td>
+<td>IS682_IS66_unknown</td>
+<td>2420536_0_363</td>
+<td>downstream</td>
+<td>34.0</td>
+<td>NONE</td>
+<td>False</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">222</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISCfr4</td>
+<td>EC958_RS06940</td>
+<td></td>
+<td>DUF2339 domain-containing protein</td>
+<td>74.0</td>
+<td>none</td>
+<td>ISCfr4_IS30_unknown</td>
+<td>2418565_61905_64563</td>
+<td>downstream</td>
+<td>193.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">223</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc12_2</td>
+<td>EC958_RS11765</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>-11.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown_stitched</td>
+<td>2419792_0_513</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">224</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc12_3</td>
+<td>EC958_RS15730</td>
+<td></td>
+<td>ImcF-related family protein</td>
+<td>26.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown_stitched</td>
+<td>2420624_137015_138848</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">225</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc20</td>
+<td>EC958_RS28710</td>
+<td></td>
+<td>helix-turn-helix transcriptional regulator</td>
+<td>164.0</td>
+<td>none</td>
+<td>ISEc20_IS110_unknown</td>
+<td>2419762_12569_12848</td>
+<td>downstream</td>
+<td>92.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">226</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc23_1</td>
+<td>EC958_RS01090</td>
+<td></td>
+<td>YiiX/YebB-like N1pC/P60 family cysteine hydrolase</td>
+<td>1.0</td>
+<td>none</td>
+<td>ISEc23_IS66_unknown_stitched</td>
+<td>2416939_6530_7043</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">227</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc23_2</td>
+<td>EC958_RS11730</td>
+<td></td>
+<td>dynamin family protein</td>
+<td>-65.0</td>
+<td>disrupted</td>
+<td>ISEc23_IS66_unknown_stitched</td>
+<td>2419950_527_2684</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">228</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc38</td>
+<td>EC958_RS27210</td>
+<td></td>
+<td>gamma-glutamyltransferase</td>
+<td>60.0</td>
+<td>disrupted</td>
+<td>ISEc38_ISL3_unknown</td>
+<td>2420170_2458_2572</td>
+<td>downstream</td>
+<td>230.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">229</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc52_2</td>
+<td>EC958_RS17905</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>0.0</td>
+<td>none</td>
+<td>ISEc52_IS3_IS3_stitched</td>
+<td>2421270_55142_55601</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">230</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc52_4</td>
+<td>EC958_RS25035</td>
+<td>yjhR</td>
+<td>helicase YjhR</td>
+<td>-10.0</td>
+<td>disrupted</td>
+<td>ISEc52_IS3_IS3_stitched</td>
+<td>2421188_1_1168</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">231</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc53</td>
+<td>EC958_RS25065</td>
+<td>fimB</td>
+<td>type 1 fimbria switch DNA invertase FimB</td>
+<td>2.0</td>
+<td>none</td>
+<td>ISEc53_ISL3_unknown</td>
+<td>2421188_6090_6291</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">232</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc53</td>
+<td>EC958_RS25080</td>
+<td>fimB</td>
+<td>type 1 fimbria switch DNA invertase FimB</td>
+<td>-12.0</td>
+<td>none</td>
+<td>ISEc53_ISL3_unknown</td>
+<td>2421188_8223_8583</td>
+<td>upstream</td>
+<td>48.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">233</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc9</td>
+<td>EC958_RS24660</td>
+<td></td>
+<td>BCCT family transporter</td>
+<td>-12.0</td>
+<td>none</td>
+<td>ISEc9_IS1380_unknown_stitched</td>
+<td>2420376_164_1508</td>
+<td>upstream</td>
+<td>93.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">234</th>
+<td>Real-reads GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEch14</td>
+<td>EC958_RS27570</td>
+<td></td>
+<td>L-lactate permease</td>
+<td>2.0</td>
+<td>none</td>
+<td>ISEch14_IS3_IS150</td>
+<td>2420294_18761_18965</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">235</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS100kyp</td>
+<td>EC958_RS30525</td>
+<td></td>
+<td>IS21 family transposase</td>
+<td>2.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">236</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1397_2</td>
+<td>EC958_RS11060</td>
+<td>msrQ</td>
+<td>protein-methionine-sulfoxide reductase heme-binding subunit MsrQ</td>
+<td>51.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">237</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1F_1</td>
+<td>EC958_RS30560</td>
+<td>ykgR</td>
+<td>small membrane protein YkgR</td>
+<td>299.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">238</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1F_2</td>
+<td>EC958_RS29430</td>
+<td></td>
+<td>IS3 family transposase</td>
+<td>144.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">239</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS1F_2</td>
+<td>EC958_RS30140</td>
+<td>ykiE</td>
+<td>protein YkiE</td>
+<td>31.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">240</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS2</td>
+<td>EC958_RS30340</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>367.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">241</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS200C_1</td>
+<td>EC958_RS11105</td>
+<td></td>
+<td>prophage tail fiber N-terminal domain-containing protein</td>
+<td>11.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">242</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS200C_1</td>
+<td>EC958_RS11880</td>
+<td>plaP</td>
+<td>putrescine/proton symporter PlaP</td>
+<td>75.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">243</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS5</td>
+<td>EC958_RS24665</td>
+<td></td>
+<td>IS1380-like element ISEcp1 family transposase</td>
+<td>59.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">244</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS5</td>
+<td>EC958_RS24675</td>
+<td></td>
+<td>class C beta-lactamase CMY-23</td>
+<td>268.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">245</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS600</td>
+<td>EC958_RS24690</td>
+<td></td>
+<td>IS3-like element ISEc52 family transposase</td>
+<td>2.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">246</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10860</td>
+<td></td>
+<td>SOS response-associated peptidase family protein</td>
+<td>-2.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">247</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS609_2</td>
+<td>EC958_RS19340</td>
+<td>yhgE</td>
+<td>DUF4153 domain-containing protein</td>
+<td>96.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">248</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS682</td>
+<td>EC958_RS30005</td>
+<td></td>
+<td>transposase domain-containing protein</td>
+<td>56.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">249</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc12_1</td>
+<td>EC958_RS07600</td>
+<td></td>
+<td>Ail/Lom family outer membrane beta-barrel protein</td>
+<td>57.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">250</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc12_1</td>
+<td>EC958_RS07585</td>
+<td></td>
+<td>Ail/Lom family outer membrane beta-barrel protein</td>
+<td>14.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>budget</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">251</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc12_2</td>
+<td>EC958_RS11780</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>22.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">252</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc12_3</td>
+<td>EC958_RS15715</td>
+<td></td>
+<td>ImcF-related family protein</td>
+<td>58.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>budget</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">253</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc12_4</td>
+<td>EC958_RS24865</td>
+<td></td>
+<td>type IV toxin-antitoxin system YeeU family antitoxin</td>
+<td>212.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">254</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc22</td>
+<td>EC958_RS29550</td>
+<td></td>
+<td>putative zinc ribbon protein</td>
+<td>1.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">255</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc22</td>
+<td>EC958_RS16805</td>
+<td>tnpC</td>
+<td>IS66 family transposase</td>
+<td>-15.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">256</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc23_1</td>
+<td>EC958_RS01090</td>
+<td></td>
+<td>YiiX/YebB-like N1pC/P60 family cysteine hydrolase</td>
+<td>1.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">257</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc23_2</td>
+<td>EC958_RS11750</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>-4.0</td>
+<td>disrupted</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">258</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc23_3</td>
+<td>EC958_RS30575</td>
+<td></td>
+<td>transposase</td>
+<td>252.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">259</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS29425</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>78.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">260</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS24680</td>
+<td></td>
+<td>IS3-like element IS600 family transposase</td>
+<td>64.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">261</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc52_4</td>
+<td>EC958_RS28255</td>
+<td></td>
+<td>GNAT family N-acetyltransferase</td>
+<td>23.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">262</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc53</td>
+<td>EC958_RS25065</td>
+<td>fimB</td>
+<td>type 1 fimbria switch DNA invertase FimB</td>
+<td>2.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">263</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc9</td>
+<td>EC958_RS24670</td>
+<td></td>
+<td>IS5-like element IS5 family transposase</td>
+<td>146.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">264</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16660</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>-26.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">265</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16650</td>
+<td></td>
+<td>IS30-like element IS30 family transposase</td>
+<td>5.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">266</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSen1</td>
+<td>EC958_RS24890</td>
+<td></td>
+<td>Alw26I/Eco31I/Esp3I family type II restriction adenine-specific DNA-methyltransferase</td>
+<td>398.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">267</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSen1</td>
+<td>EC958_RS29720</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>313.0</td>
+<td>none</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">268</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20820</td>
+<td></td>
+<td>putative zinc ribbon protein</td>
+<td>-59.0</td>
+<td>uncertain</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">269</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20830</td>
+<td>ltrA</td>
+<td>group II intron reverse transcriptase/maturase</td>
+<td>90.0</td>
+<td>uncertain</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">270</th>
+<td>Simulated GFA</td>
+<td>FN_wrong_side</td>
+<td>downstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10865</td>
+<td>tnpA</td>
+<td>IS200/IS605 family transposase</td>
+<td>-357.0</td>
+<td>disrupted</td>
+<td>IS609_IS200/IS605_IS605_stitched</td>
+<td>1244458_192_717</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">271</th>
+<td>Simulated GFA</td>
+<td>FN_wrong_side</td>
+<td>downstream</td>
+<td>IS629</td>
+<td>EC958_RS20830</td>
+<td>ltrA</td>
+<td>group II intron reverse transcriptase/maturase</td>
+<td>671.0</td>
+<td>none</td>
+<td>IS629_IS3_IS51</td>
+<td>1245106_1200_2709</td>
+<td>upstream</td>
+<td>81.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td>gene</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">272</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc52_IS3_IS3_stitched</td>
+<td>1236636_0_156</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">273</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS600_IS3_IS3_stitched</td>
+<td>1243600_193_367</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">274</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc8_IS66_unknown_stitched</td>
+<td>1242486_0_270</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">275</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc8_IS66_unknown_stitched</td>
+<td>1245098_659_788</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">276</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc8_IS66_unknown_stitched</td>
+<td>1244320_1031_1139</td>
+<td>downstream</td>
+<td>91.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">277</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1F_IS1_unknown_stitched</td>
+<td>1244706_920_3302</td>
+<td>downstream</td>
+<td>582.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">278</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1A_IS1_unknown_stitched</td>
+<td>1236016_1227_1353</td>
+<td>downstream</td>
+<td>17.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">279</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS30_IS30_unknown</td>
+<td>1242602_2_80</td>
+<td>downstream</td>
+<td>38.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">280</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc22_IS66_unknown</td>
+<td>1243212_1_112</td>
+<td>downstream</td>
+<td>31.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">281</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISKox3_ISL3_unknown</td>
+<td>1243600_17022_17184</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">282</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISKox3_ISL3_unknown</td>
+<td>1243600_18181_18358</td>
+<td>downstream</td>
+<td>262.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">283</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS100kyp_IS21_unknown</td>
+<td>1244402_11528_11771</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">284</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc53_ISL3_unknown</td>
+<td>1244638_68105_68237</td>
+<td>downstream</td>
+<td>177.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">285</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>1244656_1815_2199</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">286</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>1244656_1060_1693</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">287</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>1244656_4152_4740</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">288</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc49_IS66_unknown</td>
+<td>1244656_2514_3102</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">289</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISCro1_IS66_unknown</td>
+<td>1244656_14651_14843</td>
+<td>downstream</td>
+<td>116.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">290</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS682_IS66_unknown</td>
+<td>1244674_2074_2278</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">291</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS682_IS66_unknown</td>
+<td>1244674_143_1244</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">292</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS2_IS3_IS2</td>
+<td>1244674_13199_13304</td>
+<td>downstream</td>
+<td>199.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">293</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEch14_IS3_IS150</td>
+<td>1135873_1_76</td>
+<td>upstream</td>
+<td>7.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">294</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1203_IS3_IS51</td>
+<td>1243600_18630_18927</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">295</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1203_IS3_IS51</td>
+<td>1244656_0_300</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">296</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1203_IS3_IS51</td>
+<td>1244936_967_1048</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">297</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc10_IS21_unknown</td>
+<td>1244994_5664_5760</td>
+<td>upstream</td>
+<td>95.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">298</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISCfr4_IS30_unknown</td>
+<td>1245002_71590_72175</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">299</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc24_IS3_IS51</td>
+<td>1245002_77958_78045</td>
+<td>downstream</td>
+<td>37.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">300</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS4_IS4_IS4</td>
+<td>1245002_123126_124332</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">301</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc9_IS1380_unknown</td>
+<td>1245048_12558_12690</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">302</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc38_ISL3_unknown</td>
+<td>1245062_65792_65912</td>
+<td>downstream</td>
+<td>30.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">303</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc1_ISAs1_unknown</td>
+<td>1245096_45535_45655</td>
+<td>upstream</td>
+<td>335.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">304</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS629_IS3_IS51</td>
+<td>1245106_3321_3399</td>
+<td>downstream</td>
+<td>7.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">305</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1R_IS1_unknown</td>
+<td>1171599_2_173</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">306</th>
+<td>Simulated GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1R_IS1_unknown</td>
+<td>1208153_0_267</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">307</th>
+<td>Simulated GFA</td>
+<td>FP_unplaceable</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1F_IS1_unknown_stitched</td>
+<td>1244890_8880_8946</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">308</th>
+<td>Simulated GFA</td>
+<td>FP_unplaceable</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS1F_IS1_unknown_stitched</td>
+<td>1245106_18576_18642</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">309</th>
+<td>Simulated GFA</td>
+<td>FP_unplaceable</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>IS30_IS30_unknown</td>
+<td>1242602_1298_1439</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">310</th>
+<td>Simulated GFA</td>
+<td>FP_unplaceable</td>
+<td>upstream</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>ISEc22_IS66_unknown</td>
+<td>1240608_0_192</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">311</th>
+<td>Simulated GFA</td>
+<td>FP_wrong_side</td>
+<td>upstream</td>
+<td>IS609_1</td>
+<td>EC958_RS10865</td>
+<td>tnpA</td>
+<td>IS200/IS605 family transposase</td>
+<td>-357.0</td>
+<td>disrupted</td>
+<td>IS609_IS200/IS605_IS605_stitched</td>
+<td>1244458_192_717</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">312</th>
+<td>Simulated GFA</td>
+<td>FP_wrong_side</td>
+<td>upstream</td>
+<td>IS629</td>
+<td>EC958_RS20830</td>
+<td>ltrA</td>
+<td>group II intron reverse transcriptase/maturase</td>
+<td>671.0</td>
+<td>none</td>
+<td>IS629_IS3_IS51</td>
+<td>1245106_1200_2709</td>
+<td>upstream</td>
+<td>81.0</td>
+<td>NONE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">313</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS100kyp</td>
+<td>EC958_RS29265</td>
+<td></td>
+<td>IS21 family transposase</td>
+<td>0.0</td>
+<td>none</td>
+<td>IS100kyp_IS21_unknown</td>
+<td>1244402_13521_13653</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">314</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS1203</td>
+<td>EC958_RS29355</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>36.0</td>
+<td>none</td>
+<td>IS1203_IS3_IS51</td>
+<td>1243600_18432_18540</td>
+<td>upstream</td>
+<td>302.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">315</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS1A_1</td>
+<td>EC958_RS12310</td>
+<td></td>
+<td>fimbrial protein</td>
+<td>1.0</td>
+<td>disrupted</td>
+<td>IS1R_IS1_unknown</td>
+<td>1245038_98886_99339</td>
+<td>downstream</td>
+<td>157.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">316</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS1A_1</td>
+<td>EC958_RS12325</td>
+<td></td>
+<td>putative fimbrial-like adhesin protein</td>
+<td>-10.0</td>
+<td>disrupted</td>
+<td>IS1R_IS1_unknown</td>
+<td>1245046_511491_512118</td>
+<td>upstream</td>
+<td>128.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">317</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS1A_3</td>
+<td>EC958_RS29345</td>
+<td>papA</td>
+<td>P fimbria major subunit PapA</td>
+<td>-27.0</td>
+<td>none</td>
+<td>IS1R_IS1_unknown</td>
+<td>1244936_3023_3293</td>
+<td>upstream</td>
+<td>123.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">318</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS21</td>
+<td>EC958_RS20955</td>
+<td></td>
+<td>Rpn family recombination-promoting nuclease/putative transposase</td>
+<td>0.0</td>
+<td>none</td>
+<td>IS21_IS21_unknown</td>
+<td>1244656_17931_18486</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">319</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS30</td>
+<td>EC958_RS16655</td>
+<td></td>
+<td>IS3-like element IS600 family transposase</td>
+<td>-1.0</td>
+<td>disrupted</td>
+<td>IS30_IS30_unknown</td>
+<td>1243758_1_889</td>
+<td>downstream</td>
+<td>8.0</td>
+<td>NONE</td>
+<td>False</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">320</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS30</td>
+<td>EC958_RS16645</td>
+<td></td>
+<td>transposase</td>
+<td>-43.0</td>
+<td>disrupted</td>
+<td>IS30_IS30_unknown</td>
+<td>1228204_2_239</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">321</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS600</td>
+<td>EC958_RS28175</td>
+<td></td>
+<td>BCCT family transporter</td>
+<td>110.0</td>
+<td>disrupted</td>
+<td>IS600_IS3_IS3_stitched</td>
+<td>1245048_14094_14771</td>
+<td>downstream</td>
+<td>104.0</td>
+<td>NONE</td>
+<td>True</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">322</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>IS629</td>
+<td>EC958_RS28880</td>
+<td></td>
+<td>IS66-like element ISEc43 family transposase</td>
+<td>18.0</td>
+<td>none</td>
+<td>IS1203_IS3_IS51</td>
+<td>1244656_357_903</td>
+<td>upstream</td>
+<td>269.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">323</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>IS682</td>
+<td>EC958_RS16810</td>
+<td>tnpC</td>
+<td>IS66 family transposase</td>
+<td>-2.0</td>
+<td>none</td>
+<td>IS682_IS66_unknown</td>
+<td>1243212_180_1233</td>
+<td>downstream</td>
+<td>484.0</td>
+<td>NONE</td>
+<td>False</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">324</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISCfr4</td>
+<td>EC958_RS06940</td>
+<td></td>
+<td>DUF2339 domain-containing protein</td>
+<td>74.0</td>
+<td>none</td>
+<td>ISCfr4_IS30_unknown</td>
+<td>1245002_72312_74970</td>
+<td>downstream</td>
+<td>193.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">325</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc12_2</td>
+<td>EC958_RS11765</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>-11.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown_stitched</td>
+<td>1243458_31_553</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">326</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc12_3</td>
+<td>EC958_RS15730</td>
+<td></td>
+<td>ImcF-related family protein</td>
+<td>26.0</td>
+<td>disrupted</td>
+<td>ISEc12_IS21_unknown_stitched</td>
+<td>1245022_137055_138858</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">327</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc20</td>
+<td>EC958_RS28710</td>
+<td></td>
+<td>helix-turn-helix transcriptional regulator</td>
+<td>164.0</td>
+<td>none</td>
+<td>ISEc20_IS110_unknown</td>
+<td>1244402_15233_15512</td>
+<td>downstream</td>
+<td>92.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">328</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc23_2</td>
+<td>EC958_RS11730</td>
+<td></td>
+<td>dynamin family protein</td>
+<td>-65.0</td>
+<td>disrupted</td>
+<td>ISEc23_IS66_unknown_stitched</td>
+<td>1244402_39_2199</td>
+<td>upstream</td>
+<td>0.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">329</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc38</td>
+<td>EC958_RS27210</td>
+<td></td>
+<td>gamma-glutamyltransferase</td>
+<td>60.0</td>
+<td>disrupted</td>
+<td>ISEc38_ISL3_unknown</td>
+<td>1245062_65598_65712</td>
+<td>downstream</td>
+<td>230.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">330</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEc52_2</td>
+<td>EC958_RS17905</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>0.0</td>
+<td>none</td>
+<td>ISEc52_IS3_IS3_stitched</td>
+<td>1245052_107_566</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">331</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc52_4</td>
+<td>EC958_RS25035</td>
+<td>yjhR</td>
+<td>helicase YjhR</td>
+<td>-10.0</td>
+<td>disrupted</td>
+<td>ISEc52_IS3_IS3_stitched</td>
+<td>1244638_73050_74094</td>
+<td>upstream</td>
+<td>53.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">332</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc53</td>
+<td>EC958_RS25080</td>
+<td>fimB</td>
+<td>type 1 fimbria switch DNA invertase FimB</td>
+<td>-12.0</td>
+<td>none</td>
+<td>ISEc53_ISL3_unknown</td>
+<td>1244638_65635_65995</td>
+<td>upstream</td>
+<td>48.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">333</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>upstream</td>
+<td>ISEc9</td>
+<td>EC958_RS24660</td>
+<td></td>
+<td>BCCT family transporter</td>
+<td>-12.0</td>
+<td>none</td>
+<td>ISEc9_IS1380_unknown</td>
+<td>1245048_8485_9829</td>
+<td>upstream</td>
+<td>93.0</td>
+<td>NONE</td>
+<td>False</td>
+<td>True</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">334</th>
+<td>Simulated GFA</td>
+<td>TP</td>
+<td>downstream</td>
+<td>ISEch14</td>
+<td>EC958_RS27570</td>
+<td></td>
+<td>L-lactate permease</td>
+<td>2.0</td>
+<td>none</td>
+<td>ISEch14_IS3_IS150</td>
+<td>1244674_18801_19005</td>
+<td>downstream</td>
+<td>0.0</td>
+<td>DISRUPTED</td>
+<td>False</td>
+<td>False</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
