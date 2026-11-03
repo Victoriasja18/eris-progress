@@ -234,12 +234,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
+  <li><a href="#main-findings" id="toc-main-findings" class="nav-link" data-scroll-target="#main-findings">Main findings</a></li>
   <li><a href="#iscds-relation-validation" id="toc-iscds-relation-validation" class="nav-link" data-scroll-target="#iscds-relation-validation">IS–CDS relation validation</a>
   <ul class="collapse">
   <li><a href="#precision-recall-and-f1" id="toc-precision-recall-and-f1" class="nav-link" data-scroll-target="#precision-recall-and-f1">Precision, recall and F1</a></li>
   <li><a href="#confusion-matrices" id="toc-confusion-matrices" class="nav-link" data-scroll-target="#confusion-matrices">Confusion matrices</a></li>
   <li><a href="#which-cds-were-predicted-wrong" id="toc-which-cds-were-predicted-wrong" class="nav-link" data-scroll-target="#which-cds-were-predicted-wrong">Which CDS were predicted wrong</a></li>
   </ul></li>
+  <li><a href="#what-will-i-do-next" id="toc-what-will-i-do-next" class="nav-link" data-scroll-target="#what-will-i-do-next">What will I do next?</a></li>
   </ul>
 </nav>
     </div>
@@ -284,14 +287,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Merge pull with Dimas’s pipeline (notes for Dimas please keep me updated with your changes)</li>
 <li>Made new github repo for eris validations <code>https://github.com/Victoriasja18/eris-validation</code></li>
 </ul>
-<p>How to navigate these repo:</p>
+</section>
+<section id="glossary" class="level1">
+<h1>Glossary</h1>
+<ul>
+<li><strong>TP_calls</strong>: eris’s nearest gene on a side that is the right gene –&gt; because the truth only reported one flanks gene, that is why we <strong>ignore the others when calculating precision</strong>.</li>
+<li><strong>FN_wrong_side</strong>: eris found the gene but reported it on the other side, e.g.&nbsp;downstream instead of upstream. It counts as a miss.</li>
+<li><strong>FP_wrong_side</strong>: The same wrong-side mistake seen from eris’s side: the gene is real but sits on the wrong side. It counts as a false call, so one wrong-side mistake costs both recall and precision.</li>
+<li><strong>FP_unplaceable</strong>: eris reported a gene whose DNA can’t be found in the reference genome, usually a gene cut off at a contig end in a GFA assembly. It can’t match anything, so it counts as a false call.</li>
+</ul>
+<p>Wrong side cause both FP and FN.</p>
+</section>
+<section id="main-findings" class="level1">
+<h1>Main findings</h1>
+<ul>
+<li>eris finds about three quarters of IS–CDS relations on the complete genome; fragmented assemblies cost about 0.12–0.15 F1.</li>
+<li>Upstream is consistently more accurate than downstream. Almost all misses come from gene calling, not from the graph walk: allowing 20 hops instead of 3 recovers only 0–2 relations per assembly.</li>
+<li>Often the right gene is found but a wrong gene sits nearer the IS. On the complete genome this happens for 17 of the 85 relations found: either the IS’s own transposase overhangs its end and is reported as a disrupted flank, or pyfgs calls a short ORF (69–234 bp) that RefSeq does not annotate. Counting only eris’s nearest gene, recall drops to 0.58 / 0.38 / 0.35.</li>
+<li>Disrupted calls are poor, especially on GFAs, partly because of the same transposase overhang.</li>
+</ul>
 </section>
 <section id="iscds-relation-validation" class="level1">
 <h1>IS–CDS relation validation</h1>
-<p>Scores from <a href="https://github.com/Victoriasja18/eris-validation">eris-validation</a>: for each IS, did eris report the right CDS <strong>upstream</strong> and <strong>downstream</strong>, at the right <strong>distance</strong>, with the right <strong>effect</strong> (disrupted)? Truth: <code>ec958_IS_cds_relations.tsv</code> (117 relations; 94 on the chromosome for the simulated GFA). eris: Dimas’s main (<code>e4c6dbd</code>), collapse mode, <code>--hops 3</code>, <code>min_coverage 0.30</code>.</p>
+<p>Scores from <a href="https://github.com/Victoriasja18/eris-validation">eris-validation</a>: for each IS, did eris report the right CDS <strong>upstream</strong> and <strong>downstream</strong>, at the right <strong>distance</strong>, with the right <strong>effect</strong> (disrupted)?</p>
+<ul>
+<li>Truth: <code>ec958_IS_cds_relations.tsv</code> (117 relations; 94 on the chromosome for the simulated GFA).</li>
+<li>eris: Dimas’s main (<code>e4c6dbd</code>), collapse mode, <code>--hops 3</code>, <code>min_coverage 0.30</code>.</li>
+</ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../../eris-validation</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run snakemake <span class="at">--cores</span> 4</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="776c74a8" class="cell" data-execution_count="1">
+<div id="ee4d9ae6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>RESULTS <span class="op">=</span> <span class="st">"../result/eris_validation"</span></span>
@@ -305,8 +330,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="precision-recall-and-f1" class="level2">
 <h2 class="anchored" data-anchor-id="precision-recall-and-f1">Precision, recall and F1</h2>
 <p>Side: recall is over the truth relations; precision is over eris’s nearest flank on each side (per graph branch). A flank on the wrong side counts as a miss on its true side and a false call on the side reported. Distance: per band (overlapping, near 0–150 bp, far), over relations found on their side. Effect: disrupted only; eris <code>TRUNCATED</code> counts as disrupted.</p>
-<p>Recall = TP / (TP + FN) over the truth relations. Precision = TP_calls / (TP_calls + FP) over eris’s calls; for side and effect these are eris’s nearest flanks, so TP_calls can be lower than TP (one collapsed IS locus can find several truth relations, e.g.&nbsp;the flanks of several copies, but has only one nearest flank per side per branch).</p>
-<div id="d1be6686" class="cell" data-execution_count="2">
+<ul>
+<li>Recall = TP / (TP + FN) over the truth relations.</li>
+<li>Precision = TP_calls / (TP_calls + FP) over eris’s calls; for side and effect these are eris’s nearest flanks, so TP_calls can be lower than TP (when a wrong gene, such as the IS’s own transposase or a short ORF, sits nearer the IS than the true CDS, the true CDS still counts as found for recall, but eris’s call is an FP).</li>
+</ul>
+<div id="03b5e16b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(metrics.drop(columns<span class="op">=</span>[<span class="st">"genome"</span>, <span class="st">"assembly_type"</span>])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        .set_index([<span class="st">"assembly"</span>, <span class="st">"dimension"</span>, <span class="st">"class"</span>])</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        .style.<span class="bu">format</span>(<span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>, subset<span class="op">=</span>[<span class="st">"precision"</span>, <span class="st">"recall"</span>, <span class="st">"f1"</span>], na_rep<span class="op">=</span><span class="st">"–"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -314,19 +342,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style type="text/css">
 </style>
 
-<table id="T_cb3ff" class="caption-top table table-sm table-striped small">
+<table id="T_e6f76" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th class="blank" data-quarto-table-cell-role="th">&nbsp;</th>
 <th class="blank" data-quarto-table-cell-role="th">&nbsp;</th>
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_cb3ff_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">TP</th>
-<th id="T_cb3ff_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">FN</th>
-<th id="T_cb3ff_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">TP_calls</th>
-<th id="T_cb3ff_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">FP</th>
-<th id="T_cb3ff_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">precision</th>
-<th id="T_cb3ff_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">recall</th>
-<th id="T_cb3ff_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">f1</th>
+<th id="T_e6f76_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">TP</th>
+<th id="T_e6f76_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">FN</th>
+<th id="T_e6f76_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">TP_calls</th>
+<th id="T_e6f76_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">FP</th>
+<th id="T_e6f76_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">precision</th>
+<th id="T_e6f76_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">recall</th>
+<th id="T_e6f76_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">f1</th>
 </tr>
 <tr class="even">
 <th class="index_name level0" data-quarto-table-cell-role="th">assembly</th>
@@ -343,232 +371,232 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<th rowspan="7" id="T_cb3ff_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
-<th rowspan="3" id="T_cb3ff_level1_row0" class="row_heading level1 row0" data-quarto-table-cell-role="th">side</th>
-<th id="T_cb3ff_level2_row0" class="row_heading level2 row0" data-quarto-table-cell-role="th">upstream</th>
-<td id="T_cb3ff_row0_col0" class="data row0 col0">47</td>
-<td id="T_cb3ff_row0_col1" class="data row0 col1">12</td>
-<td id="T_cb3ff_row0_col2" class="data row0 col2">42</td>
-<td id="T_cb3ff_row0_col3" class="data row0 col3">16</td>
-<td id="T_cb3ff_row0_col4" class="data row0 col4">0.72</td>
-<td id="T_cb3ff_row0_col5" class="data row0 col5">0.80</td>
-<td id="T_cb3ff_row0_col6" class="data row0 col6">0.76</td>
+<th rowspan="7" id="T_e6f76_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
+<th rowspan="3" id="T_e6f76_level1_row0" class="row_heading level1 row0" data-quarto-table-cell-role="th">side</th>
+<th id="T_e6f76_level2_row0" class="row_heading level2 row0" data-quarto-table-cell-role="th">upstream</th>
+<td id="T_e6f76_row0_col0" class="data row0 col0">47</td>
+<td id="T_e6f76_row0_col1" class="data row0 col1">12</td>
+<td id="T_e6f76_row0_col2" class="data row0 col2">42</td>
+<td id="T_e6f76_row0_col3" class="data row0 col3">16</td>
+<td id="T_e6f76_row0_col4" class="data row0 col4">0.72</td>
+<td id="T_e6f76_row0_col5" class="data row0 col5">0.80</td>
+<td id="T_e6f76_row0_col6" class="data row0 col6">0.76</td>
 </tr>
 <tr class="even">
-<th id="T_cb3ff_level2_row1" class="row_heading level2 row1" data-quarto-table-cell-role="th">downstream</th>
-<td id="T_cb3ff_row1_col0" class="data row1 col0">38</td>
-<td id="T_cb3ff_row1_col1" class="data row1 col1">20</td>
-<td id="T_cb3ff_row1_col2" class="data row1 col2">26</td>
-<td id="T_cb3ff_row1_col3" class="data row1 col3">32</td>
-<td id="T_cb3ff_row1_col4" class="data row1 col4">0.45</td>
-<td id="T_cb3ff_row1_col5" class="data row1 col5">0.66</td>
-<td id="T_cb3ff_row1_col6" class="data row1 col6">0.53</td>
+<th id="T_e6f76_level2_row1" class="row_heading level2 row1" data-quarto-table-cell-role="th">downstream</th>
+<td id="T_e6f76_row1_col0" class="data row1 col0">38</td>
+<td id="T_e6f76_row1_col1" class="data row1 col1">20</td>
+<td id="T_e6f76_row1_col2" class="data row1 col2">26</td>
+<td id="T_e6f76_row1_col3" class="data row1 col3">32</td>
+<td id="T_e6f76_row1_col4" class="data row1 col4">0.45</td>
+<td id="T_e6f76_row1_col5" class="data row1 col5">0.66</td>
+<td id="T_e6f76_row1_col6" class="data row1 col6">0.53</td>
 </tr>
 <tr class="odd">
-<th id="T_cb3ff_level2_row2" class="row_heading level2 row2" data-quarto-table-cell-role="th">both</th>
-<td id="T_cb3ff_row2_col0" class="data row2 col0">85</td>
-<td id="T_cb3ff_row2_col1" class="data row2 col1">32</td>
-<td id="T_cb3ff_row2_col2" class="data row2 col2">68</td>
-<td id="T_cb3ff_row2_col3" class="data row2 col3">48</td>
-<td id="T_cb3ff_row2_col4" class="data row2 col4">0.59</td>
-<td id="T_cb3ff_row2_col5" class="data row2 col5">0.73</td>
-<td id="T_cb3ff_row2_col6" class="data row2 col6">0.65</td>
+<th id="T_e6f76_level2_row2" class="row_heading level2 row2" data-quarto-table-cell-role="th">both</th>
+<td id="T_e6f76_row2_col0" class="data row2 col0">85</td>
+<td id="T_e6f76_row2_col1" class="data row2 col1">32</td>
+<td id="T_e6f76_row2_col2" class="data row2 col2">68</td>
+<td id="T_e6f76_row2_col3" class="data row2 col3">48</td>
+<td id="T_e6f76_row2_col4" class="data row2 col4">0.59</td>
+<td id="T_e6f76_row2_col5" class="data row2 col5">0.73</td>
+<td id="T_e6f76_row2_col6" class="data row2 col6">0.65</td>
 </tr>
 <tr class="even">
-<th rowspan="3" id="T_cb3ff_level1_row3" class="row_heading level1 row3" data-quarto-table-cell-role="th">distance</th>
-<th id="T_cb3ff_level2_row3" class="row_heading level2 row3" data-quarto-table-cell-role="th">overlapping</th>
-<td id="T_cb3ff_row3_col0" class="data row3 col0">8</td>
-<td id="T_cb3ff_row3_col1" class="data row3 col1">5</td>
-<td id="T_cb3ff_row3_col2" class="data row3 col2">8</td>
-<td id="T_cb3ff_row3_col3" class="data row3 col3">16</td>
-<td id="T_cb3ff_row3_col4" class="data row3 col4">0.33</td>
-<td id="T_cb3ff_row3_col5" class="data row3 col5">0.61</td>
-<td id="T_cb3ff_row3_col6" class="data row3 col6">0.43</td>
+<th rowspan="3" id="T_e6f76_level1_row3" class="row_heading level1 row3" data-quarto-table-cell-role="th">distance</th>
+<th id="T_e6f76_level2_row3" class="row_heading level2 row3" data-quarto-table-cell-role="th">overlapping</th>
+<td id="T_e6f76_row3_col0" class="data row3 col0">8</td>
+<td id="T_e6f76_row3_col1" class="data row3 col1">5</td>
+<td id="T_e6f76_row3_col2" class="data row3 col2">8</td>
+<td id="T_e6f76_row3_col3" class="data row3 col3">16</td>
+<td id="T_e6f76_row3_col4" class="data row3 col4">0.33</td>
+<td id="T_e6f76_row3_col5" class="data row3 col5">0.61</td>
+<td id="T_e6f76_row3_col6" class="data row3 col6">0.43</td>
 </tr>
 <tr class="odd">
-<th id="T_cb3ff_level2_row4" class="row_heading level2 row4" data-quarto-table-cell-role="th">near</th>
-<td id="T_cb3ff_row4_col0" class="data row4 col0">30</td>
-<td id="T_cb3ff_row4_col1" class="data row4 col1">19</td>
-<td id="T_cb3ff_row4_col2" class="data row4 col2">30</td>
-<td id="T_cb3ff_row4_col3" class="data row4 col3">6</td>
-<td id="T_cb3ff_row4_col4" class="data row4 col4">0.83</td>
-<td id="T_cb3ff_row4_col5" class="data row4 col5">0.61</td>
-<td id="T_cb3ff_row4_col6" class="data row4 col6">0.71</td>
+<th id="T_e6f76_level2_row4" class="row_heading level2 row4" data-quarto-table-cell-role="th">near</th>
+<td id="T_e6f76_row4_col0" class="data row4 col0">30</td>
+<td id="T_e6f76_row4_col1" class="data row4 col1">19</td>
+<td id="T_e6f76_row4_col2" class="data row4 col2">30</td>
+<td id="T_e6f76_row4_col3" class="data row4 col3">6</td>
+<td id="T_e6f76_row4_col4" class="data row4 col4">0.83</td>
+<td id="T_e6f76_row4_col5" class="data row4 col5">0.61</td>
+<td id="T_e6f76_row4_col6" class="data row4 col6">0.71</td>
 </tr>
 <tr class="even">
-<th id="T_cb3ff_level2_row5" class="row_heading level2 row5" data-quarto-table-cell-role="th">far</th>
-<td id="T_cb3ff_row5_col0" class="data row5 col0">22</td>
-<td id="T_cb3ff_row5_col1" class="data row5 col1">1</td>
-<td id="T_cb3ff_row5_col2" class="data row5 col2">22</td>
-<td id="T_cb3ff_row5_col3" class="data row5 col3">3</td>
-<td id="T_cb3ff_row5_col4" class="data row5 col4">0.88</td>
-<td id="T_cb3ff_row5_col5" class="data row5 col5">0.96</td>
-<td id="T_cb3ff_row5_col6" class="data row5 col6">0.92</td>
+<th id="T_e6f76_level2_row5" class="row_heading level2 row5" data-quarto-table-cell-role="th">far</th>
+<td id="T_e6f76_row5_col0" class="data row5 col0">22</td>
+<td id="T_e6f76_row5_col1" class="data row5 col1">1</td>
+<td id="T_e6f76_row5_col2" class="data row5 col2">22</td>
+<td id="T_e6f76_row5_col3" class="data row5 col3">3</td>
+<td id="T_e6f76_row5_col4" class="data row5 col4">0.88</td>
+<td id="T_e6f76_row5_col5" class="data row5 col5">0.96</td>
+<td id="T_e6f76_row5_col6" class="data row5 col6">0.92</td>
 </tr>
 <tr class="odd">
-<th id="T_cb3ff_level1_row6" class="row_heading level1 row6" data-quarto-table-cell-role="th">effect</th>
-<th id="T_cb3ff_level2_row6" class="row_heading level2 row6" data-quarto-table-cell-role="th">disrupted</th>
-<td id="T_cb3ff_row6_col0" class="data row6 col0">8</td>
-<td id="T_cb3ff_row6_col1" class="data row6 col1">11</td>
-<td id="T_cb3ff_row6_col2" class="data row6 col2">8</td>
-<td id="T_cb3ff_row6_col3" class="data row6 col3">37</td>
-<td id="T_cb3ff_row6_col4" class="data row6 col4">0.18</td>
-<td id="T_cb3ff_row6_col5" class="data row6 col5">0.42</td>
-<td id="T_cb3ff_row6_col6" class="data row6 col6">0.25</td>
+<th id="T_e6f76_level1_row6" class="row_heading level1 row6" data-quarto-table-cell-role="th">effect</th>
+<th id="T_e6f76_level2_row6" class="row_heading level2 row6" data-quarto-table-cell-role="th">disrupted</th>
+<td id="T_e6f76_row6_col0" class="data row6 col0">8</td>
+<td id="T_e6f76_row6_col1" class="data row6 col1">11</td>
+<td id="T_e6f76_row6_col2" class="data row6 col2">8</td>
+<td id="T_e6f76_row6_col3" class="data row6 col3">37</td>
+<td id="T_e6f76_row6_col4" class="data row6 col4">0.18</td>
+<td id="T_e6f76_row6_col5" class="data row6 col5">0.42</td>
+<td id="T_e6f76_row6_col6" class="data row6 col6">0.25</td>
 </tr>
 <tr class="even">
-<th rowspan="7" id="T_cb3ff_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">Simulated GFA</th>
-<th rowspan="3" id="T_cb3ff_level1_row7" class="row_heading level1 row7" data-quarto-table-cell-role="th">side</th>
-<th id="T_cb3ff_level2_row7" class="row_heading level2 row7" data-quarto-table-cell-role="th">upstream</th>
-<td id="T_cb3ff_row7_col0" class="data row7 col0">31</td>
-<td id="T_cb3ff_row7_col1" class="data row7 col1">16</td>
-<td id="T_cb3ff_row7_col2" class="data row7 col2">22</td>
-<td id="T_cb3ff_row7_col3" class="data row7 col3">20</td>
-<td id="T_cb3ff_row7_col4" class="data row7 col4">0.52</td>
-<td id="T_cb3ff_row7_col5" class="data row7 col5">0.66</td>
-<td id="T_cb3ff_row7_col6" class="data row7 col6">0.58</td>
+<th rowspan="7" id="T_e6f76_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">Simulated GFA</th>
+<th rowspan="3" id="T_e6f76_level1_row7" class="row_heading level1 row7" data-quarto-table-cell-role="th">side</th>
+<th id="T_e6f76_level2_row7" class="row_heading level2 row7" data-quarto-table-cell-role="th">upstream</th>
+<td id="T_e6f76_row7_col0" class="data row7 col0">31</td>
+<td id="T_e6f76_row7_col1" class="data row7 col1">16</td>
+<td id="T_e6f76_row7_col2" class="data row7 col2">22</td>
+<td id="T_e6f76_row7_col3" class="data row7 col3">20</td>
+<td id="T_e6f76_row7_col4" class="data row7 col4">0.52</td>
+<td id="T_e6f76_row7_col5" class="data row7 col5">0.66</td>
+<td id="T_e6f76_row7_col6" class="data row7 col6">0.58</td>
 </tr>
 <tr class="odd">
-<th id="T_cb3ff_level2_row8" class="row_heading level2 row8" data-quarto-table-cell-role="th">downstream</th>
-<td id="T_cb3ff_row8_col0" class="data row8 col0">26</td>
-<td id="T_cb3ff_row8_col1" class="data row8 col1">21</td>
-<td id="T_cb3ff_row8_col2" class="data row8 col2">14</td>
-<td id="T_cb3ff_row8_col3" class="data row8 col3">21</td>
-<td id="T_cb3ff_row8_col4" class="data row8 col4">0.40</td>
-<td id="T_cb3ff_row8_col5" class="data row8 col5">0.55</td>
-<td id="T_cb3ff_row8_col6" class="data row8 col6">0.46</td>
+<th id="T_e6f76_level2_row8" class="row_heading level2 row8" data-quarto-table-cell-role="th">downstream</th>
+<td id="T_e6f76_row8_col0" class="data row8 col0">26</td>
+<td id="T_e6f76_row8_col1" class="data row8 col1">21</td>
+<td id="T_e6f76_row8_col2" class="data row8 col2">14</td>
+<td id="T_e6f76_row8_col3" class="data row8 col3">21</td>
+<td id="T_e6f76_row8_col4" class="data row8 col4">0.40</td>
+<td id="T_e6f76_row8_col5" class="data row8 col5">0.55</td>
+<td id="T_e6f76_row8_col6" class="data row8 col6">0.46</td>
 </tr>
 <tr class="even">
-<th id="T_cb3ff_level2_row9" class="row_heading level2 row9" data-quarto-table-cell-role="th">both</th>
-<td id="T_cb3ff_row9_col0" class="data row9 col0">57</td>
-<td id="T_cb3ff_row9_col1" class="data row9 col1">37</td>
-<td id="T_cb3ff_row9_col2" class="data row9 col2">36</td>
-<td id="T_cb3ff_row9_col3" class="data row9 col3">41</td>
-<td id="T_cb3ff_row9_col4" class="data row9 col4">0.47</td>
-<td id="T_cb3ff_row9_col5" class="data row9 col5">0.61</td>
-<td id="T_cb3ff_row9_col6" class="data row9 col6">0.53</td>
+<th id="T_e6f76_level2_row9" class="row_heading level2 row9" data-quarto-table-cell-role="th">both</th>
+<td id="T_e6f76_row9_col0" class="data row9 col0">57</td>
+<td id="T_e6f76_row9_col1" class="data row9 col1">37</td>
+<td id="T_e6f76_row9_col2" class="data row9 col2">36</td>
+<td id="T_e6f76_row9_col3" class="data row9 col3">41</td>
+<td id="T_e6f76_row9_col4" class="data row9 col4">0.47</td>
+<td id="T_e6f76_row9_col5" class="data row9 col5">0.61</td>
+<td id="T_e6f76_row9_col6" class="data row9 col6">0.53</td>
 </tr>
 <tr class="odd">
-<th rowspan="3" id="T_cb3ff_level1_row10" class="row_heading level1 row10" data-quarto-table-cell-role="th">distance</th>
-<th id="T_cb3ff_level2_row10" class="row_heading level2 row10" data-quarto-table-cell-role="th">overlapping</th>
-<td id="T_cb3ff_row10_col0" class="data row10 col0">0</td>
-<td id="T_cb3ff_row10_col1" class="data row10 col1">10</td>
-<td id="T_cb3ff_row10_col2" class="data row10 col2">0</td>
-<td id="T_cb3ff_row10_col3" class="data row10 col3">5</td>
-<td id="T_cb3ff_row10_col4" class="data row10 col4">0.00</td>
-<td id="T_cb3ff_row10_col5" class="data row10 col5">0.00</td>
-<td id="T_cb3ff_row10_col6" class="data row10 col6">0.00</td>
+<th rowspan="3" id="T_e6f76_level1_row10" class="row_heading level1 row10" data-quarto-table-cell-role="th">distance</th>
+<th id="T_e6f76_level2_row10" class="row_heading level2 row10" data-quarto-table-cell-role="th">overlapping</th>
+<td id="T_e6f76_row10_col0" class="data row10 col0">0</td>
+<td id="T_e6f76_row10_col1" class="data row10 col1">10</td>
+<td id="T_e6f76_row10_col2" class="data row10 col2">0</td>
+<td id="T_e6f76_row10_col3" class="data row10 col3">5</td>
+<td id="T_e6f76_row10_col4" class="data row10 col4">0.00</td>
+<td id="T_e6f76_row10_col5" class="data row10 col5">0.00</td>
+<td id="T_e6f76_row10_col6" class="data row10 col6">0.00</td>
 </tr>
 <tr class="even">
-<th id="T_cb3ff_level2_row11" class="row_heading level2 row11" data-quarto-table-cell-role="th">near</th>
-<td id="T_cb3ff_row11_col0" class="data row11 col0">21</td>
-<td id="T_cb3ff_row11_col1" class="data row11 col1">10</td>
-<td id="T_cb3ff_row11_col2" class="data row11 col2">21</td>
-<td id="T_cb3ff_row11_col3" class="data row11 col3">10</td>
-<td id="T_cb3ff_row11_col4" class="data row11 col4">0.68</td>
-<td id="T_cb3ff_row11_col5" class="data row11 col5">0.68</td>
-<td id="T_cb3ff_row11_col6" class="data row11 col6">0.68</td>
+<th id="T_e6f76_level2_row11" class="row_heading level2 row11" data-quarto-table-cell-role="th">near</th>
+<td id="T_e6f76_row11_col0" class="data row11 col0">21</td>
+<td id="T_e6f76_row11_col1" class="data row11 col1">10</td>
+<td id="T_e6f76_row11_col2" class="data row11 col2">21</td>
+<td id="T_e6f76_row11_col3" class="data row11 col3">10</td>
+<td id="T_e6f76_row11_col4" class="data row11 col4">0.68</td>
+<td id="T_e6f76_row11_col5" class="data row11 col5">0.68</td>
+<td id="T_e6f76_row11_col6" class="data row11 col6">0.68</td>
 </tr>
 <tr class="odd">
-<th id="T_cb3ff_level2_row12" class="row_heading level2 row12" data-quarto-table-cell-role="th">far</th>
-<td id="T_cb3ff_row12_col0" class="data row12 col0">15</td>
-<td id="T_cb3ff_row12_col1" class="data row12 col1">1</td>
-<td id="T_cb3ff_row12_col2" class="data row12 col2">15</td>
-<td id="T_cb3ff_row12_col3" class="data row12 col3">6</td>
-<td id="T_cb3ff_row12_col4" class="data row12 col4">0.71</td>
-<td id="T_cb3ff_row12_col5" class="data row12 col5">0.94</td>
-<td id="T_cb3ff_row12_col6" class="data row12 col6">0.81</td>
+<th id="T_e6f76_level2_row12" class="row_heading level2 row12" data-quarto-table-cell-role="th">far</th>
+<td id="T_e6f76_row12_col0" class="data row12 col0">15</td>
+<td id="T_e6f76_row12_col1" class="data row12 col1">1</td>
+<td id="T_e6f76_row12_col2" class="data row12 col2">15</td>
+<td id="T_e6f76_row12_col3" class="data row12 col3">6</td>
+<td id="T_e6f76_row12_col4" class="data row12 col4">0.71</td>
+<td id="T_e6f76_row12_col5" class="data row12 col5">0.94</td>
+<td id="T_e6f76_row12_col6" class="data row12 col6">0.81</td>
 </tr>
 <tr class="even">
-<th id="T_cb3ff_level1_row13" class="row_heading level1 row13" data-quarto-table-cell-role="th">effect</th>
-<th id="T_cb3ff_level2_row13" class="row_heading level2 row13" data-quarto-table-cell-role="th">disrupted</th>
-<td id="T_cb3ff_row13_col0" class="data row13 col0">1</td>
-<td id="T_cb3ff_row13_col1" class="data row13 col1">16</td>
-<td id="T_cb3ff_row13_col2" class="data row13 col2">1</td>
-<td id="T_cb3ff_row13_col3" class="data row13 col3">19</td>
-<td id="T_cb3ff_row13_col4" class="data row13 col4">0.05</td>
-<td id="T_cb3ff_row13_col5" class="data row13 col5">0.06</td>
-<td id="T_cb3ff_row13_col6" class="data row13 col6">0.05</td>
+<th id="T_e6f76_level1_row13" class="row_heading level1 row13" data-quarto-table-cell-role="th">effect</th>
+<th id="T_e6f76_level2_row13" class="row_heading level2 row13" data-quarto-table-cell-role="th">disrupted</th>
+<td id="T_e6f76_row13_col0" class="data row13 col0">1</td>
+<td id="T_e6f76_row13_col1" class="data row13 col1">16</td>
+<td id="T_e6f76_row13_col2" class="data row13 col2">1</td>
+<td id="T_e6f76_row13_col3" class="data row13 col3">19</td>
+<td id="T_e6f76_row13_col4" class="data row13 col4">0.05</td>
+<td id="T_e6f76_row13_col5" class="data row13 col5">0.06</td>
+<td id="T_e6f76_row13_col6" class="data row13 col6">0.05</td>
 </tr>
 <tr class="odd">
-<th rowspan="7" id="T_cb3ff_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">Real-reads GFA</th>
-<th rowspan="3" id="T_cb3ff_level1_row14" class="row_heading level1 row14" data-quarto-table-cell-role="th">side</th>
-<th id="T_cb3ff_level2_row14" class="row_heading level2 row14" data-quarto-table-cell-role="th">upstream</th>
-<td id="T_cb3ff_row14_col0" class="data row14 col0">35</td>
-<td id="T_cb3ff_row14_col1" class="data row14 col1">24</td>
-<td id="T_cb3ff_row14_col2" class="data row14 col2">24</td>
-<td id="T_cb3ff_row14_col3" class="data row14 col3">22</td>
-<td id="T_cb3ff_row14_col4" class="data row14 col4">0.52</td>
-<td id="T_cb3ff_row14_col5" class="data row14 col5">0.59</td>
-<td id="T_cb3ff_row14_col6" class="data row14 col6">0.56</td>
+<th rowspan="7" id="T_e6f76_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">Real-reads GFA</th>
+<th rowspan="3" id="T_e6f76_level1_row14" class="row_heading level1 row14" data-quarto-table-cell-role="th">side</th>
+<th id="T_e6f76_level2_row14" class="row_heading level2 row14" data-quarto-table-cell-role="th">upstream</th>
+<td id="T_e6f76_row14_col0" class="data row14 col0">35</td>
+<td id="T_e6f76_row14_col1" class="data row14 col1">24</td>
+<td id="T_e6f76_row14_col2" class="data row14 col2">24</td>
+<td id="T_e6f76_row14_col3" class="data row14 col3">22</td>
+<td id="T_e6f76_row14_col4" class="data row14 col4">0.52</td>
+<td id="T_e6f76_row14_col5" class="data row14 col5">0.59</td>
+<td id="T_e6f76_row14_col6" class="data row14 col6">0.56</td>
 </tr>
 <tr class="even">
-<th id="T_cb3ff_level2_row15" class="row_heading level2 row15" data-quarto-table-cell-role="th">downstream</th>
-<td id="T_cb3ff_row15_col0" class="data row15 col0">25</td>
-<td id="T_cb3ff_row15_col1" class="data row15 col1">33</td>
-<td id="T_cb3ff_row15_col2" class="data row15 col2">17</td>
-<td id="T_cb3ff_row15_col3" class="data row15 col3">20</td>
-<td id="T_cb3ff_row15_col4" class="data row15 col4">0.46</td>
-<td id="T_cb3ff_row15_col5" class="data row15 col5">0.43</td>
-<td id="T_cb3ff_row15_col6" class="data row15 col6">0.45</td>
+<th id="T_e6f76_level2_row15" class="row_heading level2 row15" data-quarto-table-cell-role="th">downstream</th>
+<td id="T_e6f76_row15_col0" class="data row15 col0">25</td>
+<td id="T_e6f76_row15_col1" class="data row15 col1">33</td>
+<td id="T_e6f76_row15_col2" class="data row15 col2">17</td>
+<td id="T_e6f76_row15_col3" class="data row15 col3">20</td>
+<td id="T_e6f76_row15_col4" class="data row15 col4">0.46</td>
+<td id="T_e6f76_row15_col5" class="data row15 col5">0.43</td>
+<td id="T_e6f76_row15_col6" class="data row15 col6">0.45</td>
 </tr>
 <tr class="odd">
-<th id="T_cb3ff_level2_row16" class="row_heading level2 row16" data-quarto-table-cell-role="th">both</th>
-<td id="T_cb3ff_row16_col0" class="data row16 col0">60</td>
-<td id="T_cb3ff_row16_col1" class="data row16 col1">57</td>
-<td id="T_cb3ff_row16_col2" class="data row16 col2">41</td>
-<td id="T_cb3ff_row16_col3" class="data row16 col3">42</td>
-<td id="T_cb3ff_row16_col4" class="data row16 col4">0.49</td>
-<td id="T_cb3ff_row16_col5" class="data row16 col5">0.51</td>
-<td id="T_cb3ff_row16_col6" class="data row16 col6">0.50</td>
+<th id="T_e6f76_level2_row16" class="row_heading level2 row16" data-quarto-table-cell-role="th">both</th>
+<td id="T_e6f76_row16_col0" class="data row16 col0">60</td>
+<td id="T_e6f76_row16_col1" class="data row16 col1">57</td>
+<td id="T_e6f76_row16_col2" class="data row16 col2">41</td>
+<td id="T_e6f76_row16_col3" class="data row16 col3">42</td>
+<td id="T_e6f76_row16_col4" class="data row16 col4">0.49</td>
+<td id="T_e6f76_row16_col5" class="data row16 col5">0.51</td>
+<td id="T_e6f76_row16_col6" class="data row16 col6">0.50</td>
 </tr>
 <tr class="even">
-<th rowspan="3" id="T_cb3ff_level1_row17" class="row_heading level1 row17" data-quarto-table-cell-role="th">distance</th>
-<th id="T_cb3ff_level2_row17" class="row_heading level2 row17" data-quarto-table-cell-role="th">overlapping</th>
-<td id="T_cb3ff_row17_col0" class="data row17 col0">1</td>
-<td id="T_cb3ff_row17_col1" class="data row17 col1">10</td>
-<td id="T_cb3ff_row17_col2" class="data row17 col2">1</td>
-<td id="T_cb3ff_row17_col3" class="data row17 col3">9</td>
-<td id="T_cb3ff_row17_col4" class="data row17 col4">0.10</td>
-<td id="T_cb3ff_row17_col5" class="data row17 col5">0.09</td>
-<td id="T_cb3ff_row17_col6" class="data row17 col6">0.10</td>
+<th rowspan="3" id="T_e6f76_level1_row17" class="row_heading level1 row17" data-quarto-table-cell-role="th">distance</th>
+<th id="T_e6f76_level2_row17" class="row_heading level2 row17" data-quarto-table-cell-role="th">overlapping</th>
+<td id="T_e6f76_row17_col0" class="data row17 col0">1</td>
+<td id="T_e6f76_row17_col1" class="data row17 col1">10</td>
+<td id="T_e6f76_row17_col2" class="data row17 col2">1</td>
+<td id="T_e6f76_row17_col3" class="data row17 col3">9</td>
+<td id="T_e6f76_row17_col4" class="data row17 col4">0.10</td>
+<td id="T_e6f76_row17_col5" class="data row17 col5">0.09</td>
+<td id="T_e6f76_row17_col6" class="data row17 col6">0.10</td>
 </tr>
 <tr class="odd">
-<th id="T_cb3ff_level2_row18" class="row_heading level2 row18" data-quarto-table-cell-role="th">near</th>
-<td id="T_cb3ff_row18_col0" class="data row18 col0">23</td>
-<td id="T_cb3ff_row18_col1" class="data row18 col1">12</td>
-<td id="T_cb3ff_row18_col2" class="data row18 col2">23</td>
-<td id="T_cb3ff_row18_col3" class="data row18 col3">9</td>
-<td id="T_cb3ff_row18_col4" class="data row18 col4">0.72</td>
-<td id="T_cb3ff_row18_col5" class="data row18 col5">0.66</td>
-<td id="T_cb3ff_row18_col6" class="data row18 col6">0.69</td>
+<th id="T_e6f76_level2_row18" class="row_heading level2 row18" data-quarto-table-cell-role="th">near</th>
+<td id="T_e6f76_row18_col0" class="data row18 col0">23</td>
+<td id="T_e6f76_row18_col1" class="data row18 col1">12</td>
+<td id="T_e6f76_row18_col2" class="data row18 col2">23</td>
+<td id="T_e6f76_row18_col3" class="data row18 col3">9</td>
+<td id="T_e6f76_row18_col4" class="data row18 col4">0.72</td>
+<td id="T_e6f76_row18_col5" class="data row18 col5">0.66</td>
+<td id="T_e6f76_row18_col6" class="data row18 col6">0.69</td>
 </tr>
 <tr class="even">
-<th id="T_cb3ff_level2_row19" class="row_heading level2 row19" data-quarto-table-cell-role="th">far</th>
-<td id="T_cb3ff_row19_col0" class="data row19 col0">13</td>
-<td id="T_cb3ff_row19_col1" class="data row19 col1">1</td>
-<td id="T_cb3ff_row19_col2" class="data row19 col2">13</td>
-<td id="T_cb3ff_row19_col3" class="data row19 col3">5</td>
-<td id="T_cb3ff_row19_col4" class="data row19 col4">0.72</td>
-<td id="T_cb3ff_row19_col5" class="data row19 col5">0.93</td>
-<td id="T_cb3ff_row19_col6" class="data row19 col6">0.81</td>
+<th id="T_e6f76_level2_row19" class="row_heading level2 row19" data-quarto-table-cell-role="th">far</th>
+<td id="T_e6f76_row19_col0" class="data row19 col0">13</td>
+<td id="T_e6f76_row19_col1" class="data row19 col1">1</td>
+<td id="T_e6f76_row19_col2" class="data row19 col2">13</td>
+<td id="T_e6f76_row19_col3" class="data row19 col3">5</td>
+<td id="T_e6f76_row19_col4" class="data row19 col4">0.72</td>
+<td id="T_e6f76_row19_col5" class="data row19 col5">0.93</td>
+<td id="T_e6f76_row19_col6" class="data row19 col6">0.81</td>
 </tr>
 <tr class="odd">
-<th id="T_cb3ff_level1_row20" class="row_heading level1 row20" data-quarto-table-cell-role="th">effect</th>
-<th id="T_cb3ff_level2_row20" class="row_heading level2 row20" data-quarto-table-cell-role="th">disrupted</th>
-<td id="T_cb3ff_row20_col0" class="data row20 col0">2</td>
-<td id="T_cb3ff_row20_col1" class="data row20 col1">17</td>
-<td id="T_cb3ff_row20_col2" class="data row20 col2">1</td>
-<td id="T_cb3ff_row20_col3" class="data row20 col3">25</td>
-<td id="T_cb3ff_row20_col4" class="data row20 col4">0.04</td>
-<td id="T_cb3ff_row20_col5" class="data row20 col5">0.10</td>
-<td id="T_cb3ff_row20_col6" class="data row20 col6">0.06</td>
+<th id="T_e6f76_level1_row20" class="row_heading level1 row20" data-quarto-table-cell-role="th">effect</th>
+<th id="T_e6f76_level2_row20" class="row_heading level2 row20" data-quarto-table-cell-role="th">disrupted</th>
+<td id="T_e6f76_row20_col0" class="data row20 col0">2</td>
+<td id="T_e6f76_row20_col1" class="data row20 col1">17</td>
+<td id="T_e6f76_row20_col2" class="data row20 col2">1</td>
+<td id="T_e6f76_row20_col3" class="data row20 col3">25</td>
+<td id="T_e6f76_row20_col4" class="data row20 col4">0.04</td>
+<td id="T_e6f76_row20_col5" class="data row20 col5">0.10</td>
+<td id="T_e6f76_row20_col6" class="data row20 col6">0.06</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<div id="9ebf8c37" class="cell" data-execution_count="3">
+<div id="38b2957b" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>other <span class="op">=</span> {(<span class="st">"side"</span>, <span class="st">"both"</span>, <span class="st">"pooled_recall"</span>): <span class="st">"Pooled recall (either side)"</span>,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"side"</span>, <span class="st">"both"</span>, <span class="st">"wrong_side"</span>): <span class="st">"Found only on the wrong side"</span>,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"side"</span>, <span class="st">"both"</span>, <span class="st">"miss_gene"</span>): <span class="st">"Misses: wrong/absent gene"</span>,</span>
@@ -586,63 +614,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style type="text/css">
 </style>
 
-<table id="T_e8491" class="caption-top table table-sm table-striped small">
+<table id="T_76338" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_e8491_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
-<th id="T_e8491_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Simulated GFA</th>
-<th id="T_e8491_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Real-reads GFA</th>
+<th id="T_76338_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
+<th id="T_76338_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Simulated GFA</th>
+<th id="T_76338_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Real-reads GFA</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th id="T_e8491_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Pooled recall (either side)</th>
-<td id="T_e8491_row0_col0" class="data row0 col0">0.74</td>
-<td id="T_e8491_row0_col1" class="data row0 col1">0.63</td>
-<td id="T_e8491_row0_col2" class="data row0 col2">0.52</td>
+<th id="T_76338_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Pooled recall (either side)</th>
+<td id="T_76338_row0_col0" class="data row0 col0">0.74</td>
+<td id="T_76338_row0_col1" class="data row0 col1">0.63</td>
+<td id="T_76338_row0_col2" class="data row0 col2">0.52</td>
 </tr>
 <tr class="even">
-<th id="T_e8491_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">Found only on the wrong side</th>
-<td id="T_e8491_row1_col0" class="data row1 col0">2</td>
-<td id="T_e8491_row1_col1" class="data row1 col1">2</td>
-<td id="T_e8491_row1_col2" class="data row1 col2">1</td>
+<th id="T_76338_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">Found only on the wrong side</th>
+<td id="T_76338_row1_col0" class="data row1 col0">2</td>
+<td id="T_76338_row1_col1" class="data row1 col1">2</td>
+<td id="T_76338_row1_col2" class="data row1 col2">1</td>
 </tr>
 <tr class="odd">
-<th id="T_e8491_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">Misses: wrong/absent gene</th>
-<td id="T_e8491_row2_col0" class="data row2 col0">30</td>
-<td id="T_e8491_row2_col1" class="data row2 col1">35</td>
-<td id="T_e8491_row2_col2" class="data row2 col2">57</td>
+<th id="T_76338_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">Misses: wrong/absent gene</th>
+<td id="T_76338_row2_col0" class="data row2 col0">30</td>
+<td id="T_76338_row2_col1" class="data row2 col1">35</td>
+<td id="T_76338_row2_col2" class="data row2 col2">57</td>
 </tr>
 <tr class="even">
-<th id="T_e8491_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">Misses: hops budget (found with --hops 20)</th>
-<td id="T_e8491_row3_col0" class="data row3 col0">2</td>
-<td id="T_e8491_row3_col1" class="data row3 col1">2</td>
-<td id="T_e8491_row3_col2" class="data row3 col2">0</td>
+<th id="T_76338_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">Misses: hops budget (found with --hops 20)</th>
+<td id="T_76338_row3_col0" class="data row3 col0">2</td>
+<td id="T_76338_row3_col1" class="data row3 col1">2</td>
+<td id="T_76338_row3_col2" class="data row3 col2">0</td>
 </tr>
 <tr class="odd">
-<th id="T_e8491_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">Flank genes not placeable on the reference</th>
-<td id="T_e8491_row4_col0" class="data row4 col0">0</td>
-<td id="T_e8491_row4_col1" class="data row4 col1">4</td>
-<td id="T_e8491_row4_col2" class="data row4 col2">7</td>
+<th id="T_76338_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">Flank genes not placeable on the reference</th>
+<td id="T_76338_row4_col0" class="data row4 col0">0</td>
+<td id="T_76338_row4_col1" class="data row4 col1">4</td>
+<td id="T_76338_row4_col2" class="data row4 col2">7</td>
 </tr>
 <tr class="even">
-<th id="T_e8491_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">Distance band agreement</th>
-<td id="T_e8491_row5_col0" class="data row5 col0">0.71</td>
-<td id="T_e8491_row5_col1" class="data row5 col1">0.63</td>
-<td id="T_e8491_row5_col2" class="data row5 col2">0.62</td>
+<th id="T_76338_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">Distance band agreement</th>
+<td id="T_76338_row5_col0" class="data row5 col0">0.71</td>
+<td id="T_76338_row5_col1" class="data row5 col1">0.63</td>
+<td id="T_76338_row5_col2" class="data row5 col2">0.62</td>
 </tr>
 <tr class="odd">
-<th id="T_e8491_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">Median distance error (bp)</th>
-<td id="T_e8491_row6_col0" class="data row6 col0">0.00</td>
-<td id="T_e8491_row6_col1" class="data row6 col1">0.00</td>
-<td id="T_e8491_row6_col2" class="data row6 col2">0.00</td>
+<th id="T_76338_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">Median distance error (bp)</th>
+<td id="T_76338_row6_col0" class="data row6 col0">0.00</td>
+<td id="T_76338_row6_col1" class="data row6 col1">0.00</td>
+<td id="T_76338_row6_col2" class="data row6 col2">0.00</td>
 </tr>
 <tr class="even">
-<th id="T_e8491_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">Distance within 10 bp</th>
-<td id="T_e8491_row7_col0" class="data row7 col0">0.68</td>
-<td id="T_e8491_row7_col1" class="data row7 col1">0.68</td>
-<td id="T_e8491_row7_col2" class="data row7 col2">0.72</td>
+<th id="T_76338_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">Distance within 10 bp</th>
+<td id="T_76338_row7_col0" class="data row7 col0">0.68</td>
+<td id="T_76338_row7_col1" class="data row7 col1">0.68</td>
+<td id="T_76338_row7_col2" class="data row7 col2">0.72</td>
 </tr>
 </tbody>
 </table>
@@ -652,7 +680,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="confusion-matrices" class="level2">
 <h2 class="anchored" data-anchor-id="confusion-matrices">Confusion matrices</h2>
 <p>Rows are the truth, columns are eris. <code>no_truth</code> = a flank eris reported that is in no truth relation.</p>
-<div id="bab7e9ac" class="cell" data-execution_count="4">
+<div id="9939cc77" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, Markdown</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> kind <span class="kw">in</span> (<span class="st">"side"</span>, <span class="st">"distance"</span>, <span class="st">"effect"</span>):</span>
@@ -1105,8 +1133,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="which-cds-were-predicted-wrong" class="level2">
 <h2 class="anchored" data-anchor-id="which-cds-were-predicted-wrong">Which CDS were predicted wrong</h2>
-<p>Every truth relation eris missed (<code>FN</code>, <code>FN_wrong_side</code>), every false first flank (<code>FP</code>, <code>FP_wrong_side</code>, <code>FP_unplaceable</code>), and found relations whose distance band or effect is wrong. Full tables: <code>progress/result/eris_validation/EC958/&lt;assembly&gt;/relations.tsv</code>; the quick summary is <code>progress/result/eris_validation/metrics.tsv</code>.</p>
-<div id="2d66a4f2" class="cell" data-execution_count="5">
+<p>Every truth relation eris missed (<code>FN</code>, <code>FN_wrong_side</code>), every false first flank (<code>FP</code>, <code>FP_wrong_side</code>, <code>FP_unplaceable</code>), and found relations whose distance band or effect is wrong.</p>
+<p>Full tables: <code>progress/result/eris_validation/EC958/&lt;assembly&gt;/relations.tsv</code>; the quick summary is <code>progress/result/eris_validation/metrics.tsv</code>.</p>
+<div id="253289f2" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>relations <span class="op">=</span> pd.concat([pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).assign(assembly<span class="op">=</span>name)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items()], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>wrong <span class="op">=</span> relations[(relations[<span class="st">"status"</span>] <span class="op">!=</span> <span class="st">"TP"</span>) <span class="op">|</span> (relations[<span class="st">"distance_band_ok"</span>] <span class="op">==</span> <span class="va">False</span>)</span>
@@ -1174,7 +1203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="c64f8c01" class="cell" data-execution_count="6">
+<div id="35aeb9af" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>columns <span class="op">=</span> [<span class="st">"assembly"</span>, <span class="st">"status"</span>, <span class="st">"side"</span>, <span class="st">"is_id"</span>, <span class="st">"locus_tag"</span>, <span class="st">"gene"</span>, <span class="st">"product"</span>, <span class="st">"truth_distance"</span>, <span class="st">"truth_effect"</span>,</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>           <span class="st">"eris_target"</span>, <span class="st">"eris_gene"</span>, <span class="st">"eris_side"</span>, <span class="st">"eris_distance"</span>, <span class="st">"eris_effect"</span>, <span class="st">"distance_band_ok"</span>, <span class="st">"effect_ok"</span>,</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"miss_cause"</span>]</span>
@@ -7914,9 +7943,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="what-will-i-do-next" class="level1">
+<h1>What will I do next?</h1>
+<ul>
+<li>Investigate where is the bugs</li>
+<li>Why upstream is significantly better than the downstream</li>
+</ul>
+
+
 </section>
 
 </main> <!-- /main -->

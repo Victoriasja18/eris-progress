@@ -14,14 +14,29 @@ execute:
 - Made new github repo for eris validations
 `https://github.com/Victoriasja18/eris-validation`
 
-How to navigate these repo:
+# Glossary 
+
+- **TP_calls**: eris’s nearest gene on a side that is the right gene --> because the truth only reported one flanks gene, that is why we **ignore the others when calculating precision**.
+- **FN_wrong_side**: eris found the gene but reported it on the other side, e.g. downstream instead of upstream. It counts as a miss.
+- **FP_wrong_side**: The same wrong-side mistake seen from eris’s side: the gene is real but sits on the wrong side. It counts as a false call, so one wrong-side mistake costs both recall and precision.
+- **FP_unplaceable**: eris reported a gene whose DNA can’t be found in the reference genome, usually a gene cut off at a contig end in a GFA assembly. It can’t match anything, so it counts as a false call.
+
+Wrong side cause both FP and FN.
+
+# Main findings
+
+* eris finds about three quarters of IS–CDS relations on the complete genome; fragmented assemblies cost about 0.12–0.15 F1.
+* Upstream is consistently more accurate than downstream. Almost all misses come from gene calling, not from the graph walk: allowing 20 hops instead of 3 recovers only 0–2 relations per assembly.
+* Often the right gene is found but a wrong gene sits nearer the IS. On the complete genome this happens for 17 of the 85 relations found: either the IS's own transposase overhangs its end and is reported as a disrupted flank, or pyfgs calls a short ORF (69–234 bp) that RefSeq does not annotate. Counting only eris's nearest gene, recall drops to 0.58 / 0.38 / 0.35.
+* Disrupted calls are poor, especially on GFAs, partly because of the same transposase overhang.
 
 
 # IS–CDS relation validation
 
 Scores from [eris-validation](https://github.com/Victoriasja18/eris-validation): for each IS, did eris report the right CDS **upstream** and **downstream**, at the right **distance**, with the right **effect** (disrupted)?
-Truth: `ec958_IS_cds_relations.tsv` (117 relations; 94 on the chromosome for the simulated GFA).
-eris: Dimas's main (`e4c6dbd`), collapse mode, `--hops 3`, `min_coverage 0.30`.
+
+- Truth: `ec958_IS_cds_relations.tsv` (117 relations; 94 on the chromosome for the simulated GFA).
+- eris: Dimas's main (`e4c6dbd`), collapse mode, `--hops 3`, `min_coverage 0.30`.
 
 ```bash
 cd ../../eris-validation
@@ -47,9 +62,8 @@ A flank on the wrong side counts as a miss on its true side and a false call on 
 Distance: per band (overlapping, near 0–150 bp, far), over relations found on their side.
 Effect: disrupted only; eris `TRUNCATED` counts as disrupted.
 
-Recall = TP / (TP + FN) over the truth relations. Precision = TP_calls / (TP_calls + FP) over eris's calls; for side and
-effect these are eris's nearest flanks, so TP_calls can be lower than TP (one collapsed IS locus can find several truth
-relations, e.g. the flanks of several copies, but has only one nearest flank per side per branch).
+- Recall = TP / (TP + FN) over the truth relations. 
+- Precision = TP_calls / (TP_calls + FP) over eris's calls; for side and effect these are eris's nearest flanks, so TP_calls can be lower than TP (when a wrong gene, such as the IS's own transposase or a short ORF, sits nearer the IS than the true CDS, the true CDS still counts as found for recall, but eris's call is an FP).
 
 ```{python}
 (metrics.drop(columns=["genome", "assembly_type"])
@@ -91,6 +105,7 @@ for kind in ("side", "distance", "effect"):
 
 Every truth relation eris missed (`FN`, `FN_wrong_side`), every false first flank (`FP`, `FP_wrong_side`,
 `FP_unplaceable`), and found relations whose distance band or effect is wrong.
+
 Full tables: `progress/result/eris_validation/EC958/<assembly>/relations.tsv`; the quick summary is `progress/result/eris_validation/metrics.tsv`.
 
 ```{python}
@@ -108,3 +123,8 @@ columns = ["assembly", "status", "side", "is_id", "locus_tag", "gene", "product"
 pd.set_option("display.max_rows", None, "display.max_colwidth", None)
 wrong[columns].sort_values(["assembly", "status", "is_id"]).reset_index(drop=True).fillna("")
 ```
+
+# What will I do next?
+
+- Investigate where is the bugs
+- Why upstream is significantly better than the downstream
