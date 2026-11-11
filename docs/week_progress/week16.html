@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Victoria Sjalim">
+<meta name="dcterms.date" content="2026-11-08">
+
+<title>Week 16 – Eris Progress</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-209258432f336cc574c0f847bd0a7210.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Eris Progress</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-weekly-updates" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Weekly Updates</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-weekly-updates">    
+        <li>
+    <a class="dropdown-item" href="../week_progress/week1.html">
+ <span class="dropdown-text">Week 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week2.html">
+ <span class="dropdown-text">Week 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week3.html">
+ <span class="dropdown-text">Week 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week4.html">
+ <span class="dropdown-text">Week 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week5.html">
+ <span class="dropdown-text">Week 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week6.html">
+ <span class="dropdown-text">Week 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week7.html">
+ <span class="dropdown-text">Week 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week9.html">
+ <span class="dropdown-text">Week 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week10.html">
+ <span class="dropdown-text">Week 10</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week11.html">
+ <span class="dropdown-text">Week 11</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week12.html">
+ <span class="dropdown-text">Week 12</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week13.html">
+ <span class="dropdown-text">Week 13</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week14.html">
+ <span class="dropdown-text">Week 14</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week15.html">
+ <span class="dropdown-text">Week 15</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week16.html">
+ <span class="dropdown-text">Week 16</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-eris-meeting" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Eris Meeting</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-eris-meeting">    
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting.html">
+ <span class="dropdown-text">28th July</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting2.html">
+ <span class="dropdown-text">25 Aug</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting3.html">
+ <span class="dropdown-text">1 Oct</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../week_progress/validation_pipeline.html"> 
+<span class="menu-text">Validation Pipeline</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#updates" id="toc-updates" class="nav-link active" data-scroll-target="#updates">Updates</a></li>
+  <li><a href="#fn-and-fp-reasons" id="toc-fn-and-fp-reasons" class="nav-link" data-scroll-target="#fn-and-fp-reasons">FN and FP reasons</a>
+  <ul class="collapse">
+  <li><a href="#wrong-is-cases" id="toc-wrong-is-cases" class="nav-link" data-scroll-target="#wrong-is-cases">Wrong-IS cases</a></li>
+  </ul></li>
+  <li><a href="#miss-causes-not-called-vs-not-reported" id="toc-miss-causes-not-called-vs-not-reported" class="nav-link" data-scroll-target="#miss-causes-not-called-vs-not-reported">Miss causes: not called vs not reported</a>
+  <ul class="collapse">
+  <li><a href="#disrupted-is-no-longer-scored" id="toc-disrupted-is-no-longer-scored" class="nav-link" data-scroll-target="#disrupted-is-no-longer-scored">Disrupted is no longer scored</a></li>
+  </ul></li>
+  <li><a href="#why-the-gfa-assemblies-score-worse" id="toc-why-the-gfa-assemblies-score-worse" class="nav-link" data-scroll-target="#why-the-gfa-assemblies-score-worse">Why the GFA assemblies score worse</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Week 16</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Victoria Sjalim </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 8, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="updates" class="level1">
+<h1>Updates</h1>
+<ul>
+<li>Check Validation Pipeline Tab –&gt; easier to understand</li>
+<li>Categorized FP and FN more thoroughly</li>
+</ul>
+</section>
+<section id="fn-and-fp-reasons" class="level1">
+<h1>FN and FP reasons</h1>
+<p>Each row of <code>relations.tsv</code> now has only three statuses (<strong>TP</strong>, <strong>FN</strong>, <strong>FP</strong>) and a separate <strong>reason</strong> for FN and FP, so each reason points at one kind of bug. The reasons are checked in this order:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Status</th>
+<th>Reason</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>FN</td>
+<td><code>wrong_side</code></td>
+<td>its own IS reports the CDS, but only on the other side</td>
+</tr>
+<tr class="even">
+<td>FN</td>
+<td><code>wrong_IS</code></td>
+<td>only a differently named IS reports the CDS, on the same side</td>
+</tr>
+<tr class="odd">
+<td>FN</td>
+<td><code>not_found</code></td>
+<td>not reported at all (see the miss cause below)</td>
+</tr>
+<tr class="even">
+<td>FP</td>
+<td><code>unplaceable</code></td>
+<td>eris’s nearest gene cannot be placed on the reference</td>
+</tr>
+<tr class="odd">
+<td>FP</td>
+<td><code>wrong_side</code></td>
+<td>a truth CDS of its IS, but on the other side</td>
+</tr>
+<tr class="even">
+<td>FP</td>
+<td><code>wrong_IS</code></td>
+<td>a truth CDS on the same side, but of a differently named IS</td>
+</tr>
+<tr class="odd">
+<td>FP</td>
+<td><code>not_in_truth</code></td>
+<td>in no truth relation</td>
+</tr>
+</tbody>
+</table>
+<p>Precision, recall and F1 are unchanged, only the labels are new.</p>
+<div id="51bce866" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>RESULTS <span class="op">=</span> <span class="st">"../result/eris_validation"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ASSEMBLIES <span class="op">=</span> {<span class="st">"complete"</span>: <span class="st">"Complete genome (FASTA)"</span>, <span class="st">"simulated"</span>: <span class="st">"Simulated GFA"</span>, <span class="st">"real"</span>: <span class="st">"Real-reads GFA"</span>}</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_rows"</span>, <span class="va">None</span>, <span class="st">"display.max_columns"</span>, <span class="va">None</span>, <span class="st">"display.max_colwidth"</span>, <span class="va">None</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>relations <span class="op">=</span> pd.concat([pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).assign(assembly<span class="op">=</span>name)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items()], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>relations[<span class="st">"reason"</span>] <span class="op">=</span> relations[<span class="st">"reason"</span>].fillna(<span class="st">"–"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>pd.crosstab([relations[<span class="st">"status"</span>], relations[<span class="st">"reason"</span>]], relations[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">assembly</th>
+<th data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
+<th data-quarto-table-cell-role="th">Simulated GFA</th>
+<th data-quarto-table-cell-role="th">Real-reads GFA</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">status</th>
+<th data-quarto-table-cell-role="th">reason</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">FN</th>
+<th data-quarto-table-cell-role="th">not_found</th>
+<td>28</td>
+<td>30</td>
+<td>44</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">wrong_IS</th>
+<td>2</td>
+<td>5</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">wrong_side</th>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th rowspan="4" data-quarto-table-cell-role="th" data-valign="top">FP</th>
+<th data-quarto-table-cell-role="th">not_in_truth</th>
+<td>45</td>
+<td>35</td>
+<td>31</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">unplaceable</th>
+<td>0</td>
+<td>4</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">wrong_IS</th>
+<td>1</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">wrong_side</th>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">TP</th>
+<th data-quarto-table-cell-role="th">–</th>
+<td>85</td>
+<td>57</td>
+<td>60</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="wrong-is-cases" class="level2">
+<h2 class="anchored" data-anchor-id="wrong-is-cases">Wrong-IS cases</h2>
+<p>A wrong-IS row only says the gene belongs to another IS’s relation. <code>distance_error</code> helps judge each case:</p>
+<ul>
+<li><strong>a few bp</strong>: eris’s IS sits where the truth IS is, so eris probably <strong>misnamed</strong> the IS (e.g.&nbsp;ISSen10 called IS629, IS26_2 called ISEc9);</li>
+<li><strong>thousands of bp</strong>: a <strong>different IS further away</strong> reports the same gene (e.g.&nbsp;ISEch14 at ~52 kb), which looks like a real neighbouring IS rather than a naming bug.</li>
+</ul>
+<div id="4ac68643" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wrong_is <span class="op">=</span> relations[relations[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"wrong_IS"</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>wrong_is[[<span class="st">"assembly"</span>, <span class="st">"status"</span>, <span class="st">"side"</span>, <span class="st">"is_id"</span>, <span class="st">"locus_tag"</span>, <span class="st">"eris_target"</span>, <span class="st">"truth_distance"</span>, <span class="st">"eris_distance"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">"distance_error"</span>]].sort_values([<span class="st">"assembly"</span>, <span class="st">"distance_error"</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>).fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">assembly</th>
+<th data-quarto-table-cell-role="th">status</th>
+<th data-quarto-table-cell-role="th">side</th>
+<th data-quarto-table-cell-role="th">is_id</th>
+<th data-quarto-table-cell-role="th">locus_tag</th>
+<th data-quarto-table-cell-role="th">eris_target</th>
+<th data-quarto-table-cell-role="th">truth_distance</th>
+<th data-quarto-table-cell-role="th">eris_distance</th>
+<th data-quarto-table-cell-role="th">distance_error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16660</td>
+<td>IS30_IS30_unknown</td>
+<td>-26.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Complete genome (FASTA)</td>
+<td>FP</td>
+<td>downstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16660</td>
+<td>IS30_IS30_unknown</td>
+<td>-26.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Complete genome (FASTA)</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS24680</td>
+<td>ISEch14_IS3_IS150</td>
+<td>64.0</td>
+<td>839.0</td>
+<td>775.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20820</td>
+<td>IS629_IS3_IS51_stitched</td>
+<td>-59.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_2</td>
+<td>EC958_RS25830</td>
+<td>ISEc9_IS1380_unknown_stitched</td>
+<td>52.0</td>
+<td>52.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>downstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20820</td>
+<td>IS629_IS3_IS51_stitched</td>
+<td>-59.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_2</td>
+<td>EC958_RS29475</td>
+<td>ISEc9_IS1380_unknown_stitched</td>
+<td>7.0</td>
+<td>0.0</td>
+<td>7.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td>IS26_2</td>
+<td>EC958_RS29475</td>
+<td>ISEc9_IS1380_unknown_stitched</td>
+<td>7.0</td>
+<td>0.0</td>
+<td>7.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS24680</td>
+<td>IS30D_IS30_unknown</td>
+<td>64.0</td>
+<td>0.0</td>
+<td>64.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS26_1</td>
+<td>EC958_RS25840</td>
+<td>IS5_IS5_IS5</td>
+<td>191.0</td>
+<td>59.0</td>
+<td>132.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc8</td>
+<td>EC958_RS24755</td>
+<td>IS1F_IS1_unknown_stitched</td>
+<td>201.0</td>
+<td>634.0</td>
+<td>433.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">11</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16650</td>
+<td>ISEch14_IS3_IS150</td>
+<td>5.0</td>
+<td>1742.0</td>
+<td>1737.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">12</th>
+<td>Real-reads GFA</td>
+<td>FP</td>
+<td>upstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16650</td>
+<td>ISEch14_IS3_IS150</td>
+<td>5.0</td>
+<td>1742.0</td>
+<td>1737.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">13</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>IS1203</td>
+<td>EC958_RS16560</td>
+<td>ISEc49_IS66_unknown</td>
+<td>521.0</td>
+<td>2559.0</td>
+<td>2038.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">14</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISEc9</td>
+<td>EC958_RS24670</td>
+<td>IS30D_IS30_unknown</td>
+<td>146.0</td>
+<td>3258.0</td>
+<td>3112.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">15</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20830</td>
+<td>ISEch14_IS3_IS150</td>
+<td>90.0</td>
+<td>38435.0</td>
+<td>38345.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">16</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_5</td>
+<td>EC958_RS26080</td>
+<td>ISEch14_IS3_IS150</td>
+<td>216.0</td>
+<td>52338.0</td>
+<td>52122.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">17</th>
+<td>Real-reads GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS26_8</td>
+<td>EC958_RS26205</td>
+<td>ISEch14_IS3_IS150</td>
+<td>2.0</td>
+<td>52124.0</td>
+<td>52122.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">18</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20830</td>
+<td>IS629_IS3_IS51</td>
+<td>90.0</td>
+<td>81.0</td>
+<td>9.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">19</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISEc52_3</td>
+<td>EC958_RS24680</td>
+<td>IS30_IS30_unknown</td>
+<td>64.0</td>
+<td>0.0</td>
+<td>64.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">20</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>downstream</td>
+<td>ISSen10</td>
+<td>EC958_RS20820</td>
+<td>IS629_IS3_IS51</td>
+<td>-59.0</td>
+<td>118.0</td>
+<td>118.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">21</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>IS600</td>
+<td>EC958_RS24690</td>
+<td>IS30_IS30_unknown</td>
+<td>2.0</td>
+<td>278.0</td>
+<td>276.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">22</th>
+<td>Simulated GFA</td>
+<td>FN</td>
+<td>upstream</td>
+<td>ISSd1</td>
+<td>EC958_RS16650</td>
+<td>ISEch14_IS3_IS150</td>
+<td>5.0</td>
+<td>1742.0</td>
+<td>1737.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="miss-causes-not-called-vs-not-reported" class="level1">
+<h1>Miss causes: not called vs not reported</h1>
+<p>The old miss cause <code>gene</code> was a catch-all. It is now split, so every FN gets one of three miss causes, checked in this order (<a href="https://github.com/Victoriasja18/eris-validation">eris-validation</a>):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Miss cause</th>
+<th>Meaning</th>
+<th>Where the bug is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>budget</code></td>
+<td>the <code>--hops 20</code> run finds it</td>
+<td>eris stops walking too early</td>
+</tr>
+<tr class="even">
+<td><code>not_reported</code></td>
+<td>pyfgs <strong>called</strong> a gene that is the truth CDS (same strand, ≥ 50 % overlap), but eris never reports it as a flank of that IS on that side</td>
+<td>eris’s flank walk / reporting, or the IS (missed or misnamed)</td>
+</tr>
+<tr class="odd">
+<td><code>not_called</code></td>
+<td><strong>no</strong> gene pyfgs called is the truth CDS</td>
+<td>gene calling (pyfgs), or a truth CDS that has no real ORF</td>
+</tr>
+</tbody>
+</table>
+<p>How it works: eris’s <code>_cds.fna</code> holds <strong>every</strong> gene pyfgs called on the assembly (6,291 on the real-reads GFA), not only the reported ones. All of them are placed on the reference with minimap2, the same way as the flank genes. If any of them matches the truth CDS, the gene was called, so the miss is <code>not_reported</code>; otherwise <code>not_called</code>.</p>
+<div id="0818b187" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> relations[relations[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"FN"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pd.crosstab([fn[<span class="st">"miss_cause"</span>]], fn[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">assembly</th>
+<th data-quarto-table-cell-role="th">Complete genome (FASTA)</th>
+<th data-quarto-table-cell-role="th">Simulated GFA</th>
+<th data-quarto-table-cell-role="th">Real-reads GFA</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">miss_cause</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">budget</th>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">not_called</th>
+<td>15</td>
+<td>9</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">not_reported</th>
+<td>15</td>
+<td>26</td>
+<td>46</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>By FN reason: a <code>wrong_side</code> or <code>wrong_IS</code> miss is always <code>not_reported</code>, because eris did report the gene, just not for that IS on that side.</p>
+<div id="fd47a173" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab([fn[<span class="st">"assembly"</span>], fn[<span class="st">"reason"</span>]], fn[<span class="st">"miss_cause"</span>]).reindex(<span class="bu">list</span>(ASSEMBLIES.values()), level<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">miss_cause</th>
+<th data-quarto-table-cell-role="th">budget</th>
+<th data-quarto-table-cell-role="th">not_called</th>
+<th data-quarto-table-cell-role="th">not_reported</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">assembly</th>
+<th data-quarto-table-cell-role="th">reason</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">Complete genome (FASTA)</th>
+<th data-quarto-table-cell-role="th">not_found</th>
+<td>2</td>
+<td>15</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">wrong_IS</th>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">wrong_side</th>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">Simulated GFA</th>
+<th data-quarto-table-cell-role="th">not_found</th>
+<td>2</td>
+<td>9</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">wrong_IS</th>
+<td>0</td>
+<td>0</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">wrong_side</th>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">Real-reads GFA</th>
+<th data-quarto-table-cell-role="th">not_found</th>
+<td>0</td>
+<td>11</td>
+<td>33</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">wrong_IS</th>
+<td>0</td>
+<td>0</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">wrong_side</th>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>What the split shows:</p>
+<ul>
+<li><strong>Most GFA misses are <code>not_reported</code></strong> (26 of 37 simulated, 46 of 57 real-reads): pyfgs did call the gene, so the loss is in eris’s flank walk and reporting (the collapsed repeat “roundabouts” below) or in the IS itself, not in gene calling.</li>
+<li><strong><code>not_called</code> stays about the same on every assembly</strong> (15 complete, 9 simulated, 11 real-reads), so it is not caused by fragmentation.</li>
+<li><strong>On the complete genome, 12 of the 15 <code>not_called</code> truth CDS are pseudogenes</strong> (<code>pseudo = True</code>, mostly also partial), often genes broken by the IS itself. They have no intact ORF, so pyfgs cannot call them. The other 3 are tiny genes of 69–144 bp (ykiE, ykgR, a GNAT fragment). So most <code>not_called</code> misses come from the truth including pseudogenes, not from a pyfgs bug.</li>
+</ul>
+<div id="dc295c3a" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>complete <span class="op">=</span> relations[(relations[<span class="st">"assembly"</span>] <span class="op">==</span> ASSEMBLIES[<span class="st">"complete"</span>]) <span class="op">&amp;</span> (relations[<span class="st">"miss_cause"</span>] <span class="op">==</span> <span class="st">"not_called"</span>)]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>span <span class="op">=</span> complete[<span class="st">"truth_location"</span>].<span class="bu">str</span>.extract(<span class="vs">r":</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs">-</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs">"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>complete.assign(length_bp<span class="op">=</span>span[<span class="dv">1</span>] <span class="op">-</span> span[<span class="dv">0</span>])[[<span class="st">"is_id"</span>, <span class="st">"side"</span>, <span class="st">"locus_tag"</span>, <span class="st">"gene"</span>, <span class="st">"product"</span>, <span class="st">"length_bp"</span>, <span class="st">"partial"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"pseudo"</span>]].reset_index(drop<span class="op">=</span><span class="va">True</span>).fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">is_id</th>
+<th data-quarto-table-cell-role="th">side</th>
+<th data-quarto-table-cell-role="th">locus_tag</th>
+<th data-quarto-table-cell-role="th">gene</th>
+<th data-quarto-table-cell-role="th">product</th>
+<th data-quarto-table-cell-role="th">length_bp</th>
+<th data-quarto-table-cell-role="th">partial</th>
+<th data-quarto-table-cell-role="th">pseudo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>ISEc23_1</td>
+<td>downstream</td>
+<td>EC958_RS01090</td>
+<td></td>
+<td>YiiX/YebB-like N1pC/P60 family cysteine hydrolase</td>
+<td>468</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>ISEc23_2</td>
+<td>downstream</td>
+<td>EC958_RS11750</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>309</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>IS1203</td>
+<td>upstream</td>
+<td>EC958_RS29355</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>123</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>IS2</td>
+<td>downstream</td>
+<td>EC958_RS30340</td>
+<td></td>
+<td>hypothetical protein</td>
+<td>183</td>
+<td>False</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>ISEc22</td>
+<td>downstream</td>
+<td>EC958_RS29550</td>
+<td></td>
+<td>putative zinc ribbon protein</td>
+<td>186</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>IS1F_1</td>
+<td>downstream</td>
+<td>EC958_RS30560</td>
+<td>ykgR</td>
+<td>small membrane protein YkgR</td>
+<td>102</td>
+<td>False</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>IS600</td>
+<td>downstream</td>
+<td>EC958_RS28175</td>
+<td></td>
+<td>BCCT family transporter</td>
+<td>567</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>IS1F_2</td>
+<td>upstream</td>
+<td>EC958_RS30140</td>
+<td>ykiE</td>
+<td>protein YkiE</td>
+<td>69</td>
+<td>False</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>ISEc52_4</td>
+<td>downstream</td>
+<td>EC958_RS28255</td>
+<td></td>
+<td>GNAT family N-acetyltransferase</td>
+<td>144</td>
+<td>False</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>ISEc53</td>
+<td>downstream</td>
+<td>EC958_RS25065</td>
+<td>fimB</td>
+<td>type 1 fimbria switch DNA invertase FimB</td>
+<td>198</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>IS26_2</td>
+<td>upstream</td>
+<td>EC958_RS29475</td>
+<td></td>
+<td>DUF4158 domain-containing protein</td>
+<td>207</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">11</th>
+<td>IS26_5</td>
+<td>downstream</td>
+<td>EC958_RS29660</td>
+<td></td>
+<td>recombinase family protein</td>
+<td>177</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">12</th>
+<td>IS6100</td>
+<td>upstream</td>
+<td>EC958_RS29565</td>
+<td></td>
+<td>EAL domain-containing protein</td>
+<td>66</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">13</th>
+<td>IS26_7</td>
+<td>downstream</td>
+<td>EC958_RS26485</td>
+<td></td>
+<td>CatB-related O-acetyltransferase</td>
+<td>441</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">14</th>
+<td>IS1A</td>
+<td>upstream</td>
+<td>EC958_RS30185</td>
+<td></td>
+<td>type II toxin-antitoxin system RelE/ParE family toxin</td>
+<td>269</td>
+<td>False</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="disrupted-is-no-longer-scored" class="level2">
+<h2 class="anchored" data-anchor-id="disrupted-is-no-longer-scored">Disrupted is no longer scored</h2>
+<p>The disrupted / truncated effect is set aside as not a priority: <code>metrics.tsv</code> no longer has an effect row, <code>effect_confusion.tsv</code> and the <code>effect_ok</code> column are gone. The truth and eris effects are still kept in <code>relations.tsv</code> (<code>truth_effect</code>, <code>eris_effect</code>) for reference. Side and distance scores did not change.</p>
+</section>
+</section>
+<section id="why-the-gfa-assemblies-score-worse" class="level1">
+<h1>Why the GFA assemblies score worse</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>F1 (precision / recall), both sides</th>
+<th>Complete</th>
+<th>Simulated GFA</th>
+<th>Real-reads GFA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Both sides</td>
+<td>0.65 (0.59 / 0.73)</td>
+<td>0.53 (0.47 / 0.61)</td>
+<td>0.50 (0.49 / 0.51)</td>
+</tr>
+<tr class="even">
+<td>Distance band agreement</td>
+<td>0.71</td>
+<td>0.63</td>
+<td>0.62</td>
+</tr>
+</tbody>
+</table>
+<p>Why the GFA relations are missed (from extra analysis, not part of the workflow; the “not called” row now comes from the workflow’s <code>not_called</code> miss cause, and matches):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cause</th>
+<th>Simulated (37 FN)</th>
+<th>Real reads (57 FN)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gene called by pyfgs, but no IS reports it as a flank, even at 20 hops</td>
+<td>17</td>
+<td>38</td>
+</tr>
+<tr class="even">
+<td>Gene not called by pyfgs at all</td>
+<td>9</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td>Gene reported next to a differently named IS</td>
+<td>7</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>IS not detected at all (ISSen10, ISSen1, IS5)</td>
+<td>6</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>Only found with 20 hops</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>Wrong side</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>(The counts add to slightly more than the FN totals because a few misses fall into two categories.)</p>
+<ul>
+<li><strong>Recall</strong>: most lost genes sit on a contig <strong>one link</strong> away from the IS’s contig. The IS involved are multi-copy (ISEc12, ISEc23, IS200C, IS1397, IS609); their contigs have 2–6× the normal depth (~33×), so one collapsed contig stands in for several copies (58 loci on the complete genome vs 35–36 on the GFAs). The single-copy contigs hanging off these “roundabouts” are often not reported as flanks. Since <code>--hops 20</code> does not recover them, this points to eris’s flank walk / branch reporting in collapse mode, not to the hops budget.</li>
+<li><strong>Precision</strong>: about two thirds of the false nearest-flank calls are genes <strong>shorter than 250 bp</strong> (23 of 35 simulated, 22 of 34 real): small ORFs near contig ends that sit in front of the real gene. Another 4–7 are <strong>unplaceable</strong> fragments cut at contig ends.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

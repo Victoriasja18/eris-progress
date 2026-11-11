@@ -43,6 +43,8 @@ website:
             href: week_progress/week14.qmd
           - text: "Week 15"
             href: week_progress/week15.qmd
+          - text: "Week 16"
+            href: week_progress/week16.qmd
       - text: "Eris Meeting"
         menu:
           - text: "28th July"
@@ -51,6 +53,8 @@ website:
             href: week_progress/eris_meeting2.qmd
           - text: "1 Oct"
             href: week_progress/eris_meeting3.qmd
+      - text: "Validation Pipeline"
+        href: week_progress/validation_pipeline.qmd
 
 execute:
   freeze: auto

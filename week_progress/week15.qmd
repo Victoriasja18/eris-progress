@@ -17,11 +17,11 @@ execute:
 # Glossary 
 
 - **TP_calls**: eris’s nearest gene on a side that is the right gene --> because the truth only reported one flanks gene, that is why we **ignore the others when calculating precision**.
-- **FN_wrong_side**: eris found the gene but reported it on the other side, e.g. downstream instead of upstream. It counts as a miss.
-- **FP_wrong_side**: The same wrong-side mistake seen from eris’s side: the gene is real but sits on the wrong side. It counts as a false call, so one wrong-side mistake costs both recall and precision.
-- **FP_unplaceable**: eris reported a gene whose DNA can’t be found in the reference genome, usually a gene cut off at a contig end in a GFA assembly. It can’t match anything, so it counts as a false call.
-
-Wrong side cause both FP and FN.
+- **Status** is only TP, FN or FP; the **reason** column says why an FN or FP is wrong (updated in week 16):
+- **wrong_side** (FN and FP): eris found the gene but reported it on the other side, e.g. downstream instead of upstream. It is a miss on its true side (FN) and a false call on the reported side (FP), so one wrong-side mistake costs both recall and precision.
+- **wrong_IS** (FN and FP): eris reported the gene on the right side, but under a differently named IS.
+- **unplaceable** (FP): eris reported a gene whose DNA can’t be found in the reference genome, usually a gene cut off at a contig end in a GFA assembly. It can’t match anything, so it counts as a false call.
+- **not_found** (FN) / **not_in_truth** (FP): the truth CDS is not reported at all / eris's nearest gene is in no truth relation.
 
 # Main findings
 
@@ -74,6 +74,7 @@ Effect: disrupted only; eris `TRUNCATED` counts as disrupted.
 ```{python}
 other = {("side", "both", "pooled_recall"): "Pooled recall (either side)",
          ("side", "both", "wrong_side"): "Found only on the wrong side",
+         ("side", "both", "wrong_IS"): "Found only under a differently named IS",
          ("side", "both", "miss_gene"): "Misses: wrong/absent gene",
          ("side", "both", "miss_budget"): "Misses: hops budget (found with --hops 20)",
          ("side", "both", "unplaceable"): "Flank genes not placeable on the reference",
@@ -103,8 +104,8 @@ for kind in ("side", "distance", "effect"):
 
 ## Which CDS were predicted wrong
 
-Every truth relation eris missed (`FN`, `FN_wrong_side`), every false first flank (`FP`, `FP_wrong_side`,
-`FP_unplaceable`), and found relations whose distance band or effect is wrong.
+Every truth relation eris missed (`FN`), every false first flank (`FP`), each with its `reason`, and found relations
+whose distance band or effect is wrong.
 
 Full tables: `progress/result/eris_validation/EC958/<assembly>/relations.tsv`; the quick summary is `progress/result/eris_validation/metrics.tsv`.
 
@@ -113,15 +114,15 @@ relations = pd.concat([pd.read_csv(f"{RESULTS}/EC958/{a}/relations.tsv", sep="\t
                        for a, name in ASSEMBLIES.items()], ignore_index=True)
 wrong = relations[(relations["status"] != "TP") | (relations["distance_band_ok"] == False)
                   | (relations["effect_ok"] == False)]
-pd.crosstab(wrong["status"], wrong["assembly"])[list(ASSEMBLIES.values())]
+pd.crosstab([wrong["status"], wrong["reason"].fillna("– (TP, wrong band/effect)")], wrong["assembly"])[list(ASSEMBLIES.values())]
 ```
 
 ```{python}
-columns = ["assembly", "status", "side", "is_id", "locus_tag", "gene", "product", "truth_distance", "truth_effect",
+columns = ["assembly", "status", "reason", "side", "is_id", "locus_tag", "gene", "product", "truth_distance", "truth_effect",
            "eris_target", "eris_gene", "eris_side", "eris_distance", "eris_effect", "distance_band_ok", "effect_ok",
            "miss_cause"]
 pd.set_option("display.max_rows", None, "display.max_colwidth", None)
-wrong[columns].sort_values(["assembly", "status", "is_id"]).reset_index(drop=True).fillna("")
+wrong[columns].sort_values(["assembly", "status", "reason", "is_id"]).reset_index(drop=True).fillna("")
 ```
 
 # What will I do next?

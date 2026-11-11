@@ -1,0 +1,126 @@
+---
+title: "Week 16"
+author: "Victoria Sjalim"
+date: "2026-11-8"
+format: html
+execute:
+  freeze: auto
+---
+
+# Updates
+
+- Check Validation Pipeline Tab --> easier to understand
+- Categorized FP and FN more thoroughly
+
+# FN and FP reasons
+
+Each row of `relations.tsv` now has only three statuses (**TP**, **FN**, **FP**) and a separate **reason** for FN and
+FP, so each reason points at one kind of bug. The reasons are checked in this order:
+
+| Status | Reason | Meaning |
+|---|---|---|
+| FN | `wrong_side` | its own IS reports the CDS, but only on the other side |
+| FN | `wrong_IS` | only a differently named IS reports the CDS, on the same side |
+| FN | `not_found` | not reported at all (see the miss cause below) |
+| FP | `unplaceable` | eris's nearest gene cannot be placed on the reference |
+| FP | `wrong_side` | a truth CDS of its IS, but on the other side |
+| FP | `wrong_IS` | a truth CDS on the same side, but of a differently named IS |
+| FP | `not_in_truth` | in no truth relation |
+
+Precision, recall and F1 are unchanged, only the labels are new.
+
+```{python}
+import pandas as pd
+
+RESULTS = "../result/eris_validation"
+ASSEMBLIES = {"complete": "Complete genome (FASTA)", "simulated": "Simulated GFA", "real": "Real-reads GFA"}
+pd.set_option("display.max_rows", None, "display.max_columns", None, "display.max_colwidth", None)
+relations = pd.concat([pd.read_csv(f"{RESULTS}/EC958/{a}/relations.tsv", sep="\t").assign(assembly=name)
+                       for a, name in ASSEMBLIES.items()], ignore_index=True)
+relations["reason"] = relations["reason"].fillna("–")
+pd.crosstab([relations["status"], relations["reason"]], relations["assembly"])[list(ASSEMBLIES.values())]
+```
+
+## Wrong-IS cases
+
+A wrong-IS row only says the gene belongs to another IS's relation. `distance_error` helps judge each case:
+
+- **a few bp**: eris's IS sits where the truth IS is, so eris probably **misnamed** the IS (e.g. ISSen10 called IS629, IS26_2 called ISEc9);
+- **thousands of bp**: a **different IS further away** reports the same gene (e.g. ISEch14 at ~52 kb), which looks like a real neighbouring IS rather than a naming bug.
+
+```{python}
+wrong_is = relations[relations["reason"] == "wrong_IS"]
+wrong_is[["assembly", "status", "side", "is_id", "locus_tag", "eris_target", "truth_distance", "eris_distance",
+          "distance_error"]].sort_values(["assembly", "distance_error"]).reset_index(drop=True).fillna("")
+```
+
+# Miss causes: not called vs not reported
+
+The old miss cause `gene` was a catch-all. It is now split, so every FN gets one of three miss causes, checked in this
+order ([eris-validation](https://github.com/Victoriasja18/eris-validation)):
+
+| Miss cause | Meaning | Where the bug is |
+|---|---|---|
+| `budget` | the `--hops 20` run finds it | eris stops walking too early |
+| `not_reported` | pyfgs **called** a gene that is the truth CDS (same strand, ≥ 50 % overlap), but eris never reports it as a flank of that IS on that side | eris's flank walk / reporting, or the IS (missed or misnamed) |
+| `not_called` | **no** gene pyfgs called is the truth CDS | gene calling (pyfgs), or a truth CDS that has no real ORF |
+
+How it works: eris's `_cds.fna` holds **every** gene pyfgs called on the assembly (6,291 on the real-reads GFA), not
+only the reported ones. All of them are placed on the reference with minimap2, the same way as the flank genes. If
+any of them matches the truth CDS, the gene was called, so the miss is `not_reported`; otherwise `not_called`.
+
+```{python}
+fn = relations[relations["status"] == "FN"]
+pd.crosstab([fn["miss_cause"]], fn["assembly"])[list(ASSEMBLIES.values())]
+```
+
+By FN reason: a `wrong_side` or `wrong_IS` miss is always `not_reported`, because eris did report the gene, just not
+for that IS on that side.
+
+```{python}
+pd.crosstab([fn["assembly"], fn["reason"]], fn["miss_cause"]).reindex(list(ASSEMBLIES.values()), level=0)
+```
+
+What the split shows:
+
+- **Most GFA misses are `not_reported`** (26 of 37 simulated, 46 of 57 real-reads): pyfgs did call the gene, so the loss is in eris's flank walk and reporting (the collapsed repeat "roundabouts" below) or in the IS itself, not in gene calling.
+- **`not_called` stays about the same on every assembly** (15 complete, 9 simulated, 11 real-reads), so it is not caused by fragmentation.
+- **On the complete genome, 12 of the 15 `not_called` truth CDS are pseudogenes** (`pseudo = True`, mostly also partial), often genes broken by the IS itself. They have no intact ORF, so pyfgs cannot call them. The other 3 are tiny genes of 69–144 bp (ykiE, ykgR, a GNAT fragment). So most `not_called` misses come from the truth including pseudogenes, not from a pyfgs bug.
+
+```{python}
+complete = relations[(relations["assembly"] == ASSEMBLIES["complete"]) & (relations["miss_cause"] == "not_called")]
+span = complete["truth_location"].str.extract(r":(\d+)-(\d+)").astype(int)
+complete.assign(length_bp=span[1] - span[0])[["is_id", "side", "locus_tag", "gene", "product", "length_bp", "partial",
+                                              "pseudo"]].reset_index(drop=True).fillna("")
+```
+
+## Disrupted is no longer scored
+
+The disrupted / truncated effect is set aside as not a priority: `metrics.tsv` no longer has an effect row,
+`effect_confusion.tsv` and the `effect_ok` column are gone. The truth and eris effects are still kept in
+`relations.tsv` (`truth_effect`, `eris_effect`) for reference. Side and distance scores did not change.
+
+# Why the GFA assemblies score worse
+
+| F1 (precision / recall), both sides | Complete | Simulated GFA | Real-reads GFA |
+|---|---|---|---|
+| Both sides | 0.65 (0.59 / 0.73) | 0.53 (0.47 / 0.61) | 0.50 (0.49 / 0.51) |
+| Distance band agreement | 0.71 | 0.63 | 0.62 |
+
+Why the GFA relations are missed (from extra analysis, not part of the workflow; the "not called" row now comes
+from the workflow's `not_called` miss cause, and matches):
+
+| Cause | Simulated (37 FN) | Real reads (57 FN) |
+|---|---|---|
+| Gene called by pyfgs, but no IS reports it as a flank, even at 20 hops | 17 | 38 |
+| Gene not called by pyfgs at all | 9 | 11 |
+| Gene reported next to a differently named IS | 7 | 7 |
+| IS not detected at all (ISSen10, ISSen1, IS5) | 6 | 4 |
+| Only found with 20 hops | 2 | 0 |
+| Wrong side | 2 | 1 |
+
+(The counts add to slightly more than the FN totals because a few misses fall into two categories.)
+
+- **Recall**: most lost genes sit on a contig **one link** away from the IS's contig. The IS involved are multi-copy
+  (ISEc12, ISEc23, IS200C, IS1397, IS609); their contigs have 2–6× the normal depth (~33×), so one collapsed contig stands in for several copies (58 loci on the complete genome vs 35–36 on the GFAs). The single-copy contigs hanging off these "roundabouts" are often not reported as flanks. Since `--hops 20` does not recover them, this points to eris's flank walk / branch reporting in collapse mode, not to the hops budget.
+- **Precision**: about two thirds of the false nearest-flank calls are genes **shorter than 250 bp** (23 of 35 simulated, 22 of 34 real): small ORFs near contig ends that sit in front of the real gene. Another 4–7 are **unplaceable** fragments cut at contig ends.

@@ -1,0 +1,414 @@
+---
+title: "How Eris Validation Works"
+author: "Victoria Sjalim"
+date: "2026-11-8"
+format: html
+execute:
+  freeze: auto
+---
+
+# How does eris-validation works?
+
+This page walks through, step by step, how **eris-validation** grades eris's IS–CDS relations against the curated truth. (How eris itself finds an IS and its flanks was covered earlier, so it is left out here.)
+
+Code: [github.com/Victoriasja18/eris-validation](https://github.com/Victoriasja18/eris-validation) · results: `progress/result/eris_validation/`
+
+## The idea in one picture
+
+Think of the genome as a long **book** written in A, C, G and T.
+
+- **Genes (CDS)** are the **sentences** that mean something (each is a recipe for a protein).
+- An **IS (insertion sequence)** is a **sticky note that can jump**: it copies or cuts itself into a new place. If it lands in the middle of a sentence, that sentence is broken.
+
+For every sticky note we want to know: which sentence is just **before** it (upstream), which is just **after** it (downstream), and **how far** away each one is. (Whether the note **broke** a gene, i.e. disrupted, is not scored for now.)
+
+```
+        upstream CDS                IS                downstream CDS
+   ──[=====gene A=====>]──gap──[≡≡≡≡≡≡≡≡≡≡>]──gap──[=====gene B=====>]──
+                         ◄─────►                 ◄─────►
+                        distance                distance
+   "before" and "after" are read in the direction of the IS's own strand
+```
+
+eris-validation compares eris's answers with an **answer key** (the truth) and gives it a score, like a teacher marking a test.
+
+## The whole workflow
+
+```{mermaid}
+flowchart TD
+    C["config/config.yaml<br/>config/samples.tsv"] --> A1["1. clone_eris<br/>(pinned commit)"]
+    A1 --> A2["2. install_eris<br/>(own venv)"]
+    C --> D["3. check_is_db"]
+    A2 --> R3["4. run_eris --hops 3<br/>(graded run)"]
+    A2 --> R20["4. run_eris --hops 20<br/>(reach run)"]
+    D --> R3
+    D --> R20
+    R3 --> S["5. erisval score<br/>(one per assembly)"]
+    R20 --> S
+    T["truth TSV + reference .fa<br/>+ isoform_groups.tsv"] --> S
+    S --> M["6. erisval combine<br/>metrics.tsv · details.tsv"]
+```
+
+Snakemake works **backwards** from what was asked for: the combined `metrics.tsv` needs a score for each assembly, each score needs two eris runs, each eris run needs eris installed. It runs those steps in order and skips any whose outputs already exist.
+
+```bash
+cd ../eris-validation
+uv run snakemake --cores 4        # EC958, all three assemblies: about 40 seconds
+```
+
+# Eris-validation grades eris, step by step
+
+## Settings
+
+**`config/samples.tsv`**: one row per assembly.
+
+| genome | assembly_type | assembly | reference | truth | replicons |
+|---|---|---|---|---|---|
+| EC958 | complete | complete `.fa` | reference `.fa` | `ec958_IS_cds_relations.tsv` | |
+| EC958 | simulated | simulated `.gfa` | same | same | `HG941718.1` |
+| EC958 | real | real-reads `.gfa` | same | same | |
+
+The simulated GFA is **chromosome only**, so `replicons` limits the answer key to `HG941718.1`; otherwise every plasmid relation would count as a miss (117 → 94 relations).
+
+**`config/config.yaml`**:
+
+| Setting | Value | Why |
+|---|---|---|
+| `eris.repo` / `eris.commit` | Dimas's main, `e4c6dbd` | test one exact eris version |
+| `is_db` | `../data/IS_n.mmi` | ISfinder index |
+| `mode` | collapse | |
+| `min_coverage` | 0.30 | same as eris's default |
+| `hops` / `reach_hops` | 3 / 20 | graded run / reach run |
+| `min_overlap` | 0.5 | gene match threshold (B5d) |
+| `near` | 150 bp | distance band boundary |
+| `min_identity` | 0.99 | sequence check (B5f) |
+| `min_cds_coverage` | 0.8 | sequence check (B5f) |
+| `outdir` | `../progress/result/eris_validation` | where results go |
+
+## 1–2. Get the exact eris version (`clone_eris`, `install_eris`)
+
+1. `git clone` eris **from GitHub** (`https://github.com/adimascf/eris.git`, Dimas's repo) into `resources/eris/<commit>/src` and check out the pinned commit `e4c6dbd` (merge of PR #46, isoform relations, 2026-11-03).
+2. Write the commit actually checked out into a file `COMMIT`.
+3. Install eris into its **own** virtual environment (`resources/eris/<commit>/venv`).
+
+Why: every result can be traced back to one eris version, and editing my own eris folder cannot change the results by accident. The clone also gives `tests/isoform_groups.tsv` (the IS synonym list), used in B5a.
+
+## 3. Check the IS database (`check_is_db`)
+
+`erisval check-is-db` loads the index and checks it holds **at least 100 sequences**. An ISfinder index has thousands; a genome index only a handful, so this catches a wrong or empty database before wasting a run.
+
+## 4. Run eris twice per assembly (`run_eris`)
+
+```bash
+eris -i <assembly> -d IS_n.mmi -o .../eris/h3  --mode collapse --hops 3  -c 0.30
+eris -i <assembly> -d IS_n.mmi -o .../eris/h20 --mode collapse --hops 20 -c 0.30
+```
+
+- **h3** is the run that is graded.
+- **h20** is never graded. It only answers: "if eris had walked further, would it have found the missing gene?"
+  (the **miss cause**, B5e).
+
+## 5. Grade one assembly (`erisval score`)
+
+This is the core of the validation (`src/eris_validation/`).
+
+### 5a. Read the answer key (`truth.py`)
+
+The truth (`ec958_IS_cds_relations.tsv`) is curated **outside** this repo from the EC958 GenBank annotation. Each row is a **truth relation**: one CDS on one side of one IS, with its reference position, strand, distance and effect.
+
+What the reader does:
+
+1. Checks the required columns are present and the replicons exist in the reference.
+2. Turns each IS name into its **isoform group** using eris's `isoform_groups.tsv`: the copy number is dropped (`ISEc23_1` → `ISEc23`) and ISfinder synonyms/isoforms map to one name. Names are **never** merged because they look alike (IS1A ≠ IS1F).
+3. Keeps only rows on the listed `replicons` (simulated GFA: chromosome only).
+4. If the same (isoform group, side, CDS) appears twice, e.g. two copies of one IS next to the same gene, keeps only the nearer one. This (group, side, locus tag) is the **relation key**: IS copies are not told apart.
+5. Keeps the effect column as information only: effects are not scored.
+
+### 5b. Read eris's answers (`eris_output.py`)
+
+Each row of `h3_report.tsv` becomes a **flank**:
+
+| Flank field | From |
+|---|---|
+| locus | `locus_id` |
+| IS name, isoform group | `target` → group (same synonym list) |
+| side | `context`: `UPSTREAM` / `OVERLAPPING_START` → upstream; `DOWNSTREAM` / `OVERLAPPING_END` → downstream (`INSIDE` has no side) |
+| gene, contig | `gene_id` (`contig_start_end`) |
+| distance, hops, effect | `dist_bp`, `topo_hops`, `effect` |
+
+Then each gene's **DNA** is fetched from `h3_cds.fna`. The FASTA header style differs between eris versions (0- or 1-based starts, extra prefixes), so genes are joined on **contig + end**, allowing the start to differ by 1.
+
+### 5c. Put eris's genes onto the reference (`place.py`)
+
+eris's gene coordinates are on **its own contigs**; the answer key uses **reference** coordinates. They cannot be compared directly, so every gene's DNA is aligned to the reference genome with **minimap2** (preset `asm5`, for near-identical sequence):
+
+- Keep the best hit. If several hits tie (a gene present twice in the genome), keep **all** of them.
+- If minimap2 finds nothing (usually a very short gene), fall back to an **exact text search** on both strands.
+- If both fail, the gene has no placement: it is **unplaceable** and can match nothing.
+
+Each **placement** = replicon, start, end, strand, % identity.
+
+```
+eris gene  contigA_5200_6100 ──(DNA from _cds.fna)──► minimap2 ──► HG941718.1:813465-814899 (+), identity 1.00
+```
+
+### 5d. Is it the same CDS? (`matches`)
+
+An eris gene **is** the truth CDS when one of its placements passes all three tests:
+
+| Test | Why |
+|---|---|
+| same replicon | same place in the genome |
+| same strand | a gene on the other strand is a different gene |
+| overlap ≥ **50 % of the shorter** of the two | allows pyfgs to pick a different start codon, or a gene cut at a contig end |
+
+```
+truth  EC958_RS03935   HG941718.1 813,465 ─────────────────── 814,899 (+)
+eris   placed          HG941718.1 813,465 ─────────────────── 814,899 (+)
+overlap 1,434 bp / shorter 1,434 bp = 100 %  ≥ 50 %   ✔ same CDS
+```
+
+And a relation matches when the eris flank also has the **same isoform group** (and, for TP, the same side).
+
+### 5e. Mark every answer-key row (recall side)
+
+For each truth relation, search **all** of eris's flanks (not only the nearest) for one with the same isoform group
+whose gene is the truth CDS:
+
+| Found? (checked in this order) | Status | Reason |
+|---|---|---|
+| by its own IS, on the right side | **TP** | – |
+| by its own IS, only on the other side | **FN** | `wrong_side` |
+| only by a differently named IS, on the same side | **FN** | `wrong_IS` |
+| not found | **FN** | `not_found` |
+
+Every FN then gets a **miss cause**, checked in this order:
+
+| Miss cause | How it is decided |
+|---|---|
+| `budget` | the h20 run reports the gene for this IS on this side |
+| `not_reported` | some gene pyfgs called (any record in `_cds.fna`, which holds **every** called gene) places on the truth CDS, but eris never reports it as this IS's flank on this side |
+| `not_called` | no called gene places on the truth CDS |
+
+### 5f. Extra checks on every TP
+
+| Column | Check |
+|---|---|
+| `distance_band_ok` | truth band = eris band (overlapping < 0 · near 0–150 bp · far > 150 bp) |
+| `distance_error` | \|eris distance − truth distance\|; eris reports overlaps as 0, so a negative truth distance counts as 0 |
+| `nucleotide_ok` | the aligned part is ≥ 99 % identical **and** eris's gene covers ≥ 80 % of the truth CDS (coverage waived for partial/pseudo CDS) |
+
+`nucleotide_ok` is reported but does not change any score. It catches a gene that lands in the right place but is
+badly cut.
+
+### 5g. Mark eris's own answers (precision side)
+
+The truth holds **only the nearest CDS** on each side, so only eris's nearest gene is treated as its answer:
+
+- **first flank** = the nearest flank on each side of each locus. On the IS's own contig (hops 0) that is one gene; if
+  the nearest gene is on another contig, each contig at the fewest hops is a separate branch and gives its own first
+  flank.
+
+Each first flank gets a status and, if it is false, one reason (checked in this order):
+
+| First flank… | Status | Reason |
+|---|---|---|
+| is a truth CDS of its IS, on the same side | counted in **TP_calls** | – |
+| has no placement on the reference | **FP** | `unplaceable` |
+| is a truth CDS of its IS, but on the other side | **FP** | `wrong_side` |
+| is a truth CDS on the same side, but of a differently named IS | **FP** | `wrong_IS` |
+| places somewhere that is no truth CDS | **FP** | `not_in_truth` |
+
+**Wrong IS** only says the gene belongs to another IS's relation. Whether eris misnamed the IS, or found a real
+neighbouring IS that the truth does not list, has to be judged case by case: `distance_error` is filled in for these
+rows, and a small error (a few bp) means eris's IS sits where the truth IS is, so the name is probably wrong.
+
+### 5h. Count the scores (`tables.py`)
+
+$$
+\text{Recall} = \frac{TP}{TP + FN}
+\qquad
+\text{Precision} = \frac{TP_{calls}}{TP_{calls} + FP}
+\qquad
+F_1 = \frac{2 \cdot P \cdot R}{P + R}
+$$
+
+- There are only three statuses: **TP**, **FN** and **FP**; the `reason` column says why an FN or FP is wrong, so each
+  reason points at one kind of bug. A wrong-side mistake appears twice, as an FN `wrong_side` on its true side and an
+  FP `wrong_side` on the reported side, so it costs both recall and precision.
+- **TP vs TP_calls**: recall accepts the true CDS at **any** flank, precision looks only at the **nearest**. When a
+  wrong gene (often the IS's own transposase overhanging its end, or a short ORF) sits nearer the IS than the true
+  CDS, the true CDS still counts as found (TP), but eris's nearest call is an FP. So TP_calls ≤ TP.
+- Computed for:
+  - **side**: upstream, downstream, both;
+  - **distance**: per band (overlapping, near, far), over relations found on their side;
+  - **effect** (disrupted) is **not scored** for now; `truth_effect` and `eris_effect` stay in `relations.tsv` for reference.
+
+Files written per assembly in `<outdir>/EC958/<assembly_type>/`:
+
+| File | Content |
+|---|---|
+| `metrics.tsv` | quick summary: TP, FN, TP_calls, FP, precision, recall, f1 per class |
+| `details.tsv` | pooled recall, wrong-side and wrong-IS counts, miss causes, unplaceable genes, distance agreement and errors |
+| `relations.tsv` | one row per truth relation (TP / FN) and per false first flank (FP), with `reason` for FN and FP and `miss_cause` for FN |
+| `side_confusion.tsv`, `distance_confusion.tsv` | truth (rows) × eris (columns) |
+
+The `genome` and `assembly_type` labels are written by `score` as the first columns of `metrics.tsv` and `details.tsv`.
+
+## 6. Combine (`erisval combine`)
+
+`combine` does no calculation. It reads each assembly's `metrics.tsv` (and, in a second run, `details.tsv`) and stacks them under each other into one table.
+<!-- 
+```python
+tables = [pd.read_csv(path, sep="\t") for path in args.tables]
+pd.concat(tables, ignore_index=True).to_csv(args.out, sep="\t", index=False)
+```
+
+```
+EC958/complete/metrics.tsv   ┐
+EC958/simulated/metrics.tsv  ├──► pd.concat ──► eris_validation/metrics.tsv
+EC958/real/metrics.tsv       ┘
+``` -->
+
+It does not average across assemblies, and `relations.tsv` and the confusion tables stay in each assembly's folder.
+
+# Real examples from the complete genome
+
+```{python}
+import pandas as pd
+
+RESULTS = "../result/eris_validation"
+pd.set_option("display.max_columns", None, "display.max_colwidth", None)
+relations = pd.read_csv(f"{RESULTS}/EC958/complete/relations.tsv", sep="\t")
+cols = ["status", "reason", "is_id", "side", "locus_tag", "truth_location", "truth_distance", "truth_effect",
+        "eris_target", "eris_gene", "eris_placement", "eris_context", "eris_distance", "eris_effect",
+        "distance_band_ok", "nucleotide_ok", "miss_cause"]
+pd.crosstab(relations["status"], relations["reason"].fillna("–"), margins=True, margins_name="total")
+```
+
+## 1. A clean TP: MITEEc1_1 downstream, ybhI
+
+```{python}
+relations[(relations.status == "TP") & (relations.locus_tag == "EC958_RS03935")][cols].T.fillna("")
+```
+
+The answer key says MITEEc1 has `EC958_RS03935` (ybhI) 3 bp downstream. eris reports gene
+`HG941718.1_813465_814899` downstream at 3 bp. Its DNA places at exactly the truth position, same strand → same CDS, same isoform group, same side → **TP**. Band (near = near) and sequence agree.
+
+## 2. A TP with the wrong distance band: ISEc23_1 upstream
+
+```{python}
+relations[(relations.status == "TP") & (relations.locus_tag == "EC958_RS01070")][cols].T.fillna("")
+```
+
+The right CDS is found (TP), but eris calls it `OVERLAPPING_START` / `DISRUPTED` while the truth says 1 bp away and not disrupted: eris's gene runs 33 bp further (233,726 → 233,759) into the IS. So `distance_band_ok` is False (overlapping vs near), even though the side is right.
+
+## 3. An FN and the FP that took its place: ISEc23_1 downstream
+
+```{python}
+fn = relations[(relations.status == "FN") & (relations.locus_tag == "EC958_RS01090")]
+fp = relations[(relations.status == "FP") & (relations.eris_gene == "HG941718.1_236362_236491")]
+pd.concat([fn, fp])[cols].T.fillna("")
+```
+
+The truth CDS `EC958_RS01090` is at 236,260–236,728 on the **−** strand. eris's nearest downstream gene is a 129 bp ORF at 236,362–236,491 on the **+** strand: it overlaps the truth CDS but is on the other strand, so it is a different gene → the truth relation is an **FN** with reason `not_found` (miss cause `not_called`: no gene pyfgs called is this CDS on the − strand; the truth CDS is a pseudogene), and eris's nearest call is an **FP** with reason `not_in_truth`.
+
+## 4. A wrong-IS case (real-reads GFA)
+
+```{python}
+real = pd.read_csv(f"{RESULTS}/EC958/real/relations.tsv", sep="\t")
+real[(real.reason == "wrong_IS") & (real.locus_tag == "EC958_RS20820")][cols + ["distance_error"]].T.fillna("")
+```
+
+The truth says ISSen10 overlaps `EC958_RS20820` on its downstream side. On the real-reads GFA, eris reports that same
+gene, on the same side and at the same place (`distance_error` 0), but calls the IS `IS629`. So the truth relation is
+an **FN** `wrong_IS` and eris's call is an **FP** `wrong_IS`: most likely the IS is misnamed, since it sits exactly
+where ISSen10 is.
+
+## 5. A small worked example (from the unit tests)
+
+`tests/test_score.py` checks the scorer on a hand-made case where every answer is known:
+
+| Truth | eris | Result |
+|---|---|---|
+| IS26 upstream T1 (near) | L1 upstream g1 (48 bp) → places on T1; g6 farther | **TP**; g1 counted in TP_calls; g6 is not a first flank |
+| IS26 downstream T2 (overlap) | L1 downstream g2 → places on T2 | **TP** |
+| ISEc9 upstream T3 (far) | L2 reports T3's gene **downstream** (g3) | **FN** `wrong_side` (miss cause `not_reported`) + **FP** `wrong_side` |
+| – | L2 upstream g5: no placement | **FP** `unplaceable` |
+| ISEc9 downstream T4 (near) | not in h3; found in h20 (g8, 4 hops) | **FN** `not_found`, miss cause **budget** |
+| – | L3 (IS1) downstream g7, not in the truth | **FP** `not_in_truth` |
+
+| Side | TP | FN | TP_calls | FP | Precision | Recall | F1 |
+|---|---|---|---|---|---|---|---|
+| upstream | 1 | 1 | 1 | 1 (g5) | 0.50 | 0.50 | 0.50 |
+| downstream | 1 | 1 | 1 | 2 (g3, g7) | 0.33 | 0.50 | 0.40 |
+| both | 2 | 2 | 2 | 3 | 0.40 | 0.50 | 0.44 |
+
+# What is and is not validated
+
+## 1. The CDS
+
+**Checked**: whether eris's gene lands on the same reference CDS as the answer key (same replicon, same strand,
+≥ 50 % overlap), on the right side of an IS of the right isoform group; plus distance band and sequence
+agreement for the ones found.
+
+**Not checked**:
+
+- **Exact gene boundaries**: a gene with a different start codon still passes the 50 % test. Only `nucleotide_ok` and `distance_error` hint at it.
+- **Genes away from IS**: only genes next to an IS are graded; this is not a general gene-calling benchmark.
+- **Effect**: disrupted / truncated is not scored for now.
+- **Which copy**: a gene that places in several spots matches if **any** of them fits.
+
+## 2. The IS
+
+eris-validation does **not** validate the IS themselves. The IS name is only used as a label (isoform group) to pair eris's flanks with the answer key.
+
+**Not checked**:
+
+- **IS detection**: did eris find every IS copy (IS recall), and does it report IS that are not there (IS precision)?
+- **IS position**: do eris's IS boundaries match the reference?
+- **IS naming**: an IS reported under another name (e.g. ISSen10 as IS3411) only shows up as missed relations.
+- **Copy number**: whether eris reports 6 ISEc12 copies or collapses them into 1.
+
+A missing IS shows up only indirectly: every relation of that IS becomes an FN. That is how ISSen1, ISSen10 and IS5 were found to be undetected.
+
+# Glossary
+
+| Term | Meaning |
+|---|---|
+| **IS** | insertion sequence: a piece of DNA that can jump to a new place in the genome |
+| **CDS** | coding sequence: a gene that codes for a protein |
+| **Contig** | one continuous piece of an assembly |
+| **GFA** | assembly graph: contigs plus links saying which contig can follow which |
+| **Locus** | one IS as reported by eris (possibly stitched across several contigs) |
+| **Flank** | a gene eris reports next to an IS |
+| **First flank** | eris's nearest flank on one side (per graph branch); the only flanks precision is computed over |
+| **Hops** | `--hops`: how many genes eris collects per side; `topo_hops`: how many contigs away a gene is |
+| **Collapse mode** | repeated IS copies merged into one shared contig in the GFA |
+| **Truth relation** | one CDS on one side of one IS in the answer key, with distance and effect |
+| **Isoform group** | ISfinder names that mean the same IS (synonyms and isoforms), scored as one name |
+| **Relation key** | isoform group + side + locus tag: what makes two relations the same |
+| **Side** | upstream or downstream, read in the direction of the IS's own strand |
+| **Placement** | where an eris gene lands on the reference (replicon, start, end, strand, identity) |
+| **TP** | a truth relation eris found on the right side |
+| **TP_calls** | eris's nearest genes that are correct |
+| **FN** | a truth relation eris missed |
+| **FP** | eris's nearest gene is not the truth CDS |
+| **Reason** | why an FN or FP is wrong, one per row |
+| `wrong_side` | FN: its own IS reports the CDS only on the other side · FP: eris's nearest gene is a truth CDS of its IS, but of the other side |
+| `wrong_IS` | FN: only a differently named IS reports the CDS · FP: eris's nearest gene is a truth CDS of a differently named IS |
+| `not_found` | FN: the CDS is not reported at all |
+| `unplaceable` | FP: eris's nearest gene cannot be placed on the reference |
+| `not_in_truth` | FP: eris's nearest gene is in no truth relation |
+| **Miss cause** | `budget` (found with `--hops 20`), `not_reported` (called by pyfgs but not reported as this IS's flank), `not_called` (no called gene is the truth CDS) |
+| **Distance band** | overlapping (< 0), near (0–150 bp), far (> 150 bp) |
+| **Recall** | of all the right answers, how many eris found: TP / (TP + FN) |
+| **Precision** | of everything eris answered, how much was right: TP_calls / (TP_calls + FP) |
+| **F1** | balance of precision and recall: 2PR / (P + R) |
+
+# What will I do next?
+
+- Trace one lost GFA flank (e.g. ISEc23_1 downstream, `EC958_RS01090`, simulated GFA) through eris's graph walk to see
+  why it is not reported.
+- Add an IS-level validation (detection, position, naming) using the IS truth BED files.
+- Raise the transposase overhang and short-ORF flanks with Dimas.

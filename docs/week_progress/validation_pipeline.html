@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Victoria Sjalim">
+<meta name="dcterms.date" content="2026-11-08">
+
+<title>How Eris Validation Works – Eris Progress</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-209258432f336cc574c0f847bd0a7210.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Eris Progress</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-weekly-updates" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Weekly Updates</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-weekly-updates">    
+        <li>
+    <a class="dropdown-item" href="../week_progress/week1.html">
+ <span class="dropdown-text">Week 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week2.html">
+ <span class="dropdown-text">Week 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week3.html">
+ <span class="dropdown-text">Week 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week4.html">
+ <span class="dropdown-text">Week 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week5.html">
+ <span class="dropdown-text">Week 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week6.html">
+ <span class="dropdown-text">Week 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week7.html">
+ <span class="dropdown-text">Week 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week9.html">
+ <span class="dropdown-text">Week 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week10.html">
+ <span class="dropdown-text">Week 10</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week11.html">
+ <span class="dropdown-text">Week 11</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week12.html">
+ <span class="dropdown-text">Week 12</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week13.html">
+ <span class="dropdown-text">Week 13</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week14.html">
+ <span class="dropdown-text">Week 14</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week15.html">
+ <span class="dropdown-text">Week 15</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week16.html">
+ <span class="dropdown-text">Week 16</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-eris-meeting" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Eris Meeting</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-eris-meeting">    
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting.html">
+ <span class="dropdown-text">28th July</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting2.html">
+ <span class="dropdown-text">25 Aug</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/eris_meeting3.html">
+ <span class="dropdown-text">1 Oct</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="../week_progress/validation_pipeline.html" aria-current="page"> 
+<span class="menu-text">Validation Pipeline</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-does-eris-validation-works" id="toc-how-does-eris-validation-works" class="nav-link active" data-scroll-target="#how-does-eris-validation-works">How does eris-validation works?</a>
+  <ul class="collapse">
+  <li><a href="#the-idea-in-one-picture" id="toc-the-idea-in-one-picture" class="nav-link" data-scroll-target="#the-idea-in-one-picture">The idea in one picture</a></li>
+  <li><a href="#the-whole-workflow" id="toc-the-whole-workflow" class="nav-link" data-scroll-target="#the-whole-workflow">The whole workflow</a></li>
+  </ul></li>
+  <li><a href="#eris-validation-grades-eris-step-by-step" id="toc-eris-validation-grades-eris-step-by-step" class="nav-link" data-scroll-target="#eris-validation-grades-eris-step-by-step">Eris-validation grades eris, step by step</a>
+  <ul class="collapse">
+  <li><a href="#settings" id="toc-settings" class="nav-link" data-scroll-target="#settings">Settings</a></li>
+  <li><a href="#get-the-exact-eris-version-clone_eris-install_eris" id="toc-get-the-exact-eris-version-clone_eris-install_eris" class="nav-link" data-scroll-target="#get-the-exact-eris-version-clone_eris-install_eris">1–2. Get the exact eris version (<code>clone_eris</code>, <code>install_eris</code>)</a></li>
+  <li><a href="#check-the-is-database-check_is_db" id="toc-check-the-is-database-check_is_db" class="nav-link" data-scroll-target="#check-the-is-database-check_is_db">3. Check the IS database (<code>check_is_db</code>)</a></li>
+  <li><a href="#run-eris-twice-per-assembly-run_eris" id="toc-run-eris-twice-per-assembly-run_eris" class="nav-link" data-scroll-target="#run-eris-twice-per-assembly-run_eris">4. Run eris twice per assembly (<code>run_eris</code>)</a></li>
+  <li><a href="#grade-one-assembly-erisval-score" id="toc-grade-one-assembly-erisval-score" class="nav-link" data-scroll-target="#grade-one-assembly-erisval-score">5. Grade one assembly (<code>erisval score</code>)</a>
+  <ul class="collapse">
+  <li><a href="#a.-read-the-answer-key-truth.py" id="toc-a.-read-the-answer-key-truth.py" class="nav-link" data-scroll-target="#a.-read-the-answer-key-truth.py">5a. Read the answer key (<code>truth.py</code>)</a></li>
+  <li><a href="#b.-read-eriss-answers-eris_output.py" id="toc-b.-read-eriss-answers-eris_output.py" class="nav-link" data-scroll-target="#b.-read-eriss-answers-eris_output.py">5b. Read eris’s answers (<code>eris_output.py</code>)</a></li>
+  <li><a href="#c.-put-eriss-genes-onto-the-reference-place.py" id="toc-c.-put-eriss-genes-onto-the-reference-place.py" class="nav-link" data-scroll-target="#c.-put-eriss-genes-onto-the-reference-place.py">5c. Put eris’s genes onto the reference (<code>place.py</code>)</a></li>
+  <li><a href="#d.-is-it-the-same-cds-matches" id="toc-d.-is-it-the-same-cds-matches" class="nav-link" data-scroll-target="#d.-is-it-the-same-cds-matches">5d. Is it the same CDS? (<code>matches</code>)</a></li>
+  <li><a href="#e.-mark-every-answer-key-row-recall-side" id="toc-e.-mark-every-answer-key-row-recall-side" class="nav-link" data-scroll-target="#e.-mark-every-answer-key-row-recall-side">5e. Mark every answer-key row (recall side)</a></li>
+  <li><a href="#f.-extra-checks-on-every-tp" id="toc-f.-extra-checks-on-every-tp" class="nav-link" data-scroll-target="#f.-extra-checks-on-every-tp">5f. Extra checks on every TP</a></li>
+  <li><a href="#g.-mark-eriss-own-answers-precision-side" id="toc-g.-mark-eriss-own-answers-precision-side" class="nav-link" data-scroll-target="#g.-mark-eriss-own-answers-precision-side">5g. Mark eris’s own answers (precision side)</a></li>
+  <li><a href="#h.-count-the-scores-tables.py" id="toc-h.-count-the-scores-tables.py" class="nav-link" data-scroll-target="#h.-count-the-scores-tables.py">5h. Count the scores (<code>tables.py</code>)</a></li>
+  </ul></li>
+  <li><a href="#combine-erisval-combine" id="toc-combine-erisval-combine" class="nav-link" data-scroll-target="#combine-erisval-combine">6. Combine (<code>erisval combine</code>)</a></li>
+  </ul></li>
+  <li><a href="#real-examples-from-the-complete-genome" id="toc-real-examples-from-the-complete-genome" class="nav-link" data-scroll-target="#real-examples-from-the-complete-genome">Real examples from the complete genome</a>
+  <ul class="collapse">
+  <li><a href="#a-clean-tp-miteec1_1-downstream-ybhi" id="toc-a-clean-tp-miteec1_1-downstream-ybhi" class="nav-link" data-scroll-target="#a-clean-tp-miteec1_1-downstream-ybhi">1. A clean TP: MITEEc1_1 downstream, ybhI</a></li>
+  <li><a href="#a-tp-with-the-wrong-distance-band-isec23_1-upstream" id="toc-a-tp-with-the-wrong-distance-band-isec23_1-upstream" class="nav-link" data-scroll-target="#a-tp-with-the-wrong-distance-band-isec23_1-upstream">2. A TP with the wrong distance band: ISEc23_1 upstream</a></li>
+  <li><a href="#an-fn-and-the-fp-that-took-its-place-isec23_1-downstream" id="toc-an-fn-and-the-fp-that-took-its-place-isec23_1-downstream" class="nav-link" data-scroll-target="#an-fn-and-the-fp-that-took-its-place-isec23_1-downstream">3. An FN and the FP that took its place: ISEc23_1 downstream</a></li>
+  <li><a href="#a-wrong-is-case-real-reads-gfa" id="toc-a-wrong-is-case-real-reads-gfa" class="nav-link" data-scroll-target="#a-wrong-is-case-real-reads-gfa">4. A wrong-IS case (real-reads GFA)</a></li>
+  <li><a href="#a-small-worked-example-from-the-unit-tests" id="toc-a-small-worked-example-from-the-unit-tests" class="nav-link" data-scroll-target="#a-small-worked-example-from-the-unit-tests">5. A small worked example (from the unit tests)</a></li>
+  </ul></li>
+  <li><a href="#what-is-and-is-not-validated" id="toc-what-is-and-is-not-validated" class="nav-link" data-scroll-target="#what-is-and-is-not-validated">What is and is not validated</a>
+  <ul class="collapse">
+  <li><a href="#the-cds" id="toc-the-cds" class="nav-link" data-scroll-target="#the-cds">1. The CDS</a></li>
+  <li><a href="#the-is" id="toc-the-is" class="nav-link" data-scroll-target="#the-is">2. The IS</a></li>
+  </ul></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
+  <li><a href="#what-will-i-do-next" id="toc-what-will-i-do-next" class="nav-link" data-scroll-target="#what-will-i-do-next">What will I do next?</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">How Eris Validation Works</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Victoria Sjalim </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 8, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="how-does-eris-validation-works" class="level1">
+<h1>How does eris-validation works?</h1>
+<p>This page walks through, step by step, how <strong>eris-validation</strong> grades eris’s IS–CDS relations against the curated truth. (How eris itself finds an IS and its flanks was covered earlier, so it is left out here.)</p>
+<p>Code: <a href="https://github.com/Victoriasja18/eris-validation">github.com/Victoriasja18/eris-validation</a> · results: <code>progress/result/eris_validation/</code></p>
+<section id="the-idea-in-one-picture" class="level2">
+<h2 class="anchored" data-anchor-id="the-idea-in-one-picture">The idea in one picture</h2>
+<p>Think of the genome as a long <strong>book</strong> written in A, C, G and T.</p>
+<ul>
+<li><strong>Genes (CDS)</strong> are the <strong>sentences</strong> that mean something (each is a recipe for a protein).</li>
+<li>An <strong>IS (insertion sequence)</strong> is a <strong>sticky note that can jump</strong>: it copies or cuts itself into a new place. If it lands in the middle of a sentence, that sentence is broken.</li>
+</ul>
+<p>For every sticky note we want to know: which sentence is just <strong>before</strong> it (upstream), which is just <strong>after</strong> it (downstream), and <strong>how far</strong> away each one is. (Whether the note <strong>broke</strong> a gene, i.e.&nbsp;disrupted, is not scored for now.)</p>
+<pre><code>        upstream CDS                IS                downstream CDS
+   ──[=====gene A=====&gt;]──gap──[≡≡≡≡≡≡≡≡≡≡&gt;]──gap──[=====gene B=====&gt;]──
+                         ◄─────►                 ◄─────►
+                        distance                distance
+   "before" and "after" are read in the direction of the IS's own strand</code></pre>
+<p>eris-validation compares eris’s answers with an <strong>answer key</strong> (the truth) and gives it a score, like a teacher marking a test.</p>
+</section>
+<section id="the-whole-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="the-whole-workflow">The whole workflow</h2>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    C["config/config.yaml&lt;br/&gt;config/samples.tsv"] --&gt; A1["1. clone_eris&lt;br/&gt;(pinned commit)"]
+    A1 --&gt; A2["2. install_eris&lt;br/&gt;(own venv)"]
+    C --&gt; D["3. check_is_db"]
+    A2 --&gt; R3["4. run_eris --hops 3&lt;br/&gt;(graded run)"]
+    A2 --&gt; R20["4. run_eris --hops 20&lt;br/&gt;(reach run)"]
+    D --&gt; R3
+    D --&gt; R20
+    R3 --&gt; S["5. erisval score&lt;br/&gt;(one per assembly)"]
+    R20 --&gt; S
+    T["truth TSV + reference .fa&lt;br/&gt;+ isoform_groups.tsv"] --&gt; S
+    S --&gt; M["6. erisval combine&lt;br/&gt;metrics.tsv · details.tsv"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Snakemake works <strong>backwards</strong> from what was asked for: the combined <code>metrics.tsv</code> needs a score for each assembly, each score needs two eris runs, each eris run needs eris installed. It runs those steps in order and skips any whose outputs already exist.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../eris-validation</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run snakemake <span class="at">--cores</span> 4        <span class="co"># EC958, all three assemblies: about 40 seconds</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="eris-validation-grades-eris-step-by-step" class="level1">
+<h1>Eris-validation grades eris, step by step</h1>
+<section id="settings" class="level2">
+<h2 class="anchored" data-anchor-id="settings">Settings</h2>
+<p><strong><code>config/samples.tsv</code></strong>: one row per assembly.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>genome</th>
+<th>assembly_type</th>
+<th>assembly</th>
+<th>reference</th>
+<th>truth</th>
+<th>replicons</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>EC958</td>
+<td>complete</td>
+<td>complete <code>.fa</code></td>
+<td>reference <code>.fa</code></td>
+<td><code>ec958_IS_cds_relations.tsv</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>EC958</td>
+<td>simulated</td>
+<td>simulated <code>.gfa</code></td>
+<td>same</td>
+<td>same</td>
+<td><code>HG941718.1</code></td>
+</tr>
+<tr class="odd">
+<td>EC958</td>
+<td>real</td>
+<td>real-reads <code>.gfa</code></td>
+<td>same</td>
+<td>same</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The simulated GFA is <strong>chromosome only</strong>, so <code>replicons</code> limits the answer key to <code>HG941718.1</code>; otherwise every plasmid relation would count as a miss (117 → 94 relations).</p>
+<p><strong><code>config/config.yaml</code></strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Setting</th>
+<th>Value</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>eris.repo</code> / <code>eris.commit</code></td>
+<td>Dimas’s main, <code>e4c6dbd</code></td>
+<td>test one exact eris version</td>
+</tr>
+<tr class="even">
+<td><code>is_db</code></td>
+<td><code>../data/IS_n.mmi</code></td>
+<td>ISfinder index</td>
+</tr>
+<tr class="odd">
+<td><code>mode</code></td>
+<td>collapse</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>min_coverage</code></td>
+<td>0.30</td>
+<td>same as eris’s default</td>
+</tr>
+<tr class="odd">
+<td><code>hops</code> / <code>reach_hops</code></td>
+<td>3 / 20</td>
+<td>graded run / reach run</td>
+</tr>
+<tr class="even">
+<td><code>min_overlap</code></td>
+<td>0.5</td>
+<td>gene match threshold (B5d)</td>
+</tr>
+<tr class="odd">
+<td><code>near</code></td>
+<td>150 bp</td>
+<td>distance band boundary</td>
+</tr>
+<tr class="even">
+<td><code>min_identity</code></td>
+<td>0.99</td>
+<td>sequence check (B5f)</td>
+</tr>
+<tr class="odd">
+<td><code>min_cds_coverage</code></td>
+<td>0.8</td>
+<td>sequence check (B5f)</td>
+</tr>
+<tr class="even">
+<td><code>outdir</code></td>
+<td><code>../progress/result/eris_validation</code></td>
+<td>where results go</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="get-the-exact-eris-version-clone_eris-install_eris" class="level2">
+<h2 class="anchored" data-anchor-id="get-the-exact-eris-version-clone_eris-install_eris">1–2. Get the exact eris version (<code>clone_eris</code>, <code>install_eris</code>)</h2>
+<ol type="1">
+<li><code>git clone</code> eris <strong>from GitHub</strong> (<code>https://github.com/adimascf/eris.git</code>, Dimas’s repo) into <code>resources/eris/&lt;commit&gt;/src</code> and check out the pinned commit <code>e4c6dbd</code> (merge of PR #46, isoform relations, 2026-11-03).</li>
+<li>Write the commit actually checked out into a file <code>COMMIT</code>.</li>
+<li>Install eris into its <strong>own</strong> virtual environment (<code>resources/eris/&lt;commit&gt;/venv</code>).</li>
+</ol>
+<p>Why: every result can be traced back to one eris version, and editing my own eris folder cannot change the results by accident. The clone also gives <code>tests/isoform_groups.tsv</code> (the IS synonym list), used in B5a.</p>
+</section>
+<section id="check-the-is-database-check_is_db" class="level2">
+<h2 class="anchored" data-anchor-id="check-the-is-database-check_is_db">3. Check the IS database (<code>check_is_db</code>)</h2>
+<p><code>erisval check-is-db</code> loads the index and checks it holds <strong>at least 100 sequences</strong>. An ISfinder index has thousands; a genome index only a handful, so this catches a wrong or empty database before wasting a run.</p>
+</section>
+<section id="run-eris-twice-per-assembly-run_eris" class="level2">
+<h2 class="anchored" data-anchor-id="run-eris-twice-per-assembly-run_eris">4. Run eris twice per assembly (<code>run_eris</code>)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">eris</span> <span class="at">-i</span> <span class="op">&lt;</span>assembly<span class="op">&gt;</span> -d IS_n.mmi <span class="at">-o</span> .../eris/h3  <span class="at">--mode</span> collapse <span class="at">--hops</span> 3  <span class="at">-c</span> 0.30</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">eris</span> <span class="at">-i</span> <span class="op">&lt;</span>assembly<span class="op">&gt;</span> -d IS_n.mmi <span class="at">-o</span> .../eris/h20 <span class="at">--mode</span> collapse <span class="at">--hops</span> 20 <span class="at">-c</span> 0.30</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><strong>h3</strong> is the run that is graded.</li>
+<li><strong>h20</strong> is never graded. It only answers: “if eris had walked further, would it have found the missing gene?” (the <strong>miss cause</strong>, B5e).</li>
+</ul>
+</section>
+<section id="grade-one-assembly-erisval-score" class="level2">
+<h2 class="anchored" data-anchor-id="grade-one-assembly-erisval-score">5. Grade one assembly (<code>erisval score</code>)</h2>
+<p>This is the core of the validation (<code>src/eris_validation/</code>).</p>
+<section id="a.-read-the-answer-key-truth.py" class="level3">
+<h3 class="anchored" data-anchor-id="a.-read-the-answer-key-truth.py">5a. Read the answer key (<code>truth.py</code>)</h3>
+<p>The truth (<code>ec958_IS_cds_relations.tsv</code>) is curated <strong>outside</strong> this repo from the EC958 GenBank annotation. Each row is a <strong>truth relation</strong>: one CDS on one side of one IS, with its reference position, strand, distance and effect.</p>
+<p>What the reader does:</p>
+<ol type="1">
+<li>Checks the required columns are present and the replicons exist in the reference.</li>
+<li>Turns each IS name into its <strong>isoform group</strong> using eris’s <code>isoform_groups.tsv</code>: the copy number is dropped (<code>ISEc23_1</code> → <code>ISEc23</code>) and ISfinder synonyms/isoforms map to one name. Names are <strong>never</strong> merged because they look alike (IS1A ≠ IS1F).</li>
+<li>Keeps only rows on the listed <code>replicons</code> (simulated GFA: chromosome only).</li>
+<li>If the same (isoform group, side, CDS) appears twice, e.g.&nbsp;two copies of one IS next to the same gene, keeps only the nearer one. This (group, side, locus tag) is the <strong>relation key</strong>: IS copies are not told apart.</li>
+<li>Keeps the effect column as information only: effects are not scored.</li>
+</ol>
+</section>
+<section id="b.-read-eriss-answers-eris_output.py" class="level3">
+<h3 class="anchored" data-anchor-id="b.-read-eriss-answers-eris_output.py">5b. Read eris’s answers (<code>eris_output.py</code>)</h3>
+<p>Each row of <code>h3_report.tsv</code> becomes a <strong>flank</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Flank field</th>
+<th>From</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>locus</td>
+<td><code>locus_id</code></td>
+</tr>
+<tr class="even">
+<td>IS name, isoform group</td>
+<td><code>target</code> → group (same synonym list)</td>
+</tr>
+<tr class="odd">
+<td>side</td>
+<td><code>context</code>: <code>UPSTREAM</code> / <code>OVERLAPPING_START</code> → upstream; <code>DOWNSTREAM</code> / <code>OVERLAPPING_END</code> → downstream (<code>INSIDE</code> has no side)</td>
+</tr>
+<tr class="even">
+<td>gene, contig</td>
+<td><code>gene_id</code> (<code>contig_start_end</code>)</td>
+</tr>
+<tr class="odd">
+<td>distance, hops, effect</td>
+<td><code>dist_bp</code>, <code>topo_hops</code>, <code>effect</code></td>
+</tr>
+</tbody>
+</table>
+<p>Then each gene’s <strong>DNA</strong> is fetched from <code>h3_cds.fna</code>. The FASTA header style differs between eris versions (0- or 1-based starts, extra prefixes), so genes are joined on <strong>contig + end</strong>, allowing the start to differ by 1.</p>
+</section>
+<section id="c.-put-eriss-genes-onto-the-reference-place.py" class="level3">
+<h3 class="anchored" data-anchor-id="c.-put-eriss-genes-onto-the-reference-place.py">5c. Put eris’s genes onto the reference (<code>place.py</code>)</h3>
+<p>eris’s gene coordinates are on <strong>its own contigs</strong>; the answer key uses <strong>reference</strong> coordinates. They cannot be compared directly, so every gene’s DNA is aligned to the reference genome with <strong>minimap2</strong> (preset <code>asm5</code>, for near-identical sequence):</p>
+<ul>
+<li>Keep the best hit. If several hits tie (a gene present twice in the genome), keep <strong>all</strong> of them.</li>
+<li>If minimap2 finds nothing (usually a very short gene), fall back to an <strong>exact text search</strong> on both strands.</li>
+<li>If both fail, the gene has no placement: it is <strong>unplaceable</strong> and can match nothing.</li>
+</ul>
+<p>Each <strong>placement</strong> = replicon, start, end, strand, % identity.</p>
+<pre><code>eris gene  contigA_5200_6100 ──(DNA from _cds.fna)──► minimap2 ──► HG941718.1:813465-814899 (+), identity 1.00</code></pre>
+</section>
+<section id="d.-is-it-the-same-cds-matches" class="level3">
+<h3 class="anchored" data-anchor-id="d.-is-it-the-same-cds-matches">5d. Is it the same CDS? (<code>matches</code>)</h3>
+<p>An eris gene <strong>is</strong> the truth CDS when one of its placements passes all three tests:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Test</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>same replicon</td>
+<td>same place in the genome</td>
+</tr>
+<tr class="even">
+<td>same strand</td>
+<td>a gene on the other strand is a different gene</td>
+</tr>
+<tr class="odd">
+<td>overlap ≥ <strong>50 % of the shorter</strong> of the two</td>
+<td>allows pyfgs to pick a different start codon, or a gene cut at a contig end</td>
+</tr>
+</tbody>
+</table>
+<pre><code>truth  EC958_RS03935   HG941718.1 813,465 ─────────────────── 814,899 (+)
+eris   placed          HG941718.1 813,465 ─────────────────── 814,899 (+)
+overlap 1,434 bp / shorter 1,434 bp = 100 %  ≥ 50 %   ✔ same CDS</code></pre>
+<p>And a relation matches when the eris flank also has the <strong>same isoform group</strong> (and, for TP, the same side).</p>
+</section>
+<section id="e.-mark-every-answer-key-row-recall-side" class="level3">
+<h3 class="anchored" data-anchor-id="e.-mark-every-answer-key-row-recall-side">5e. Mark every answer-key row (recall side)</h3>
+<p>For each truth relation, search <strong>all</strong> of eris’s flanks (not only the nearest) for one with the same isoform group whose gene is the truth CDS:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Found? (checked in this order)</th>
+<th>Status</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>by its own IS, on the right side</td>
+<td><strong>TP</strong></td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>by its own IS, only on the other side</td>
+<td><strong>FN</strong></td>
+<td><code>wrong_side</code></td>
+</tr>
+<tr class="odd">
+<td>only by a differently named IS, on the same side</td>
+<td><strong>FN</strong></td>
+<td><code>wrong_IS</code></td>
+</tr>
+<tr class="even">
+<td>not found</td>
+<td><strong>FN</strong></td>
+<td><code>not_found</code></td>
+</tr>
+</tbody>
+</table>
+<p>Every FN then gets a <strong>miss cause</strong>, checked in this order:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Miss cause</th>
+<th>How it is decided</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>budget</code></td>
+<td>the h20 run reports the gene for this IS on this side</td>
+</tr>
+<tr class="even">
+<td><code>not_reported</code></td>
+<td>some gene pyfgs called (any record in <code>_cds.fna</code>, which holds <strong>every</strong> called gene) places on the truth CDS, but eris never reports it as this IS’s flank on this side</td>
+</tr>
+<tr class="odd">
+<td><code>not_called</code></td>
+<td>no called gene places on the truth CDS</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="f.-extra-checks-on-every-tp" class="level3">
+<h3 class="anchored" data-anchor-id="f.-extra-checks-on-every-tp">5f. Extra checks on every TP</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>distance_band_ok</code></td>
+<td>truth band = eris band (overlapping &lt; 0 · near 0–150 bp · far &gt; 150 bp)</td>
+</tr>
+<tr class="even">
+<td><code>distance_error</code></td>
+<td>|eris distance − truth distance|; eris reports overlaps as 0, so a negative truth distance counts as 0</td>
+</tr>
+<tr class="odd">
+<td><code>nucleotide_ok</code></td>
+<td>the aligned part is ≥ 99 % identical <strong>and</strong> eris’s gene covers ≥ 80 % of the truth CDS (coverage waived for partial/pseudo CDS)</td>
+</tr>
+</tbody>
+</table>
+<p><code>nucleotide_ok</code> is reported but does not change any score. It catches a gene that lands in the right place but is badly cut.</p>
+</section>
+<section id="g.-mark-eriss-own-answers-precision-side" class="level3">
+<h3 class="anchored" data-anchor-id="g.-mark-eriss-own-answers-precision-side">5g. Mark eris’s own answers (precision side)</h3>
+<p>The truth holds <strong>only the nearest CDS</strong> on each side, so only eris’s nearest gene is treated as its answer:</p>
+<ul>
+<li><strong>first flank</strong> = the nearest flank on each side of each locus. On the IS’s own contig (hops 0) that is one gene; if the nearest gene is on another contig, each contig at the fewest hops is a separate branch and gives its own first flank.</li>
+</ul>
+<p>Each first flank gets a status and, if it is false, one reason (checked in this order):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>First flank…</th>
+<th>Status</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>is a truth CDS of its IS, on the same side</td>
+<td>counted in <strong>TP_calls</strong></td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>has no placement on the reference</td>
+<td><strong>FP</strong></td>
+<td><code>unplaceable</code></td>
+</tr>
+<tr class="odd">
+<td>is a truth CDS of its IS, but on the other side</td>
+<td><strong>FP</strong></td>
+<td><code>wrong_side</code></td>
+</tr>
+<tr class="even">
+<td>is a truth CDS on the same side, but of a differently named IS</td>
+<td><strong>FP</strong></td>
+<td><code>wrong_IS</code></td>
+</tr>
+<tr class="odd">
+<td>places somewhere that is no truth CDS</td>
+<td><strong>FP</strong></td>
+<td><code>not_in_truth</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Wrong IS</strong> only says the gene belongs to another IS’s relation. Whether eris misnamed the IS, or found a real neighbouring IS that the truth does not list, has to be judged case by case: <code>distance_error</code> is filled in for these rows, and a small error (a few bp) means eris’s IS sits where the truth IS is, so the name is probably wrong.</p>
+</section>
+<section id="h.-count-the-scores-tables.py" class="level3">
+<h3 class="anchored" data-anchor-id="h.-count-the-scores-tables.py">5h. Count the scores (<code>tables.py</code>)</h3>
+<p><span class="math display">\[
+\text{Recall} = \frac{TP}{TP + FN}
+\qquad
+\text{Precision} = \frac{TP_{calls}}{TP_{calls} + FP}
+\qquad
+F_1 = \frac{2 \cdot P \cdot R}{P + R}
+\]</span></p>
+<ul>
+<li>There are only three statuses: <strong>TP</strong>, <strong>FN</strong> and <strong>FP</strong>; the <code>reason</code> column says why an FN or FP is wrong, so each reason points at one kind of bug. A wrong-side mistake appears twice, as an FN <code>wrong_side</code> on its true side and an FP <code>wrong_side</code> on the reported side, so it costs both recall and precision.</li>
+<li><strong>TP vs TP_calls</strong>: recall accepts the true CDS at <strong>any</strong> flank, precision looks only at the <strong>nearest</strong>. When a wrong gene (often the IS’s own transposase overhanging its end, or a short ORF) sits nearer the IS than the true CDS, the true CDS still counts as found (TP), but eris’s nearest call is an FP. So TP_calls ≤ TP.</li>
+<li>Computed for:
+<ul>
+<li><strong>side</strong>: upstream, downstream, both;</li>
+<li><strong>distance</strong>: per band (overlapping, near, far), over relations found on their side;</li>
+<li><strong>effect</strong> (disrupted) is <strong>not scored</strong> for now; <code>truth_effect</code> and <code>eris_effect</code> stay in <code>relations.tsv</code> for reference.</li>
+</ul></li>
+</ul>
+<p>Files written per assembly in <code>&lt;outdir&gt;/EC958/&lt;assembly_type&gt;/</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>metrics.tsv</code></td>
+<td>quick summary: TP, FN, TP_calls, FP, precision, recall, f1 per class</td>
+</tr>
+<tr class="even">
+<td><code>details.tsv</code></td>
+<td>pooled recall, wrong-side and wrong-IS counts, miss causes, unplaceable genes, distance agreement and errors</td>
+</tr>
+<tr class="odd">
+<td><code>relations.tsv</code></td>
+<td>one row per truth relation (TP / FN) and per false first flank (FP), with <code>reason</code> for FN and FP and <code>miss_cause</code> for FN</td>
+</tr>
+<tr class="even">
+<td><code>side_confusion.tsv</code>, <code>distance_confusion.tsv</code></td>
+<td>truth (rows) × eris (columns)</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>genome</code> and <code>assembly_type</code> labels are written by <code>score</code> as the first columns of <code>metrics.tsv</code> and <code>details.tsv</code>.</p>
+</section>
+</section>
+<section id="combine-erisval-combine" class="level2">
+<h2 class="anchored" data-anchor-id="combine-erisval-combine">6. Combine (<code>erisval combine</code>)</h2>
+<p><code>combine</code> does no calculation. It reads each assembly’s <code>metrics.tsv</code> (and, in a second run, <code>details.tsv</code>) and stacks them under each other into one table. <!-- 
+```python
+tables = [pd.read_csv(path, sep="\t") for path in args.tables]
+pd.concat(tables, ignore_index=True).to_csv(args.out, sep="\t", index=False)
+```
+
+```
+EC958/complete/metrics.tsv   ┐
+EC958/simulated/metrics.tsv  ├──► pd.concat ──► eris_validation/metrics.tsv
+EC958/real/metrics.tsv       ┘
+``` --></p>
+<p>It does not average across assemblies, and <code>relations.tsv</code> and the confusion tables stay in each assembly’s folder.</p>
+</section>
+</section>
+<section id="real-examples-from-the-complete-genome" class="level1">
+<h1>Real examples from the complete genome</h1>
+<div id="dd930561" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>RESULTS <span class="op">=</span> <span class="st">"../result/eris_validation"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_columns"</span>, <span class="va">None</span>, <span class="st">"display.max_colwidth"</span>, <span class="va">None</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>relations <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/complete/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">"status"</span>, <span class="st">"reason"</span>, <span class="st">"is_id"</span>, <span class="st">"side"</span>, <span class="st">"locus_tag"</span>, <span class="st">"truth_location"</span>, <span class="st">"truth_distance"</span>, <span class="st">"truth_effect"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"eris_target"</span>, <span class="st">"eris_gene"</span>, <span class="st">"eris_placement"</span>, <span class="st">"eris_context"</span>, <span class="st">"eris_distance"</span>, <span class="st">"eris_effect"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"distance_band_ok"</span>, <span class="st">"nucleotide_ok"</span>, <span class="st">"miss_cause"</span>]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>pd.crosstab(relations[<span class="st">"status"</span>], relations[<span class="st">"reason"</span>].fillna(<span class="st">"–"</span>), margins<span class="op">=</span><span class="va">True</span>, margins_name<span class="op">=</span><span class="st">"total"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">reason</th>
+<th data-quarto-table-cell-role="th">not_found</th>
+<th data-quarto-table-cell-role="th">not_in_truth</th>
+<th data-quarto-table-cell-role="th">wrong_IS</th>
+<th data-quarto-table-cell-role="th">wrong_side</th>
+<th data-quarto-table-cell-role="th">–</th>
+<th data-quarto-table-cell-role="th">total</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">status</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">FN</th>
+<td>28</td>
+<td>0</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>32</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">FP</th>
+<td>0</td>
+<td>45</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+<td>48</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">TP</th>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>85</td>
+<td>85</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">total</th>
+<td>28</td>
+<td>45</td>
+<td>3</td>
+<td>4</td>
+<td>85</td>
+<td>165</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="a-clean-tp-miteec1_1-downstream-ybhi" class="level2">
+<h2 class="anchored" data-anchor-id="a-clean-tp-miteec1_1-downstream-ybhi">1. A clean TP: MITEEc1_1 downstream, ybhI</h2>
+<div id="d7ad642b" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>relations[(relations.status <span class="op">==</span> <span class="st">"TP"</span>) <span class="op">&amp;</span> (relations.locus_tag <span class="op">==</span> <span class="st">"EC958_RS03935"</span>)][cols].T.fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">status</th>
+<td>TP</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">reason</th>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">is_id</th>
+<td>MITEEc1_1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">side</th>
+<td>downstream</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">locus_tag</th>
+<td>EC958_RS03935</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth_location</th>
+<td>HG941718.1:813465-814899(+)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">truth_distance</th>
+<td>3.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth_effect</th>
+<td>none</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_target</th>
+<td>MITEEc1_IS630_unknown</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_gene</th>
+<td>HG941718.1_813465_814899</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_placement</th>
+<td>HG941718.1:813465-814899(+)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_context</th>
+<td>DOWNSTREAM</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_distance</th>
+<td>3.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_effect</th>
+<td>NONE</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">distance_band_ok</th>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">nucleotide_ok</th>
+<td>True</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">miss_cause</th>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The answer key says MITEEc1 has <code>EC958_RS03935</code> (ybhI) 3 bp downstream. eris reports gene <code>HG941718.1_813465_814899</code> downstream at 3 bp. Its DNA places at exactly the truth position, same strand → same CDS, same isoform group, same side → <strong>TP</strong>. Band (near = near) and sequence agree.</p>
+</section>
+<section id="a-tp-with-the-wrong-distance-band-isec23_1-upstream" class="level2">
+<h2 class="anchored" data-anchor-id="a-tp-with-the-wrong-distance-band-isec23_1-upstream">2. A TP with the wrong distance band: ISEc23_1 upstream</h2>
+<div id="d01493b1" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>relations[(relations.status <span class="op">==</span> <span class="st">"TP"</span>) <span class="op">&amp;</span> (relations.locus_tag <span class="op">==</span> <span class="st">"EC958_RS01070"</span>)][cols].T.fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">status</th>
+<td>TP</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">reason</th>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">is_id</th>
+<td>ISEc23_1</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">side</th>
+<td>upstream</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">locus_tag</th>
+<td>EC958_RS01070</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth_location</th>
+<td>HG941718.1:233363-233726(-)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">truth_distance</th>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth_effect</th>
+<td>none</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_target</th>
+<td>ISEc23_IS66_unknown</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_gene</th>
+<td>HG941718.1_233363_233759</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_placement</th>
+<td>HG941718.1:233363-233759(-)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_context</th>
+<td>OVERLAPPING_START</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_distance</th>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_effect</th>
+<td>DISRUPTED</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">distance_band_ok</th>
+<td>False</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">nucleotide_ok</th>
+<td>True</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">miss_cause</th>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The right CDS is found (TP), but eris calls it <code>OVERLAPPING_START</code> / <code>DISRUPTED</code> while the truth says 1 bp away and not disrupted: eris’s gene runs 33 bp further (233,726 → 233,759) into the IS. So <code>distance_band_ok</code> is False (overlapping vs near), even though the side is right.</p>
+</section>
+<section id="an-fn-and-the-fp-that-took-its-place-isec23_1-downstream" class="level2">
+<h2 class="anchored" data-anchor-id="an-fn-and-the-fp-that-took-its-place-isec23_1-downstream">3. An FN and the FP that took its place: ISEc23_1 downstream</h2>
+<div id="c449cd2b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> relations[(relations.status <span class="op">==</span> <span class="st">"FN"</span>) <span class="op">&amp;</span> (relations.locus_tag <span class="op">==</span> <span class="st">"EC958_RS01090"</span>)]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> relations[(relations.status <span class="op">==</span> <span class="st">"FP"</span>) <span class="op">&amp;</span> (relations.eris_gene <span class="op">==</span> <span class="st">"HG941718.1_236362_236491"</span>)]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pd.concat([fn, fp])[cols].T.fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">117</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">status</th>
+<td>FN</td>
+<td>FP</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">reason</th>
+<td>not_found</td>
+<td>not_in_truth</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">is_id</th>
+<td>ISEc23_1</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">side</th>
+<td>downstream</td>
+<td>downstream</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">locus_tag</th>
+<td>EC958_RS01090</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth_location</th>
+<td>HG941718.1:236260-236728(-)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">truth_distance</th>
+<td>1.0</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth_effect</th>
+<td>none</td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_target</th>
+<td></td>
+<td>ISEc23_IS66_unknown</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_gene</th>
+<td></td>
+<td>HG941718.1_236362_236491</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_placement</th>
+<td></td>
+<td>HG941718.1:236362-236491(+)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_context</th>
+<td></td>
+<td>DOWNSTREAM</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_distance</th>
+<td></td>
+<td>103.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_effect</th>
+<td></td>
+<td>NONE</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">distance_band_ok</th>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">nucleotide_ok</th>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">miss_cause</th>
+<td>not_called</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The truth CDS <code>EC958_RS01090</code> is at 236,260–236,728 on the <strong>−</strong> strand. eris’s nearest downstream gene is a 129 bp ORF at 236,362–236,491 on the <strong>+</strong> strand: it overlaps the truth CDS but is on the other strand, so it is a different gene → the truth relation is an <strong>FN</strong> with reason <code>not_found</code> (miss cause <code>not_called</code>: no gene pyfgs called is this CDS on the − strand; the truth CDS is a pseudogene), and eris’s nearest call is an <strong>FP</strong> with reason <code>not_in_truth</code>.</p>
+</section>
+<section id="a-wrong-is-case-real-reads-gfa" class="level2">
+<h2 class="anchored" data-anchor-id="a-wrong-is-case-real-reads-gfa">4. A wrong-IS case (real-reads GFA)</h2>
+<div id="6a89c485" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>real <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/real/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>real[(real.reason <span class="op">==</span> <span class="st">"wrong_IS"</span>) <span class="op">&amp;</span> (real.locus_tag <span class="op">==</span> <span class="st">"EC958_RS20820"</span>)][cols <span class="op">+</span> [<span class="st">"distance_error"</span>]].T.fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">64</th>
+<th data-quarto-table-cell-role="th">126</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">status</th>
+<td>FN</td>
+<td>FP</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">reason</th>
+<td>wrong_IS</td>
+<td>wrong_IS</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">is_id</th>
+<td>ISSen10</td>
+<td>ISSen10</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">side</th>
+<td>downstream</td>
+<td>downstream</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">locus_tag</th>
+<td>EC958_RS20820</td>
+<td>EC958_RS20820</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth_location</th>
+<td>HG941718.1:4155642-4156125(-)</td>
+<td>HG941718.1:4155642-4156125(-)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">truth_distance</th>
+<td>-59.0</td>
+<td>-59.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">truth_effect</th>
+<td>uncertain</td>
+<td>uncertain</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_target</th>
+<td>IS629_IS3_IS51_stitched</td>
+<td>IS629_IS3_IS51_stitched</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_gene</th>
+<td>2419496_0_495</td>
+<td>2419496_0_495</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_placement</th>
+<td></td>
+<td>HG941718.1:4155642-4156137(-)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_context</th>
+<td>DOWNSTREAM</td>
+<td>DOWNSTREAM</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">eris_distance</th>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">eris_effect</th>
+<td>NONE</td>
+<td>NONE</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">distance_band_ok</th>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">nucleotide_ok</th>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">miss_cause</th>
+<td>not_reported</td>
+<td></td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">distance_error</th>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The truth says ISSen10 overlaps <code>EC958_RS20820</code> on its downstream side. On the real-reads GFA, eris reports that same gene, on the same side and at the same place (<code>distance_error</code> 0), but calls the IS <code>IS629</code>. So the truth relation is an <strong>FN</strong> <code>wrong_IS</code> and eris’s call is an <strong>FP</strong> <code>wrong_IS</code>: most likely the IS is misnamed, since it sits exactly where ISSen10 is.</p>
+</section>
+<section id="a-small-worked-example-from-the-unit-tests" class="level2">
+<h2 class="anchored" data-anchor-id="a-small-worked-example-from-the-unit-tests">5. A small worked example (from the unit tests)</h2>
+<p><code>tests/test_score.py</code> checks the scorer on a hand-made case where every answer is known:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Truth</th>
+<th>eris</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IS26 upstream T1 (near)</td>
+<td>L1 upstream g1 (48 bp) → places on T1; g6 farther</td>
+<td><strong>TP</strong>; g1 counted in TP_calls; g6 is not a first flank</td>
+</tr>
+<tr class="even">
+<td>IS26 downstream T2 (overlap)</td>
+<td>L1 downstream g2 → places on T2</td>
+<td><strong>TP</strong></td>
+</tr>
+<tr class="odd">
+<td>ISEc9 upstream T3 (far)</td>
+<td>L2 reports T3’s gene <strong>downstream</strong> (g3)</td>
+<td><strong>FN</strong> <code>wrong_side</code> (miss cause <code>not_reported</code>) + <strong>FP</strong> <code>wrong_side</code></td>
+</tr>
+<tr class="even">
+<td>–</td>
+<td>L2 upstream g5: no placement</td>
+<td><strong>FP</strong> <code>unplaceable</code></td>
+</tr>
+<tr class="odd">
+<td>ISEc9 downstream T4 (near)</td>
+<td>not in h3; found in h20 (g8, 4 hops)</td>
+<td><strong>FN</strong> <code>not_found</code>, miss cause <strong>budget</strong></td>
+</tr>
+<tr class="even">
+<td>–</td>
+<td>L3 (IS1) downstream g7, not in the truth</td>
+<td><strong>FP</strong> <code>not_in_truth</code></td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Side</th>
+<th>TP</th>
+<th>FN</th>
+<th>TP_calls</th>
+<th>FP</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>upstream</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1 (g5)</td>
+<td>0.50</td>
+<td>0.50</td>
+<td>0.50</td>
+</tr>
+<tr class="even">
+<td>downstream</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>2 (g3, g7)</td>
+<td>0.33</td>
+<td>0.50</td>
+<td>0.40</td>
+</tr>
+<tr class="odd">
+<td>both</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>0.40</td>
+<td>0.50</td>
+<td>0.44</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="what-is-and-is-not-validated" class="level1">
+<h1>What is and is not validated</h1>
+<section id="the-cds" class="level2">
+<h2 class="anchored" data-anchor-id="the-cds">1. The CDS</h2>
+<p><strong>Checked</strong>: whether eris’s gene lands on the same reference CDS as the answer key (same replicon, same strand, ≥ 50 % overlap), on the right side of an IS of the right isoform group; plus distance band and sequence agreement for the ones found.</p>
+<p><strong>Not checked</strong>:</p>
+<ul>
+<li><strong>Exact gene boundaries</strong>: a gene with a different start codon still passes the 50 % test. Only <code>nucleotide_ok</code> and <code>distance_error</code> hint at it.</li>
+<li><strong>Genes away from IS</strong>: only genes next to an IS are graded; this is not a general gene-calling benchmark.</li>
+<li><strong>Effect</strong>: disrupted / truncated is not scored for now.</li>
+<li><strong>Which copy</strong>: a gene that places in several spots matches if <strong>any</strong> of them fits.</li>
+</ul>
+</section>
+<section id="the-is" class="level2">
+<h2 class="anchored" data-anchor-id="the-is">2. The IS</h2>
+<p>eris-validation does <strong>not</strong> validate the IS themselves. The IS name is only used as a label (isoform group) to pair eris’s flanks with the answer key.</p>
+<p><strong>Not checked</strong>:</p>
+<ul>
+<li><strong>IS detection</strong>: did eris find every IS copy (IS recall), and does it report IS that are not there (IS precision)?</li>
+<li><strong>IS position</strong>: do eris’s IS boundaries match the reference?</li>
+<li><strong>IS naming</strong>: an IS reported under another name (e.g.&nbsp;ISSen10 as IS3411) only shows up as missed relations.</li>
+<li><strong>Copy number</strong>: whether eris reports 6 ISEc12 copies or collapses them into 1.</li>
+</ul>
+<p>A missing IS shows up only indirectly: every relation of that IS becomes an FN. That is how ISSen1, ISSen10 and IS5 were found to be undetected.</p>
+</section>
+</section>
+<section id="glossary" class="level1">
+<h1>Glossary</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>IS</strong></td>
+<td>insertion sequence: a piece of DNA that can jump to a new place in the genome</td>
+</tr>
+<tr class="even">
+<td><strong>CDS</strong></td>
+<td>coding sequence: a gene that codes for a protein</td>
+</tr>
+<tr class="odd">
+<td><strong>Contig</strong></td>
+<td>one continuous piece of an assembly</td>
+</tr>
+<tr class="even">
+<td><strong>GFA</strong></td>
+<td>assembly graph: contigs plus links saying which contig can follow which</td>
+</tr>
+<tr class="odd">
+<td><strong>Locus</strong></td>
+<td>one IS as reported by eris (possibly stitched across several contigs)</td>
+</tr>
+<tr class="even">
+<td><strong>Flank</strong></td>
+<td>a gene eris reports next to an IS</td>
+</tr>
+<tr class="odd">
+<td><strong>First flank</strong></td>
+<td>eris’s nearest flank on one side (per graph branch); the only flanks precision is computed over</td>
+</tr>
+<tr class="even">
+<td><strong>Hops</strong></td>
+<td><code>--hops</code>: how many genes eris collects per side; <code>topo_hops</code>: how many contigs away a gene is</td>
+</tr>
+<tr class="odd">
+<td><strong>Collapse mode</strong></td>
+<td>repeated IS copies merged into one shared contig in the GFA</td>
+</tr>
+<tr class="even">
+<td><strong>Truth relation</strong></td>
+<td>one CDS on one side of one IS in the answer key, with distance and effect</td>
+</tr>
+<tr class="odd">
+<td><strong>Isoform group</strong></td>
+<td>ISfinder names that mean the same IS (synonyms and isoforms), scored as one name</td>
+</tr>
+<tr class="even">
+<td><strong>Relation key</strong></td>
+<td>isoform group + side + locus tag: what makes two relations the same</td>
+</tr>
+<tr class="odd">
+<td><strong>Side</strong></td>
+<td>upstream or downstream, read in the direction of the IS’s own strand</td>
+</tr>
+<tr class="even">
+<td><strong>Placement</strong></td>
+<td>where an eris gene lands on the reference (replicon, start, end, strand, identity)</td>
+</tr>
+<tr class="odd">
+<td><strong>TP</strong></td>
+<td>a truth relation eris found on the right side</td>
+</tr>
+<tr class="even">
+<td><strong>TP_calls</strong></td>
+<td>eris’s nearest genes that are correct</td>
+</tr>
+<tr class="odd">
+<td><strong>FN</strong></td>
+<td>a truth relation eris missed</td>
+</tr>
+<tr class="even">
+<td><strong>FP</strong></td>
+<td>eris’s nearest gene is not the truth CDS</td>
+</tr>
+<tr class="odd">
+<td><strong>Reason</strong></td>
+<td>why an FN or FP is wrong, one per row</td>
+</tr>
+<tr class="even">
+<td><code>wrong_side</code></td>
+<td>FN: its own IS reports the CDS only on the other side · FP: eris’s nearest gene is a truth CDS of its IS, but of the other side</td>
+</tr>
+<tr class="odd">
+<td><code>wrong_IS</code></td>
+<td>FN: only a differently named IS reports the CDS · FP: eris’s nearest gene is a truth CDS of a differently named IS</td>
+</tr>
+<tr class="even">
+<td><code>not_found</code></td>
+<td>FN: the CDS is not reported at all</td>
+</tr>
+<tr class="odd">
+<td><code>unplaceable</code></td>
+<td>FP: eris’s nearest gene cannot be placed on the reference</td>
+</tr>
+<tr class="even">
+<td><code>not_in_truth</code></td>
+<td>FP: eris’s nearest gene is in no truth relation</td>
+</tr>
+<tr class="odd">
+<td><strong>Miss cause</strong></td>
+<td><code>budget</code> (found with <code>--hops 20</code>), <code>not_reported</code> (called by pyfgs but not reported as this IS’s flank), <code>not_called</code> (no called gene is the truth CDS)</td>
+</tr>
+<tr class="even">
+<td><strong>Distance band</strong></td>
+<td>overlapping (&lt; 0), near (0–150 bp), far (&gt; 150 bp)</td>
+</tr>
+<tr class="odd">
+<td><strong>Recall</strong></td>
+<td>of all the right answers, how many eris found: TP / (TP + FN)</td>
+</tr>
+<tr class="even">
+<td><strong>Precision</strong></td>
+<td>of everything eris answered, how much was right: TP_calls / (TP_calls + FP)</td>
+</tr>
+<tr class="odd">
+<td><strong>F1</strong></td>
+<td>balance of precision and recall: 2PR / (P + R)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-will-i-do-next" class="level1">
+<h1>What will I do next?</h1>
+<ul>
+<li>Trace one lost GFA flank (e.g.&nbsp;ISEc23_1 downstream, <code>EC958_RS01090</code>, simulated GFA) through eris’s graph walk to see why it is not reported.</li>
+<li>Add an IS-level validation (detection, position, naming) using the IS truth BED files.</li>
+<li>Raise the transposase overhang and short-ORF flanks with Dimas.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
