@@ -28,12 +28,25 @@ How it works can be seen here: ([eris-validation-pipeline](https://victoriasja18
 
 # Result
 
+## Precision and recall
+
+Side: is the CDS reported on the right side of its IS? Distance: for the relations found on their side, is the gap in the right band (overlapping, near ≤ 150 bp, far)? Recall is TP / (TP + FN) over the truth relations; precision is TP_calls / (TP_calls + FP) over eris's nearest-flank calls.
+
 ```{python}
 import pandas as pd
 
 RESULTS = "../result/eris_validation"
 ASSEMBLIES = {"complete": "Complete genome (FASTA)", "simulated": "Simulated GFA", "real": "Real-reads GFA"}
 pd.set_option("display.max_rows", None, "display.max_columns", None, "display.max_colwidth", None)
+metrics = pd.read_csv(f"{RESULTS}/metrics.tsv", sep="\t")
+metrics["assembly"] = metrics["assembly_type"].map(ASSEMBLIES)
+metrics.set_index(["assembly", "dimension", "class"])[["TP", "FN", "TP_calls", "FP", "precision", "recall", "f1"]] \
+    .reindex(list(ASSEMBLIES.values()), level=0).round(2)
+```
+
+## Counts by status and reason
+
+```{python}
 relations = pd.concat([pd.read_csv(f"{RESULTS}/EC958/{a}/relations.tsv", sep="\t").assign(assembly=name)
                        for a, name in ASSEMBLIES.items()], ignore_index=True)
 relations["reason"] = relations["reason"].fillna("–")

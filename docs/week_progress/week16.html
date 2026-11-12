@@ -243,7 +243,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#eris-pipeline-updates" id="toc-eris-pipeline-updates" class="nav-link active" data-scroll-target="#eris-pipeline-updates">Eris pipeline Updates</a></li>
   <li><a href="#eris-validation-updates" id="toc-eris-validation-updates" class="nav-link" data-scroll-target="#eris-validation-updates">Eris-validation Updates</a></li>
-  <li><a href="#result" id="toc-result" class="nav-link" data-scroll-target="#result">Result</a></li>
+  <li><a href="#result" id="toc-result" class="nav-link" data-scroll-target="#result">Result</a>
+  <ul class="collapse">
+  <li><a href="#precision-and-recall" id="toc-precision-and-recall" class="nav-link" data-scroll-target="#precision-and-recall">Precision and recall</a></li>
+  <li><a href="#counts-by-status-and-reason" id="toc-counts-by-status-and-reason" class="nav-link" data-scroll-target="#counts-by-status-and-reason">Counts by status and reason</a></li>
+  </ul></li>
   <li><a href="#fn-and-fp-reasons" id="toc-fn-and-fp-reasons" class="nav-link" data-scroll-target="#fn-and-fp-reasons">FN and FP reasons</a>
   <ul class="collapse">
   <li><a href="#wrong-is-cases" id="toc-wrong-is-cases" class="nav-link" data-scroll-target="#wrong-is-cases">Wrong-IS cases</a></li>
@@ -314,17 +318,255 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="result" class="level1">
 <h1>Result</h1>
-<div id="b4a60c16" class="cell" data-execution_count="1">
+<section id="precision-and-recall" class="level2">
+<h2 class="anchored" data-anchor-id="precision-and-recall">Precision and recall</h2>
+<p>Side: is the CDS reported on the right side of its IS? Distance: for the relations found on their side, is the gap in the right band (overlapping, near ≤ 150 bp, far)? Recall is TP / (TP + FN) over the truth relations; precision is TP_calls / (TP_calls + FP) over eris’s nearest-flank calls.</p>
+<div id="5bb02689" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>RESULTS <span class="op">=</span> <span class="st">"../result/eris_validation"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ASSEMBLIES <span class="op">=</span> {<span class="st">"complete"</span>: <span class="st">"Complete genome (FASTA)"</span>, <span class="st">"simulated"</span>: <span class="st">"Simulated GFA"</span>, <span class="st">"real"</span>: <span class="st">"Real-reads GFA"</span>}</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">"display.max_rows"</span>, <span class="va">None</span>, <span class="st">"display.max_columns"</span>, <span class="va">None</span>, <span class="st">"display.max_colwidth"</span>, <span class="va">None</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>relations <span class="op">=</span> pd.concat([pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).assign(assembly<span class="op">=</span>name)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items()], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>relations[<span class="st">"reason"</span>] <span class="op">=</span> relations[<span class="st">"reason"</span>].fillna(<span class="st">"–"</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>pd.crosstab([relations[<span class="st">"status"</span>], relations[<span class="st">"reason"</span>]], relations[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>metrics <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/metrics.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>metrics[<span class="st">"assembly"</span>] <span class="op">=</span> metrics[<span class="st">"assembly_type"</span>].<span class="bu">map</span>(ASSEMBLIES)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>metrics.set_index([<span class="st">"assembly"</span>, <span class="st">"dimension"</span>, <span class="st">"class"</span>])[[<span class="st">"TP"</span>, <span class="st">"FN"</span>, <span class="st">"TP_calls"</span>, <span class="st">"FP"</span>, <span class="st">"precision"</span>, <span class="st">"recall"</span>, <span class="st">"f1"</span>]] <span class="op">\</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    .reindex(<span class="bu">list</span>(ASSEMBLIES.values()), level<span class="op">=</span><span class="dv">0</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">TP</th>
+<th data-quarto-table-cell-role="th">FN</th>
+<th data-quarto-table-cell-role="th">TP_calls</th>
+<th data-quarto-table-cell-role="th">FP</th>
+<th data-quarto-table-cell-role="th">precision</th>
+<th data-quarto-table-cell-role="th">recall</th>
+<th data-quarto-table-cell-role="th">f1</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">assembly</th>
+<th data-quarto-table-cell-role="th">dimension</th>
+<th data-quarto-table-cell-role="th">class</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th rowspan="6" data-quarto-table-cell-role="th" data-valign="top">Complete genome (FASTA)</th>
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">side</th>
+<th data-quarto-table-cell-role="th">upstream</th>
+<td>51</td>
+<td>8</td>
+<td>44</td>
+<td>18</td>
+<td>0.71</td>
+<td>0.86</td>
+<td>0.78</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">downstream</th>
+<td>44</td>
+<td>14</td>
+<td>32</td>
+<td>30</td>
+<td>0.52</td>
+<td>0.76</td>
+<td>0.61</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">both</th>
+<td>95</td>
+<td>22</td>
+<td>76</td>
+<td>48</td>
+<td>0.61</td>
+<td>0.81</td>
+<td>0.70</td>
+</tr>
+<tr class="even">
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">distance</th>
+<th data-quarto-table-cell-role="th">overlapping</th>
+<td>9</td>
+<td>6</td>
+<td>9</td>
+<td>18</td>
+<td>0.33</td>
+<td>0.60</td>
+<td>0.43</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">near</th>
+<td>34</td>
+<td>21</td>
+<td>34</td>
+<td>7</td>
+<td>0.83</td>
+<td>0.62</td>
+<td>0.71</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">far</th>
+<td>24</td>
+<td>1</td>
+<td>24</td>
+<td>3</td>
+<td>0.89</td>
+<td>0.96</td>
+<td>0.92</td>
+</tr>
+<tr class="odd">
+<th rowspan="6" data-quarto-table-cell-role="th" data-valign="top">Simulated GFA</th>
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">side</th>
+<th data-quarto-table-cell-role="th">upstream</th>
+<td>32</td>
+<td>15</td>
+<td>22</td>
+<td>21</td>
+<td>0.51</td>
+<td>0.68</td>
+<td>0.58</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">downstream</th>
+<td>28</td>
+<td>19</td>
+<td>16</td>
+<td>20</td>
+<td>0.44</td>
+<td>0.60</td>
+<td>0.51</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">both</th>
+<td>60</td>
+<td>34</td>
+<td>38</td>
+<td>41</td>
+<td>0.48</td>
+<td>0.64</td>
+<td>0.55</td>
+</tr>
+<tr class="even">
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">distance</th>
+<th data-quarto-table-cell-role="th">overlapping</th>
+<td>0</td>
+<td>10</td>
+<td>0</td>
+<td>5</td>
+<td>0.00</td>
+<td>0.00</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">near</th>
+<td>23</td>
+<td>10</td>
+<td>23</td>
+<td>10</td>
+<td>0.70</td>
+<td>0.70</td>
+<td>0.70</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">far</th>
+<td>16</td>
+<td>1</td>
+<td>16</td>
+<td>6</td>
+<td>0.73</td>
+<td>0.94</td>
+<td>0.82</td>
+</tr>
+<tr class="odd">
+<th rowspan="6" data-quarto-table-cell-role="th" data-valign="top">Real-reads GFA</th>
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">side</th>
+<th data-quarto-table-cell-role="th">upstream</th>
+<td>35</td>
+<td>24</td>
+<td>24</td>
+<td>22</td>
+<td>0.52</td>
+<td>0.59</td>
+<td>0.56</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">downstream</th>
+<td>25</td>
+<td>33</td>
+<td>17</td>
+<td>20</td>
+<td>0.46</td>
+<td>0.43</td>
+<td>0.44</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">both</th>
+<td>60</td>
+<td>57</td>
+<td>41</td>
+<td>42</td>
+<td>0.49</td>
+<td>0.51</td>
+<td>0.50</td>
+</tr>
+<tr class="even">
+<th rowspan="3" data-quarto-table-cell-role="th" data-valign="top">distance</th>
+<th data-quarto-table-cell-role="th">overlapping</th>
+<td>1</td>
+<td>10</td>
+<td>1</td>
+<td>9</td>
+<td>0.10</td>
+<td>0.09</td>
+<td>0.10</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">near</th>
+<td>23</td>
+<td>12</td>
+<td>23</td>
+<td>9</td>
+<td>0.72</td>
+<td>0.66</td>
+<td>0.69</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">far</th>
+<td>13</td>
+<td>1</td>
+<td>13</td>
+<td>5</td>
+<td>0.72</td>
+<td>0.93</td>
+<td>0.81</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="counts-by-status-and-reason" class="level2">
+<h2 class="anchored" data-anchor-id="counts-by-status-and-reason">Counts by status and reason</h2>
+<div id="e856dcc5" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>relations <span class="op">=</span> pd.concat([pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).assign(assembly<span class="op">=</span>name)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items()], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>relations[<span class="st">"reason"</span>] <span class="op">=</span> relations[<span class="st">"reason"</span>].fillna(<span class="st">"–"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>pd.crosstab([relations[<span class="st">"status"</span>], relations[<span class="st">"reason"</span>]], relations[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -404,6 +646,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+</section>
 <section id="fn-and-fp-reasons" class="level1">
 <h1>FN and FP reasons</h1>
 <p>Each row of <code>relations.tsv</code> now has only three statuses (<strong>TP</strong>, <strong>FN</strong>, <strong>FP</strong>) and a separate <strong>reason</strong> for FN and FP, so each reason points at one kind of bug. The reasons are checked in this order:</p>
@@ -466,11 +709,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>a few bp</strong>: eris’s IS sits where the truth IS is, so eris probably <strong>misnamed</strong> the IS (e.g.&nbsp;ISSen10 called IS629, IS26_2 called ISEc9);</li>
 <li><strong>thousands of bp</strong>: a <strong>different IS further away</strong> reports the same gene (e.g.&nbsp;ISEch14 at ~52 kb), which looks like a real neighbouring IS rather than a naming bug.</li>
 </ul>
-<div id="63b2fa03" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wrong_is <span class="op">=</span> relations[relations[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"wrong_IS"</span>]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>wrong_is[[<span class="st">"assembly"</span>, <span class="st">"status"</span>, <span class="st">"side"</span>, <span class="st">"is_id"</span>, <span class="st">"locus_tag"</span>, <span class="st">"eris_target"</span>, <span class="st">"truth_distance"</span>, <span class="st">"eris_distance"</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">"distance_error"</span>]].sort_values([<span class="st">"assembly"</span>, <span class="st">"distance_error"</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>).fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div id="3d671930" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>wrong_is <span class="op">=</span> relations[relations[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"wrong_IS"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>wrong_is[[<span class="st">"assembly"</span>, <span class="st">"status"</span>, <span class="st">"side"</span>, <span class="st">"is_id"</span>, <span class="st">"locus_tag"</span>, <span class="st">"eris_target"</span>, <span class="st">"truth_distance"</span>, <span class="st">"eris_distance"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">"distance_error"</span>]].sort_values([<span class="st">"assembly"</span>, <span class="st">"distance_error"</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>).fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -798,10 +1041,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>How it works: the scorer takes <strong>every</strong> gene pyfgs called on the assembly (6,245 on the real-reads GFA), not only the reported ones, and places each on the reference with minimap2, the same way as the flank genes. If any of them matches the truth CDS, the gene was called, so the miss is <code>not_reported</code>; otherwise <code>not_called</code>.</p>
 <p>Where the called genes come from changed this week. Since my eris change <code>0aac337</code>, <code>_cds.fna</code> holds only the reported genes (about 450 per assembly), which made every called-but-unreported gene look <code>not_called</code>. The scorer now reads every called gene from eris’s <code>_assembly.gff</code> instead, cutting each one out of the assembly, so the split is the same as before that change.</p>
-<div id="e854cced" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> relations[relations[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"FN"</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pd.crosstab([fn[<span class="st">"miss_cause"</span>]], fn[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div id="e41d2d6b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> relations[relations[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"FN"</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pd.crosstab([fn[<span class="st">"miss_cause"</span>]], fn[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 
@@ -846,9 +1089,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>By FN reason: a <code>wrong_side</code> or <code>wrong_IS</code> miss is always <code>not_reported</code>, because eris did report the gene, just not for that IS on that side.</p>
-<div id="87e37bd1" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab([fn[<span class="st">"assembly"</span>], fn[<span class="st">"reason"</span>]], fn[<span class="st">"miss_cause"</span>]).reindex(<span class="bu">list</span>(ASSEMBLIES.values()), level<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div id="4cedbdea" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab([fn[<span class="st">"assembly"</span>], fn[<span class="st">"reason"</span>]], fn[<span class="st">"miss_cause"</span>]).reindex(<span class="bu">list</span>(ASSEMBLIES.values()), level<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
@@ -939,12 +1182,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong><code>not_called</code> stays about the same on every assembly</strong> (15 complete, 9 simulated, 11 real-reads), so it is not caused by fragmentation.</li>
 <li><strong>On the complete genome, 12 of the 15 <code>not_called</code> truth CDS are pseudogenes</strong> (<code>pseudo = True</code>, mostly also partial), often genes broken by the IS itself. They have no intact ORF, so pyfgs cannot call them. The other 3 are tiny genes of 69–144 bp (ykiE, ykgR, a GNAT fragment). So most <code>not_called</code> misses come from the truth including pseudogenes, not from a pyfgs bug.</li>
 </ul>
-<div id="3b7e1831" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>complete <span class="op">=</span> relations[(relations[<span class="st">"assembly"</span>] <span class="op">==</span> ASSEMBLIES[<span class="st">"complete"</span>]) <span class="op">&amp;</span> (relations[<span class="st">"miss_cause"</span>] <span class="op">==</span> <span class="st">"not_called"</span>)]</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>span <span class="op">=</span> complete[<span class="st">"truth_location"</span>].<span class="bu">str</span>.extract(<span class="vs">r":</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs">-</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs">"</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>complete.assign(length_bp<span class="op">=</span>span[<span class="dv">1</span>] <span class="op">-</span> span[<span class="dv">0</span>])[[<span class="st">"is_id"</span>, <span class="st">"side"</span>, <span class="st">"locus_tag"</span>, <span class="st">"gene"</span>, <span class="st">"product"</span>, <span class="st">"length_bp"</span>, <span class="st">"partial"</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"pseudo"</span>]].reset_index(drop<span class="op">=</span><span class="va">True</span>).fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div id="c31b1159" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>complete <span class="op">=</span> relations[(relations[<span class="st">"assembly"</span>] <span class="op">==</span> ASSEMBLIES[<span class="st">"complete"</span>]) <span class="op">&amp;</span> (relations[<span class="st">"miss_cause"</span>] <span class="op">==</span> <span class="st">"not_called"</span>)]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>span <span class="op">=</span> complete[<span class="st">"truth_location"</span>].<span class="bu">str</span>.extract(<span class="vs">r":</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs">-</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs">"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>complete.assign(length_bp<span class="op">=</span>span[<span class="dv">1</span>] <span class="op">-</span> span[<span class="dv">0</span>])[[<span class="st">"is_id"</span>, <span class="st">"side"</span>, <span class="st">"locus_tag"</span>, <span class="st">"gene"</span>, <span class="st">"product"</span>, <span class="st">"length_bp"</span>, <span class="st">"partial"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"pseudo"</span>]].reset_index(drop<span class="op">=</span><span class="va">True</span>).fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
 <div>
 
 
@@ -1193,27 +1436,27 @@ The disrupted / truncated effect is set aside as not a priority: `metrics.tsv` n
 <section id="recall-genes-eris-called-but-never-reports" class="level2">
 <h2 class="anchored" data-anchor-id="recall-genes-eris-called-but-never-reports">Recall: genes eris called but never reports</h2>
 <p>Every missed truth relation, put in the first group that fits:</p>
-<div id="673d603d" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>reported_groups <span class="op">=</span> relations[relations[<span class="st">"status"</span>].isin([<span class="st">"TP"</span>, <span class="st">"FP"</span>])].groupby(<span class="st">"assembly"</span>)[<span class="st">"group"</span>].agg(<span class="bu">set</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>MISS <span class="op">=</span> [<span class="st">"Gene called, but no IS reports it as a flank"</span>, <span class="st">"Gene not called by pyfgs"</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Reported next to a differently named IS"</span>, <span class="st">"Reported on the wrong side"</span>, <span class="st">"Only found with --hops 20"</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"No locus of this IS group has a flank"</span>]</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> miss(row):</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"wrong_side"</span>:</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> MISS[<span class="dv">3</span>]</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"wrong_IS"</span>:</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> MISS[<span class="dv">2</span>]</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">"miss_cause"</span>] <span class="op">==</span> <span class="st">"budget"</span>:</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> MISS[<span class="dv">4</span>]</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">"group"</span>] <span class="kw">not</span> <span class="kw">in</span> reported_groups.get(row[<span class="st">"assembly"</span>], <span class="bu">set</span>()):</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> MISS[<span class="dv">5</span>]</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MISS[<span class="dv">1</span>] <span class="cf">if</span> row[<span class="st">"miss_cause"</span>] <span class="op">==</span> <span class="st">"not_called"</span> <span class="cf">else</span> MISS[<span class="dv">0</span>]</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> relations[relations[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"FN"</span>]</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>why <span class="op">=</span> pd.Categorical(fn.<span class="bu">apply</span>(miss, axis<span class="op">=</span><span class="dv">1</span>), categories<span class="op">=</span>MISS, ordered<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>pd.crosstab(pd.Series(why, index<span class="op">=</span>fn.index, name<span class="op">=</span><span class="st">"why missed"</span>), fn[<span class="st">"assembly"</span>], dropna<span class="op">=</span><span class="va">False</span>)[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div id="78e9c0e1" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>reported_groups <span class="op">=</span> relations[relations[<span class="st">"status"</span>].isin([<span class="st">"TP"</span>, <span class="st">"FP"</span>])].groupby(<span class="st">"assembly"</span>)[<span class="st">"group"</span>].agg(<span class="bu">set</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>MISS <span class="op">=</span> [<span class="st">"Gene called, but no IS reports it as a flank"</span>, <span class="st">"Gene not called by pyfgs"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Reported next to a differently named IS"</span>, <span class="st">"Reported on the wrong side"</span>, <span class="st">"Only found with --hops 20"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"No locus of this IS group has a flank"</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> miss(row):</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"wrong_side"</span>:</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> MISS[<span class="dv">3</span>]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"wrong_IS"</span>:</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> MISS[<span class="dv">2</span>]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">"miss_cause"</span>] <span class="op">==</span> <span class="st">"budget"</span>:</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> MISS[<span class="dv">4</span>]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> row[<span class="st">"group"</span>] <span class="kw">not</span> <span class="kw">in</span> reported_groups.get(row[<span class="st">"assembly"</span>], <span class="bu">set</span>()):</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> MISS[<span class="dv">5</span>]</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MISS[<span class="dv">1</span>] <span class="cf">if</span> row[<span class="st">"miss_cause"</span>] <span class="op">==</span> <span class="st">"not_called"</span> <span class="cf">else</span> MISS[<span class="dv">0</span>]</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> relations[relations[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"FN"</span>]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>why <span class="op">=</span> pd.Categorical(fn.<span class="bu">apply</span>(miss, axis<span class="op">=</span><span class="dv">1</span>), categories<span class="op">=</span>MISS, ordered<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>pd.crosstab(pd.Series(why, index<span class="op">=</span>fn.index, name<span class="op">=</span><span class="st">"why missed"</span>), fn[<span class="st">"assembly"</span>], dropna<span class="op">=</span><span class="va">False</span>)[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 
 
@@ -1282,16 +1525,16 @@ The disrupted / truncated effect is set aside as not a priority: `metrics.tsv` n
 <li><strong>No locus of the IS group has a flank</strong>: ISSen1 on all three assemblies, and ISSen10 on the complete genome, so their relations can’t be found at all.</li>
 </ul>
 <p>Why the called genes are not reported: on a GFA, every copy of a multi-copy IS assembles into <strong>one collapsed contig</strong>, with the unique flanking contigs hanging off it like a roundabout. eris then reports one locus for several copies, and its copy number says how many:</p>
-<div id="106906e7" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loci(a):</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    report <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/eris/h3_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).drop_duplicates(<span class="st">"locus_id"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> report.assign(copy_number<span class="op">=</span>pd.to_numeric(report[<span class="st">"copy_number"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({name: {<span class="st">"loci"</span>: <span class="bu">len</span>(l <span class="op">:=</span> loci(a)),</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"loci standing for 2+ copies"</span>: <span class="bu">int</span>((l[<span class="st">"copy_number"</span>] <span class="op">&gt;</span> <span class="dv">1</span>).<span class="bu">sum</span>()),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"IS copies all loci stand for"</span>: <span class="bu">int</span>(l[<span class="st">"copy_number"</span>].<span class="bu">sum</span>())}</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>              <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items()})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div id="831de57b" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loci(a):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    report <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/eris/h3_report.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).drop_duplicates(<span class="st">"locus_id"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> report.assign(copy_number<span class="op">=</span>pd.to_numeric(report[<span class="st">"copy_number"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({name: {<span class="st">"loci"</span>: <span class="bu">len</span>(l <span class="op">:=</span> loci(a)),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"loci standing for 2+ copies"</span>: <span class="bu">int</span>((l[<span class="st">"copy_number"</span>] <span class="op">&gt;</span> <span class="dv">1</span>).<span class="bu">sum</span>()),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"IS copies all loci stand for"</span>: <span class="bu">int</span>(l[<span class="st">"copy_number"</span>].<span class="bu">sum</span>())}</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>              <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items()})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
@@ -1330,17 +1573,17 @@ The disrupted / truncated effect is set aside as not a priority: `metrics.tsv` n
 </div>
 </div>
 <p>On the real-reads GFA, 36 loci stand for 66 IS copies; 13 of them are collapsed, for example IS26 (one locus for 9 copies), IS1A (5), ISEc12 (4) and ISEc23 (4). Nearly all the called-but-unreported genes belong to an IS that has such a collapsed locus:</p>
-<div id="f6b2d1a6" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a, name <span class="kw">in</span> <span class="bu">list</span>(ASSEMBLIES.items())[<span class="dv">1</span>:]:</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    copies <span class="op">=</span> loci(a).set_index(<span class="st">"locus_id"</span>)[<span class="st">"copy_number"</span>]</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    assembly <span class="op">=</span> relations[relations[<span class="st">"assembly"</span>] <span class="op">==</span> name]</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    collapsed <span class="op">=</span> <span class="bu">set</span>(assembly.loc[assembly[<span class="st">"eris_locus"</span>].<span class="bu">map</span>(copies).gt(<span class="dv">1</span>), <span class="st">"group"</span>])</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    lost <span class="op">=</span> fn[(fn[<span class="st">"assembly"</span>] <span class="op">==</span> name) <span class="op">&amp;</span> (fn.<span class="bu">apply</span>(miss, axis<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> MISS[<span class="dv">0</span>])]</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    rows.append({<span class="st">"assembly"</span>: name, <span class="st">"called but not reported"</span>: <span class="bu">len</span>(lost),</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"of an IS with a collapsed locus"</span>: <span class="bu">int</span>(lost[<span class="st">"group"</span>].isin(collapsed).<span class="bu">sum</span>())})</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(rows).set_index(<span class="st">"assembly"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div id="2928017f" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a, name <span class="kw">in</span> <span class="bu">list</span>(ASSEMBLIES.items())[<span class="dv">1</span>:]:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    copies <span class="op">=</span> loci(a).set_index(<span class="st">"locus_id"</span>)[<span class="st">"copy_number"</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    assembly <span class="op">=</span> relations[relations[<span class="st">"assembly"</span>] <span class="op">==</span> name]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    collapsed <span class="op">=</span> <span class="bu">set</span>(assembly.loc[assembly[<span class="st">"eris_locus"</span>].<span class="bu">map</span>(copies).gt(<span class="dv">1</span>), <span class="st">"group"</span>])</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    lost <span class="op">=</span> fn[(fn[<span class="st">"assembly"</span>] <span class="op">==</span> name) <span class="op">&amp;</span> (fn.<span class="bu">apply</span>(miss, axis<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> MISS[<span class="dv">0</span>])]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    rows.append({<span class="st">"assembly"</span>: name, <span class="st">"called but not reported"</span>: <span class="bu">len</span>(lost),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"of an IS with a collapsed locus"</span>: <span class="bu">int</span>(lost[<span class="st">"group"</span>].isin(collapsed).<span class="bu">sum</span>())})</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(rows).set_index(<span class="st">"assembly"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
@@ -1378,15 +1621,15 @@ The disrupted / truncated effect is set aside as not a priority: `metrics.tsv` n
 </section>
 <section id="precision-small-orfs-on-every-assembly" class="level2">
 <h2 class="anchored" data-anchor-id="precision-small-orfs-on-every-assembly">Precision: small ORFs, on every assembly</h2>
-<div id="186f4ec1" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> relations[relations[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"FP"</span>].copy()</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>span <span class="op">=</span> fp[<span class="st">"eris_gene"</span>].<span class="bu">str</span>.rsplit(<span class="st">"_"</span>, n<span class="op">=</span><span class="dv">2</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>fp[<span class="st">"length_bp"</span>] <span class="op">=</span> span[<span class="dv">2</span>].astype(<span class="bu">float</span>) <span class="op">-</span> span[<span class="dv">1</span>].astype(<span class="bu">float</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>kind <span class="op">=</span> pd.Series(<span class="st">"250 bp or longer"</span>, index<span class="op">=</span>fp.index)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>kind[fp[<span class="st">"length_bp"</span>] <span class="op">&lt;</span> <span class="dv">250</span>] <span class="op">=</span> <span class="st">"shorter than 250 bp"</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>kind[fp[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"unplaceable"</span>] <span class="op">=</span> <span class="st">"unplaceable"</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>pd.crosstab(kind.rename(<span class="st">"false nearest-flank call"</span>), fp[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div id="ff10ca9b" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> relations[relations[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"FP"</span>].copy()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>span <span class="op">=</span> fp[<span class="st">"eris_gene"</span>].<span class="bu">str</span>.rsplit(<span class="st">"_"</span>, n<span class="op">=</span><span class="dv">2</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>fp[<span class="st">"length_bp"</span>] <span class="op">=</span> span[<span class="dv">2</span>].astype(<span class="bu">float</span>) <span class="op">-</span> span[<span class="dv">1</span>].astype(<span class="bu">float</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>kind <span class="op">=</span> pd.Series(<span class="st">"250 bp or longer"</span>, index<span class="op">=</span>fp.index)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>kind[fp[<span class="st">"length_bp"</span>] <span class="op">&lt;</span> <span class="dv">250</span>] <span class="op">=</span> <span class="st">"shorter than 250 bp"</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>kind[fp[<span class="st">"reason"</span>] <span class="op">==</span> <span class="st">"unplaceable"</span>] <span class="op">=</span> <span class="st">"unplaceable"</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>pd.crosstab(kind.rename(<span class="st">"false nearest-flank call"</span>), fp[<span class="st">"assembly"</span>])[<span class="bu">list</span>(ASSEMBLIES.values())]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div>
 
 
