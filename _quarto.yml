@@ -45,6 +45,8 @@ website:
             href: week_progress/week15.qmd
           - text: "Week 16"
             href: week_progress/week16.qmd
+          - text: "Week 17"
+            href: week_progress/week17.qmd
       - text: "Eris Meeting"
         menu:
           - text: "28th July"

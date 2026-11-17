@@ -232,6 +232,10 @@ window.Quarto = {
     <a class="dropdown-item" href="../week_progress/week16.html">
  <span class="dropdown-text">Week 16</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../week_progress/week17.html">
+ <span class="dropdown-text">Week 17</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -352,7 +356,7 @@ window.Quarto = {
 <section id="how-does-eris-validation-works" class="level1">
 <h1>How does eris-validation works?</h1>
 <p>This page walks through, step by step, how <strong>eris-validation</strong> grades eris’s IS–CDS relations against the curated truth. (How eris itself finds an IS and its flanks was covered earlier, so it is left out here.)</p>
-<p>Code: <a href="https://github.com/Victoriasja18/eris-validation">github.com/Victoriasja18/eris-validation</a> · results: <code>progress/result/eris_validation/</code></p>
+<p>Code: <a href="https://github.com/Victoriasja18/eris-validation">github.com/Victoriasja18/eris-validation</a></p>
 <section id="the-idea-in-one-picture" class="level2">
 <h2 class="anchored" data-anchor-id="the-idea-in-one-picture">The idea in one picture</h2>
 <p>Think of the genome as a long <strong>book</strong> written in A, C, G and T.</p>
@@ -857,7 +861,7 @@ EC958/real/metrics.tsv       ┘
 </section>
 <section id="real-examples-from-the-complete-genome" class="level1">
 <h1>Real examples from the complete genome</h1>
-<div id="dd930561" class="cell" data-execution_count="1">
+<div id="2c93d090" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>RESULTS <span class="op">=</span> <span class="st">"../result/eris_validation"</span></span>
@@ -895,18 +899,18 @@ EC958/real/metrics.tsv       ┘
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">FN</th>
-<td>28</td>
+<td>19</td>
 <td>0</td>
-<td>2</td>
+<td>1</td>
 <td>2</td>
 <td>0</td>
-<td>32</td>
+<td>22</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">FP</th>
 <td>0</td>
-<td>45</td>
-<td>1</td>
+<td>44</td>
+<td>2</td>
 <td>2</td>
 <td>0</td>
 <td>48</td>
@@ -917,16 +921,16 @@ EC958/real/metrics.tsv       ┘
 <td>0</td>
 <td>0</td>
 <td>0</td>
-<td>85</td>
-<td>85</td>
+<td>95</td>
+<td>95</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">total</th>
-<td>28</td>
-<td>45</td>
+<td>19</td>
+<td>44</td>
 <td>3</td>
 <td>4</td>
-<td>85</td>
+<td>95</td>
 <td>165</td>
 </tr>
 </tbody>
@@ -937,7 +941,7 @@ EC958/real/metrics.tsv       ┘
 </div>
 <section id="a-clean-tp-miteec1_1-downstream-ybhi" class="level2">
 <h2 class="anchored" data-anchor-id="a-clean-tp-miteec1_1-downstream-ybhi">1. A clean TP: MITEEc1_1 downstream, ybhI</h2>
-<div id="d7ad642b" class="cell" data-execution_count="2">
+<div id="e5f485c9" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>relations[(relations.status <span class="op">==</span> <span class="st">"TP"</span>) <span class="op">&amp;</span> (relations.locus_tag <span class="op">==</span> <span class="st">"EC958_RS03935"</span>)][cols].T.fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
@@ -1029,7 +1033,7 @@ EC958/real/metrics.tsv       ┘
 </section>
 <section id="a-tp-with-the-wrong-distance-band-isec23_1-upstream" class="level2">
 <h2 class="anchored" data-anchor-id="a-tp-with-the-wrong-distance-band-isec23_1-upstream">2. A TP with the wrong distance band: ISEc23_1 upstream</h2>
-<div id="d01493b1" class="cell" data-execution_count="3">
+<div id="654217ed" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>relations[(relations.status <span class="op">==</span> <span class="st">"TP"</span>) <span class="op">&amp;</span> (relations.locus_tag <span class="op">==</span> <span class="st">"EC958_RS01070"</span>)][cols].T.fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -1121,7 +1125,7 @@ EC958/real/metrics.tsv       ┘
 </section>
 <section id="an-fn-and-the-fp-that-took-its-place-isec23_1-downstream" class="level2">
 <h2 class="anchored" data-anchor-id="an-fn-and-the-fp-that-took-its-place-isec23_1-downstream">3. An FN and the FP that took its place: ISEc23_1 downstream</h2>
-<div id="c449cd2b" class="cell" data-execution_count="4">
+<div id="4bf6e9e2" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> relations[(relations.status <span class="op">==</span> <span class="st">"FN"</span>) <span class="op">&amp;</span> (relations.locus_tag <span class="op">==</span> <span class="st">"EC958_RS01090"</span>)]</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> relations[(relations.status <span class="op">==</span> <span class="st">"FP"</span>) <span class="op">&amp;</span> (relations.eris_gene <span class="op">==</span> <span class="st">"HG941718.1_236362_236491"</span>)]</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pd.concat([fn, fp])[cols].T.fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1233,7 +1237,7 @@ EC958/real/metrics.tsv       ┘
 </section>
 <section id="a-wrong-is-case-real-reads-gfa" class="level2">
 <h2 class="anchored" data-anchor-id="a-wrong-is-case-real-reads-gfa">4. A wrong-IS case (real-reads GFA)</h2>
-<div id="6a89c485" class="cell" data-execution_count="5">
+<div id="925a1c27" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>real <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>RESULTS<span class="sc">}</span><span class="ss">/EC958/real/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>real[(real.reason <span class="op">==</span> <span class="st">"wrong_IS"</span>) <span class="op">&amp;</span> (real.locus_tag <span class="op">==</span> <span class="st">"EC958_RS20820"</span>)][cols <span class="op">+</span> [<span class="st">"distance_error"</span>]].T.fillna(<span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -1245,7 +1249,7 @@ EC958/real/metrics.tsv       ┘
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">64</th>
-<th data-quarto-table-cell-role="th">126</th>
+<th data-quarto-table-cell-role="th">131</th>
 </tr>
 </thead>
 <tbody>

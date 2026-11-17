@@ -11,7 +11,7 @@ execute:
 
 This page walks through, step by step, how **eris-validation** grades eris's IS–CDS relations against the curated truth. (How eris itself finds an IS and its flanks was covered earlier, so it is left out here.)
 
-Code: [github.com/Victoriasja18/eris-validation](https://github.com/Victoriasja18/eris-validation) · results: `progress/result/eris_validation/`
+Code: [github.com/Victoriasja18/eris-validation](https://github.com/Victoriasja18/eris-validation)
 
 ## The idea in one picture
 
