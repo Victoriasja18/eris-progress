@@ -254,6 +254,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#pipeline" id="toc-pipeline" class="nav-link" data-scroll-target="#pipeline">Pipeline</a></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#distance" id="toc-distance" class="nav-link" data-scroll-target="#distance">Distance</a></li>
   <li><a href="#any_copy-vs-own_copy" id="toc-any_copy-vs-own_copy" class="nav-link" data-scroll-target="#any_copy-vs-own_copy"><code>any_copy</code> vs <code>own_copy</code></a></li>
   </ul></li>
   </ul>
@@ -295,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="comparison-between-the-variant-and-collapse-modes" class="level1">
 <h1>Comparison between the variant and collapse modes</h1>
-<div id="803fdd57" class="cell" data-execution_count="1">
+<div id="262873b4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matrix <span class="im">as</span> mt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -484,8 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="iscds-relations-by-status-and-reason" class="level2">
 <h2 class="anchored" data-anchor-id="iscds-relations-by-status-and-reason">IS–CDS relations by status and reason</h2>
-<p>Truth relations are TP or FN (<code>wrong_side</code>, <code>wrong_IS</code>, <code>not_found</code>); eris’s false nearest flanks are FP (<code>unplaceable</code>, <code>wrong_side</code>, <code>wrong_IS</code>, <code>not_in_truth</code>). Every FN also has a miss cause (<code>budget</code>, <code>not_reported</code>, <code>not_called</code>).</p>
-<div id="365a7b24" class="cell" data-execution_count="2">
+<div id="20899cb4" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> pd.concat([pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>path<span class="sc">}</span><span class="ss">/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/relations.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>).assign(assembly<span class="op">=</span>name, mode<span class="op">=</span>mode)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                  <span class="cf">for</span> mode, path <span class="kw">in</span> RESULTS.items() <span class="cf">for</span> a, name <span class="kw">in</span> ASSEMBLIES.items()], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>rows[<span class="st">"reason"</span>] <span class="op">=</span> rows[<span class="st">"reason"</span>].fillna(<span class="st">"–"</span>)</span>
@@ -608,7 +608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>FN by miss cause:</p>
-<div id="b039126c" class="cell" data-execution_count="3">
+<div id="3cc0e18a" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fn <span class="op">=</span> rows[rows[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"FN"</span>]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pd.crosstab(fn[<span class="st">"miss_cause"</span>], [fn[<span class="st">"assembly"</span>], fn[<span class="st">"mode"</span>]]).reindex(columns<span class="op">=</span>columns, fill_value<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
@@ -690,7 +690,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>I run FGS only in complete genome and found there are 5620 genes that are similar between pyfgs, genome</li>
 </ul>
 <p>FragGeneScan 1.32 was run on the complete genome outside eris, with the <code>complete</code> model in both its modes: <code>-w 0</code> (fragments, what eris uses: <code>GeneFinder(model=Model.Complete, whole_genome=False)</code>) and <code>-w 1</code> (whole genome). Genes are compared by replicon, start, end and strand.</p>
-<div id="b4b7ad2f" class="cell" data-execution_count="4">
+<div id="c006d4b1" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_genes(gff):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    genes <span class="op">=</span> pd.read_csv(gff, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, comment<span class="op">=</span><span class="st">"#"</span>, header<span class="op">=</span><span class="va">None</span>, usecols<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>],</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                        names<span class="op">=</span>[<span class="st">"replicon"</span>, <span class="st">"type"</span>, <span class="st">"start"</span>, <span class="st">"end"</span>, <span class="st">"strand"</span>])</span>
@@ -747,7 +747,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="d5e182d5" class="cell" data-execution_count="5">
+<div id="58e1ecc3" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> stop(gene):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    replicon, start, end, strand <span class="op">=</span> gene</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> replicon, end <span class="cf">if</span> strand <span class="op">==</span> <span class="st">"+"</span> <span class="cf">else</span> start, strand</span>
@@ -842,22 +842,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
-<div id="be72e531" class="cell" data-execution_count="6">
+<div id="aa5bb75c" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>RULES <span class="op">=</span> [<span class="st">"any_copy"</span>, <span class="st">"own_copy"</span>]</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>assigned <span class="op">=</span> pd.concat([pd.read_csv(<span class="ss">f"../result/eris_validation/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/assignment/</span><span class="sc">{</span>r<span class="sc">}</span><span class="ss">/metrics.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                      <span class="cf">for</span> a <span class="kw">in</span> ASSEMBLIES <span class="cf">for</span> r <span class="kw">in</span> RULES])</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>assigned <span class="op">=</span> assigned[assigned[<span class="st">"class"</span>] <span class="op">==</span> <span class="st">"both"</span>].rename(columns<span class="op">=</span>{<span class="st">"edge_rule"</span>: <span class="st">"rule"</span>})</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>assigned <span class="op">=</span> assigned.set_index([<span class="st">"assembly_type"</span>, <span class="st">"rule"</span>])[[<span class="st">"precision"</span>, <span class="st">"recall"</span>, <span class="st">"f1"</span>, <span class="st">"overcall"</span>, <span class="st">"undetected"</span>]]</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>curated <span class="op">=</span> pd.read_csv(<span class="st">"../result/eris_validation/metrics.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>curated <span class="op">=</span> curated[(curated[<span class="st">"dimension"</span>] <span class="op">==</span> <span class="st">"side"</span>) <span class="op">&amp;</span> (curated[<span class="st">"class"</span>] <span class="op">==</span> <span class="st">"both"</span>)]</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>curated <span class="op">=</span> curated.set_index(<span class="st">"assembly_type"</span>)[[<span class="st">"precision"</span>, <span class="st">"recall"</span>, <span class="st">"f1"</span>]]</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>curated <span class="op">=</span> curated.reindex(assigned.index.get_level_values(<span class="dv">0</span>)).set_axis(assigned.index)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> pd.concat({<span class="st">"Assignment score"</span>: assigned, <span class="st">"Curated score"</span>: curated}, axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">round</span>(<span class="dv">3</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> table.reindex(<span class="bu">list</span>(ASSEMBLIES), level<span class="op">=</span><span class="dv">0</span>).rename(index<span class="op">=</span>ASSEMBLIES)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>table.index.names <span class="op">=</span> [<span class="st">"assembly"</span>, <span class="st">"rule"</span>]</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>assigned <span class="op">=</span> assigned[(assigned[<span class="st">"dimension"</span>] <span class="op">==</span> <span class="st">"side"</span>) <span class="op">&amp;</span> (assigned[<span class="st">"class"</span>] <span class="op">==</span> <span class="st">"both"</span>)]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>assigned <span class="op">=</span> assigned.rename(columns<span class="op">=</span>{<span class="st">"edge_rule"</span>: <span class="st">"rule"</span>})</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>assigned <span class="op">=</span> assigned.set_index([<span class="st">"assembly_type"</span>, <span class="st">"rule"</span>])[[<span class="st">"precision"</span>, <span class="st">"recall"</span>, <span class="st">"f1"</span>, <span class="st">"overcall"</span>, <span class="st">"undetected"</span>]]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>assigned[[<span class="st">"overcall"</span>, <span class="st">"undetected"</span>]] <span class="op">=</span> assigned[[<span class="st">"overcall"</span>, <span class="st">"undetected"</span>]].astype(<span class="st">"Int64"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>curated <span class="op">=</span> pd.read_csv(<span class="st">"../result/eris_validation/metrics.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>curated <span class="op">=</span> curated[(curated[<span class="st">"dimension"</span>] <span class="op">==</span> <span class="st">"side"</span>) <span class="op">&amp;</span> (curated[<span class="st">"class"</span>] <span class="op">==</span> <span class="st">"both"</span>)]</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>curated <span class="op">=</span> curated.set_index(<span class="st">"assembly_type"</span>)[[<span class="st">"precision"</span>, <span class="st">"recall"</span>, <span class="st">"f1"</span>]]</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>curated <span class="op">=</span> curated.reindex(assigned.index.get_level_values(<span class="dv">0</span>)).set_axis(assigned.index)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> pd.concat({<span class="st">"Assignment score"</span>: assigned, <span class="st">"Curated score"</span>: curated}, axis<span class="op">=</span><span class="dv">1</span>).<span class="bu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> table.reindex(<span class="bu">list</span>(ASSEMBLIES), level<span class="op">=</span><span class="dv">0</span>).rename(index<span class="op">=</span>ASSEMBLIES)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>table.index.names <span class="op">=</span> [<span class="st">"assembly"</span>, <span class="st">"rule"</span>]</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <div>
 
@@ -975,6 +977,138 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Most of what the curated score counts against eris is gene calling: on the complete genome eris’s side assignment reaches F1 0.94–0.96 against 0.70.</li>
 <li>The 4 <code>overcall</code> FPs are two ISEc49 loci with no ISEc49 copy in the BED.</li>
 <li>Remaining errors on the complete genome: IS609 flanks on the opposite side to the BED (its family has no inverted repeats, so the orientation may be a convention difference); ISSen10 and ISSen1, short partial copies eris does not detect; and BED <code>IS26_2</code> (HG941719.1:37108–38748, 1,640 bp, twice IS26’s length), which eris calls ISEcp1. <strong>To check: is this copy really ISEcp1?</strong></li>
+</ul>
+</section>
+<section id="distance" class="level2">
+<h2 class="anchored" data-anchor-id="distance">Distance</h2>
+<p>On a relation eris finds, the expected gene and eris’s gene are the same pyfgs gene, so any difference between the two distances is only where eris puts the IS end against the BED; gene calling cannot cause it. Distance is scored on these found relations, in bands (overlapping, near ≤ 150 bp, far) and as absolute error, |eris − expected| with an overlap counted as 0.</p>
+<div id="571e237f" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>METRICS <span class="op">=</span> {<span class="st">"distance_n"</span>: <span class="st">"found"</span>, <span class="st">"distance_agreement"</span>: <span class="st">"band agreement"</span>, <span class="st">"distance_within_10bp"</span>: <span class="st">"within 10 bp"</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>           <span class="st">"distance_within_50bp"</span>: <span class="st">"within 50 bp"</span>, <span class="st">"distance_median_abs_error"</span>: <span class="st">"median error (bp)"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"distance_max_abs_error"</span>: <span class="st">"max error (bp)"</span>}</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>details <span class="op">=</span> pd.concat([pd.read_csv(<span class="ss">f"../result/eris_validation/EC958/</span><span class="sc">{</span>a<span class="sc">}</span><span class="ss">/assignment/</span><span class="sc">{</span>r<span class="sc">}</span><span class="ss">/details.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                     <span class="cf">for</span> a <span class="kw">in</span> ASSEMBLIES <span class="cf">for</span> r <span class="kw">in</span> RULES])</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>distance <span class="op">=</span> details[details[<span class="st">"metric"</span>].isin(<span class="bu">list</span>(METRICS))].pivot_table(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"assembly_type"</span>, <span class="st">"edge_rule"</span>], columns<span class="op">=</span><span class="st">"metric"</span>, values<span class="op">=</span><span class="st">"value"</span>)[<span class="bu">list</span>(METRICS)].rename(columns<span class="op">=</span>METRICS)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>curated_details <span class="op">=</span> pd.read_csv(<span class="st">"../result/eris_validation/details.tsv"</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>curated_agreement <span class="op">=</span> curated_details[(curated_details[<span class="st">"dimension"</span>] <span class="op">==</span> <span class="st">"distance"</span>) <span class="op">&amp;</span> (curated_details[<span class="st">"metric"</span>] <span class="op">==</span> <span class="st">"agreement"</span>)]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>distance[<span class="st">"curated band agreement"</span>] <span class="op">=</span> distance.index.get_level_values(<span class="dv">0</span>).<span class="bu">map</span>(</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    curated_agreement.set_index(<span class="st">"assembly_type"</span>)[<span class="st">"value"</span>])</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>distance <span class="op">=</span> distance.reindex(<span class="bu">list</span>(ASSEMBLIES), level<span class="op">=</span><span class="dv">0</span>).rename(index<span class="op">=</span>ASSEMBLIES).<span class="bu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> [<span class="st">"found"</span>, <span class="st">"median error (bp)"</span>, <span class="st">"max error (bp)"</span>]</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>distance[counts] <span class="op">=</span> distance[counts].<span class="bu">round</span>().astype(<span class="st">"Int64"</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>distance.index.names <span class="op">=</span> [<span class="st">"assembly"</span>, <span class="st">"rule"</span>]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>distance.columns.name <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>distance</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">found</th>
+<th data-quarto-table-cell-role="th">band agreement</th>
+<th data-quarto-table-cell-role="th">within 10 bp</th>
+<th data-quarto-table-cell-role="th">within 50 bp</th>
+<th data-quarto-table-cell-role="th">median error (bp)</th>
+<th data-quarto-table-cell-role="th">max error (bp)</th>
+<th data-quarto-table-cell-role="th">curated band agreement</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">assembly</th>
+<th data-quarto-table-cell-role="th">rule</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th rowspan="2" data-quarto-table-cell-role="th" data-valign="top">Complete genome (FASTA)</th>
+<th data-quarto-table-cell-role="th">any_copy</th>
+<td>114</td>
+<td>0.956</td>
+<td>0.921</td>
+<td>0.974</td>
+<td>0</td>
+<td>159</td>
+<td>0.705</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">own_copy</th>
+<td>114</td>
+<td>0.956</td>
+<td>0.921</td>
+<td>0.974</td>
+<td>0</td>
+<td>159</td>
+<td>0.705</td>
+</tr>
+<tr class="odd">
+<th rowspan="2" data-quarto-table-cell-role="th" data-valign="top">Simulated GFA</th>
+<th data-quarto-table-cell-role="th">any_copy</th>
+<td>69</td>
+<td>0.812</td>
+<td>0.884</td>
+<td>0.899</td>
+<td>0</td>
+<td>945</td>
+<td>0.650</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">own_copy</th>
+<td>70</td>
+<td>0.814</td>
+<td>0.886</td>
+<td>0.900</td>
+<td>0</td>
+<td>945</td>
+<td>0.650</td>
+</tr>
+<tr class="odd">
+<th rowspan="2" data-quarto-table-cell-role="th" data-valign="top">Real-reads GFA</th>
+<th data-quarto-table-cell-role="th">any_copy</th>
+<td>71</td>
+<td>0.775</td>
+<td>0.859</td>
+<td>0.887</td>
+<td>0</td>
+<td>186</td>
+<td>0.617</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">own_copy</th>
+<td>72</td>
+<td>0.778</td>
+<td>0.861</td>
+<td>0.889</td>
+<td>0</td>
+<td>186</td>
+<td>0.617</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<ul>
+<li>On the complete genome eris’s distance is right to the base for most found relations (92% within 10 bp, band agreement 0.96, against 0.71 for the curated score). The largest errors are IS1A (159 bp) and ISCfr4 (119 bp), where eris’s IS end and the BED’s differ.</li>
+<li>On the GFAs band agreement drops to about 0.8 for two reasons:
+<ul>
+<li><strong>Overlap across a contig join</strong>: a gene that overlaps the IS end but sits on the next contig (hop 1) is reported as <code>UPSTREAM</code>/<code>DOWNSTREAM</code> at distance 0, not <code>OVERLAPPING_*</code>. The distance is right (error 0) but the band reads near instead of overlapping: 8 of 22 overlapping flanks on the simulated GFA, 10 of 32 on the real one.</li>
+<li><strong>Multi-hop flanks</strong> (IS1A, IS3411 at 2+ hops) carry summed contig and link lengths, giving errors of 120–270 bp; the worst, 945 bp, is an IS1A flank on its own contig.</li>
+</ul></li>
+<li>The edge rule hardly changes distance: it only adds or removes the few adjacent-IS relations.</li>
 </ul>
 </section>
 <section id="any_copy-vs-own_copy" class="level2">

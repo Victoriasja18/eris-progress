@@ -47,8 +47,6 @@ table
 
 ## IS–CDS relations by status and reason
 
-Truth relations are TP or FN (`wrong_side`, `wrong_IS`, `not_found`); eris's false nearest flanks are FP (`unplaceable`, `wrong_side`, `wrong_IS`, `not_in_truth`). Every FN also has a miss cause (`budget`, `not_reported`, `not_called`).
-
 ```{python}
 rows = pd.concat([pd.read_csv(f"{path}/EC958/{a}/relations.tsv", sep="\t").assign(assembly=name, mode=mode)
                   for mode, path in RESULTS.items() for a, name in ASSEMBLIES.items()], ignore_index=True)
@@ -144,8 +142,10 @@ The curated score matches eris's pyfgs genes to RefSeq CDS, so gene-calling erro
 RULES = ["any_copy", "own_copy"]
 assigned = pd.concat([pd.read_csv(f"../result/eris_validation/EC958/{a}/assignment/{r}/metrics.tsv", sep="\t")
                       for a in ASSEMBLIES for r in RULES])
-assigned = assigned[assigned["class"] == "both"].rename(columns={"edge_rule": "rule"})
+assigned = assigned[(assigned["dimension"] == "side") & (assigned["class"] == "both")]
+assigned = assigned.rename(columns={"edge_rule": "rule"})
 assigned = assigned.set_index(["assembly_type", "rule"])[["precision", "recall", "f1", "overcall", "undetected"]]
+assigned[["overcall", "undetected"]] = assigned[["overcall", "undetected"]].astype("Int64")
 
 curated = pd.read_csv("../result/eris_validation/metrics.tsv", sep="\t")
 curated = curated[(curated["dimension"] == "side") & (curated["class"] == "both")]
@@ -161,6 +161,38 @@ table
 - Most of what the curated score counts against eris is gene calling: on the complete genome eris's side assignment reaches F1 0.94–0.96 against 0.70.
 - The 4 `overcall` FPs are two ISEc49 loci with no ISEc49 copy in the BED.
 - Remaining errors on the complete genome: IS609 flanks on the opposite side to the BED (its family has no inverted repeats, so the orientation may be a convention difference); ISSen10 and ISSen1, short partial copies eris does not detect; and BED `IS26_2` (HG941719.1:37108–38748, 1,640 bp, twice IS26's length), which eris calls ISEcp1. **To check: is this copy really ISEcp1?**
+
+## Distance
+
+On a relation eris finds, the expected gene and eris's gene are the same pyfgs gene, so any difference between the two distances is only where eris puts the IS end against the BED; gene calling cannot cause it. Distance is scored on these found relations, in bands (overlapping, near ≤ 150 bp, far) and as absolute error, |eris − expected| with an overlap counted as 0.
+
+```{python}
+METRICS = {"distance_n": "found", "distance_agreement": "band agreement", "distance_within_10bp": "within 10 bp",
+           "distance_within_50bp": "within 50 bp", "distance_median_abs_error": "median error (bp)",
+           "distance_max_abs_error": "max error (bp)"}
+details = pd.concat([pd.read_csv(f"../result/eris_validation/EC958/{a}/assignment/{r}/details.tsv", sep="\t")
+                     for a in ASSEMBLIES for r in RULES])
+distance = details[details["metric"].isin(list(METRICS))].pivot_table(
+    index=["assembly_type", "edge_rule"], columns="metric", values="value")[list(METRICS)].rename(columns=METRICS)
+
+curated_details = pd.read_csv("../result/eris_validation/details.tsv", sep="\t")
+curated_agreement = curated_details[(curated_details["dimension"] == "distance") & (curated_details["metric"] == "agreement")]
+distance["curated band agreement"] = distance.index.get_level_values(0).map(
+    curated_agreement.set_index("assembly_type")["value"])
+
+distance = distance.reindex(list(ASSEMBLIES), level=0).rename(index=ASSEMBLIES).round(3)
+counts = ["found", "median error (bp)", "max error (bp)"]
+distance[counts] = distance[counts].round().astype("Int64")
+distance.index.names = ["assembly", "rule"]
+distance.columns.name = None
+distance
+```
+
+- On the complete genome eris's distance is right to the base for most found relations (92% within 10 bp, band agreement 0.96, against 0.71 for the curated score). The largest errors are IS1A (159 bp) and ISCfr4 (119 bp), where eris's IS end and the BED's differ.
+- On the GFAs band agreement drops to about 0.8 for two reasons:
+  - **Overlap across a contig join**: a gene that overlaps the IS end but sits on the next contig (hop 1) is reported as `UPSTREAM`/`DOWNSTREAM` at distance 0, not `OVERLAPPING_*`. The distance is right (error 0) but the band reads near instead of overlapping: 8 of 22 overlapping flanks on the simulated GFA, 10 of 32 on the real one.
+  - **Multi-hop flanks** (IS1A, IS3411 at 2+ hops) carry summed contig and link lengths, giving errors of 120–270 bp; the worst, 945 bp, is an IS1A flank on its own contig.
+- The edge rule hardly changes distance: it only adds or removes the few adjacent-IS relations.
 
 ## `any_copy` vs `own_copy`
 
